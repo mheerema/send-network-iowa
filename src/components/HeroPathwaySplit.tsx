@@ -21,9 +21,9 @@ const slides = [
     credit: "Elianna Gill / Unsplash",
   },
   {
-    src: "/images/stock/hero-potluck.jpg",
-    alt: "Church community sharing a fellowship meal",
-    credit: "DJ Paine / Unsplash",
+    src: "/images/stock/hero-park-gathering.jpg",
+    alt: "Large group gathered outdoors at a community picnic",
+    credit: "Lucas Lemoine / Unsplash",
   },
   {
     src: "/images/stock/hero-community-gather.jpg",
