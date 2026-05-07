@@ -21,6 +21,13 @@ Funnel to sendnetwork.com. SNI provides Iowa-specific context and trust.
 
 ---
 
+## Asset Source
+
+Official brand assets come from the **NAMB Enterprise Canva account** (Matt has access).  
+Export to `public/images/brand/` — SVG for logos, PNG/WebP for graphics.
+
+---
+
 ## Official Brand Colors
 
 All registered as Tailwind tokens in `src/app/globals.css`.
