@@ -1,25 +1,70 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
+const slides = [
+  {
+    src: "/images/stock/hero-church-welcome.jpg",
+    alt: "A welcoming church community greeting newcomers",
+    credit: "Kristina Paparo / Unsplash",
+  },
+  {
+    src: "/images/stock/hero-community-gather.jpg",
+    alt: "Community gathering outdoors",
+    credit: "Priscilla Du Preez / Unsplash",
+  },
+  {
+    src: "/images/stock/hero-worship.jpg",
+    alt: "Small congregation in worship",
+    credit: "Elianna Gill / Unsplash",
+  },
+  {
+    src: "/images/stock/hero-chapel-interior.jpg",
+    alt: "Small chapel interior with congregation",
+    credit: "Josh Applegate / Unsplash",
+  },
+  {
+    src: "/images/stock/hero-small-group.jpg",
+    alt: "Small group community connection",
+    credit: "Unsplash",
+  },
+];
+
 export default function HeroPathwaySplit() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % slides.length);
+    }, 7500);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-      {/* Background photo */}
-      <Image
-        src="/images/stock/hero-church-welcome.jpg"
-        alt="A welcoming church community greeting newcomers"
-        fill
-        className="object-cover object-center"
-        priority
-        sizes="100vw"
-      />
+      {/* Background slideshow */}
+      {slides.map((slide, index) => (
+        <Image
+          key={slide.src}
+          src={slide.src}
+          alt={slide.alt}
+          fill
+          className={`object-cover object-center absolute inset-0 transition-opacity duration-[1500ms] ease-in-out ${
+            index === activeIndex ? "opacity-100" : "opacity-0"
+          }`}
+          priority={index === 0}
+          sizes="100vw"
+        />
+      ))}
 
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-brand-navy/70" />
 
       {/* Photo credit */}
       <p className="absolute bottom-2 right-3 z-10 text-white/30 text-[10px]">
-        Photo: Kristina Paparo / Unsplash
+        {slides[activeIndex].credit}
       </p>
 
       {/* Content */}
