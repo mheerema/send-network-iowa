@@ -11,10 +11,19 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
-  /* SNI brand tokens */
-  --color-brand-navy: #1a2744;
-  --color-brand-green: #2d4a2d;
-  --color-brand-amber: #c97c3a;
+  /* SNI brand tokens — official palette */
+  --color-brand-navy: #10294c;
+  --color-brand-blue: #18aee1;
+  --color-brand-lime: #99cc67;
+  --color-brand-teal: #69c9ca;
+  --color-brand-steel: #3c7ca0;
+  --color-brand-dark-teal: #0c4843;
+  --color-brand-green: #50b849;
+  --color-brand-mint: #cfe7c8;
+  --color-brand-amber: #fbac33;
+  --color-brand-slate: #5c6670;
+  --color-brand-light-gray: #adb3b8;
+  --color-brand-off-white: #ebeced;
 }
 
 body {
