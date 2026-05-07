@@ -11,9 +11,9 @@ const slides = [
     credit: "Kristina Paparo / Unsplash",
   },
   {
-    src: "/images/stock/hero-community-gather.jpg",
-    alt: "Community gathering outdoors",
-    credit: "Priscilla Du Preez / Unsplash",
+    src: "/images/stock/hero-baptism.jpg",
+    alt: "Community baptism gathering outdoors",
+    credit: "AMONWAT DUMKRUT / Unsplash",
   },
   {
     src: "/images/stock/hero-worship.jpg",
@@ -21,14 +21,14 @@ const slides = [
     credit: "Elianna Gill / Unsplash",
   },
   {
-    src: "/images/stock/hero-chapel-interior.jpg",
-    alt: "Small chapel interior with congregation",
-    credit: "Josh Applegate / Unsplash",
+    src: "/images/stock/hero-potluck.jpg",
+    alt: "Church community sharing a fellowship meal",
+    credit: "DJ Paine / Unsplash",
   },
   {
-    src: "/images/stock/hero-small-group.jpg",
-    alt: "Small group community connection",
-    credit: "Unsplash",
+    src: "/images/stock/hero-community-gather.jpg",
+    alt: "Community gathering outdoors",
+    credit: "Priscilla Du Preez / Unsplash",
   },
 ];
 
