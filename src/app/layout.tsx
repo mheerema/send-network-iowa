@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat, Libre_Baskerville } from "next/font/google";
+import Image from "next/image";
 import Link from "next/link";
 import "./globals.css";
 
@@ -44,10 +45,15 @@ export default function RootLayout({
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               {/* Logo / wordmark */}
-              <Link href="/" className="flex items-center gap-2">
-                <span className="text-white font-bold text-lg tracking-tight">
-                  Send Network Iowa
-                </span>
+              <Link href="/" className="flex items-center">
+                <Image
+                  src="/images/brand/sni-logo-white.png"
+                  alt="Send Network Iowa"
+                  width={175}
+                  height={32}
+                  className="h-8 w-auto"
+                  priority
+                />
               </Link>
 
               {/* Desktop nav */}
@@ -103,9 +109,13 @@ export default function RootLayout({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Brand */}
               <div>
-                <p className="text-white font-bold text-base tracking-tight mb-2">
-                  Send Network Iowa
-                </p>
+                <Image
+                  src="/images/brand/sni-logo-white.png"
+                  alt="Send Network Iowa"
+                  width={160}
+                  height={29}
+                  className="h-7 w-auto mb-3"
+                />
                 <p className="text-sm leading-relaxed">
                   A church in every Iowa community. Planting, coaching, and
                   sending through the Southern Baptist Convention.
