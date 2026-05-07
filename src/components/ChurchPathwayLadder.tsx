@@ -13,6 +13,8 @@ interface Level {
   ctas: CTA[];
 }
 
+const SEND_NETWORK_SEND = "https://www.sendnetwork.com/send/";
+
 const levels: Level[] = [
   {
     id: "cooperating",
@@ -20,8 +22,8 @@ const levels: Level[] = [
     verb: "Pray and Give",
     body: "Fuel church planting in Iowa by praying for planters and giving through the Cooperative Program and Annie Armstrong Easter Offering.",
     ctas: [
-      { text: "Pray for Iowa Planters", href: "/iowa" },
-      { text: "Learn about giving", href: "/partner" },
+      { text: "Get started on Send Network", href: SEND_NETWORK_SEND },
+      { text: "Connect with SNI", href: "/contact" },
     ],
   },
   {
@@ -30,8 +32,8 @@ const levels: Level[] = [
     verb: "Partner",
     body: "Partner with an Iowa church plant by praying, participating, and providing for their practical needs.",
     ctas: [
-      { text: "Find a plant to support", href: "/partner" },
-      { text: "Talk to someone", href: "/contact" },
+      { text: "Get started on Send Network", href: SEND_NETWORK_SEND },
+      { text: "Connect with SNI", href: "/contact" },
     ],
   },
   {
@@ -40,8 +42,8 @@ const levels: Level[] = [
     verb: "Send",
     body: "Take responsibility for an Iowa church plant by walking with a planter through preparation, coaching, and launch.",
     ctas: [
+      { text: "Get started on Send Network", href: SEND_NETWORK_SEND },
       { text: "Attend a Sending Lab", href: "/events" },
-      { text: "Learn about sending", href: "/partner" },
     ],
   },
   {
@@ -49,14 +51,20 @@ const levels: Level[] = [
     label: "Multiplying Church",
     verb: "Develop and Send",
     body: "Develop church planters from within your congregation and send them to Iowa's unreached communities.",
-    ctas: [{ text: "Talk to someone", href: "/contact" }],
+    ctas: [
+      { text: "Get started on Send Network", href: SEND_NETWORK_SEND },
+      { text: "Connect with SNI", href: "/contact" },
+    ],
   },
   {
     id: "movement",
     label: "Movement Church",
     verb: "Multiply and Catalyze",
     body: "Radically multiply and catalyze other Iowa churches to plant churches — until there is a healthy, multiplying church in every Iowa community.",
-    ctas: [{ text: "Talk to someone", href: "/contact" }],
+    ctas: [
+      { text: "Get started on Send Network", href: SEND_NETWORK_SEND },
+      { text: "Connect with SNI", href: "/contact" },
+    ],
   },
 ];
 
@@ -72,8 +80,9 @@ export default function ChurchPathwayLadder() {
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-brand-navy">
             Where Does Your Church Fit?
           </h2>
-          <p className="mt-4 text-gray-600 text-sm">
-            Every church has a role. Find yours.
+          <p className="mt-4 text-gray-600 text-sm max-w-xl mx-auto leading-relaxed">
+            Iowa churches are part of a national Send Network movement. Find your
+            level below — then take your next step at Send Network.
           </p>
         </div>
 

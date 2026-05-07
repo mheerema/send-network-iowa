@@ -90,12 +90,22 @@ export default function Home() {
           <p className="text-gray-700 font-medium mb-5">
             Not sure where your church fits?
           </p>
-          <Link
-            href="/contact"
-            className="inline-flex items-center px-7 py-3 rounded-full bg-brand-amber text-white text-sm font-semibold hover:opacity-90 transition-opacity"
-          >
-            Talk to Someone
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link
+              href="https://www.sendnetwork.com/send/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-7 py-3 rounded-full bg-brand-amber text-white text-sm font-semibold hover:opacity-90 transition-opacity"
+            >
+              Explore Send Network
+            </Link>
+            <Link
+              href="/contact"
+              className="inline-flex items-center px-7 py-3 rounded-full border border-brand-navy text-brand-navy text-sm font-semibold hover:bg-brand-navy hover:text-white transition-colors"
+            >
+              Talk to Someone in Iowa
+            </Link>
+          </div>
         </div>
       </section>
 
