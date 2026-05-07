@@ -119,10 +119,12 @@ export default function HeroPathwaySplit() {
               coaching, and launch. Iowa needs you.
             </p>
             <Link
-              href="/plant"
+              href="https://www.sendnetwork.com/plant/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-brand-navy text-white text-sm font-semibold hover:opacity-90 transition-opacity"
             >
-              Learn about planting
+              Planters Start Here
             </Link>
           </div>
 
@@ -151,10 +153,12 @@ export default function HeroPathwaySplit() {
               designed for churches of any size.
             </p>
             <Link
-              href="/partner"
+              href="https://www.sendnetwork.com/send/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-brand-amber text-white text-sm font-semibold hover:opacity-90 transition-opacity"
             >
-              Partner with us
+              Churches Start Here
             </Link>
           </div>
         </div>
