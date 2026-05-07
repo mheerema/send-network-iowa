@@ -6,8 +6,8 @@ export default function HeroPathwaySplit() {
     <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Background photo */}
       <Image
-        src="/images/sending-lab-adel/2025-Sending-Lab-01.jpg"
-        alt="Send Network Iowa Sending Lab gathering"
+        src="/images/stock/hero-church-welcome.jpg"
+        alt="A welcoming church community greeting newcomers"
         fill
         className="object-cover object-center"
         priority
@@ -16,6 +16,11 @@ export default function HeroPathwaySplit() {
 
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-brand-navy/70" />
+
+      {/* Photo credit */}
+      <p className="absolute bottom-2 right-3 z-10 text-white/30 text-[10px]">
+        Photo: Kristina Paparo / Unsplash
+      </p>
 
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-24">
