@@ -105,7 +105,6 @@ export default function HeroPathwaySplit() {
             Churches Start Here
           </Link>
         </div>
-        </div>
       </div>
     </section>
   );
