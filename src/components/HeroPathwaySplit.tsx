@@ -75,13 +75,14 @@ export default function HeroPathwaySplit() {
             Send Network Iowa
           </p>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-tight">
-            A Church in Every
+            Every Church Can Help
             <br />
-            Iowa Community
+            Plant Churches
           </h1>
           <p className="mt-6 text-lg text-white/80 max-w-2xl mx-auto leading-relaxed">
-            Iowa has more than 900 communities without a gospel-centered church.
-            We recruit, train, and send church planters to change that.
+            You are part of a larger kingdom movement, and your church can make
+            an impact beyond your neighborhood. Whether you are new to church
+            planting or have planted dozens of churches, we want to help.
           </p>
         </div>
 
