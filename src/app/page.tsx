@@ -3,7 +3,7 @@ import Link from "next/link";
 import HeroPathwaySplit from "@/components/HeroPathwaySplit";
 import OpportunityStats from "@/components/OpportunityStats";
 import PlanterCard from "@/components/PlanterCard";
-import PathwaySteps from "@/components/PathwaySteps";
+import ChurchPathwayLadder from "@/components/ChurchPathwayLadder";
 import TalkCTA from "@/components/TalkCTA";
 
 const planterStubs = [
@@ -36,6 +36,24 @@ export default function Home() {
       {/* Hero */}
       <HeroPathwaySplit />
 
+      {/* Mission-frame block */}
+      <section className="py-16 bg-white">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-4">
+            The Need
+          </p>
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-brand-navy">
+            Communities Across Iowa Need Gospel Presence
+          </h2>
+          <p className="mt-6 text-gray-600 leading-relaxed">
+            Your church can participate in God&rsquo;s kingdom work through
+            church planting. Iowa has more than 900 communities with no
+            gospel-centered church — and the work of planting them belongs to
+            every church that takes the Great Commission seriously.
+          </p>
+        </div>
+      </section>
+
       {/* Opportunity stats */}
       <OpportunityStats />
 
@@ -63,8 +81,23 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PACE pathway intro */}
-      <PathwaySteps />
+      {/* Church pathway ladder */}
+      <ChurchPathwayLadder />
+
+      {/* Pathway escape hatch */}
+      <section className="py-12 bg-white">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-gray-700 font-medium mb-5">
+            Not sure where your church fits?
+          </p>
+          <Link
+            href="/contact"
+            className="inline-flex items-center px-7 py-3 rounded-full bg-brand-amber text-white text-sm font-semibold hover:opacity-90 transition-opacity"
+          >
+            Talk to Someone
+          </Link>
+        </div>
+      </section>
 
       {/* Vision / Iowa section teaser */}
       <section className="py-20 bg-brand-green">
@@ -102,9 +135,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      {/* TalkCTA inline divider */}
-      <TalkCTA variant="inline" />
 
       {/* TalkCTA sticky (mobile only) */}
       <TalkCTA variant="sticky" />
