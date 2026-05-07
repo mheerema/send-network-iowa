@@ -21,6 +21,25 @@ Funnel to sendnetwork.com. SNI provides Iowa-specific context and trust.
 
 ---
 
+## Typography
+
+| Role | Licensed | Free alternative (use this) |
+|---|---|---|
+| Display / headings | Gotham | **Montserrat** (Google Fonts) |
+| Serif / body accent | Mrs Eaves | **Libre Baskerville** (Google Fonts) |
+
+Loaded via `next/font/google`. Current site uses Geist — needs swapping.
+
+## Brand Attributes
+
+Community-Focused, Diverse, Bold. Audiences: Planter Prospects, Current Planters, SBC Pastors.
+
+## Photography Guidelines
+
+Real people, authentic moments, natural lighting, full-color. Diversity in ethnicity, gender, age, background. No posed stock.
+
+---
+
 ## Asset Source
 
 Official brand assets come from the **NAMB Enterprise Canva account** (Matt has access).  

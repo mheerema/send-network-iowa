@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Montserrat, Libre_Baskerville } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const montserrat = Montserrat({
   subsets: ["latin"],
+  variable: "--font-montserrat",
+  display: "swap",
+});
+
+const libreBaskerville = Libre_Baskerville({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-libre-baskerville",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -28,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} h-full antialiased`}>
+    <html lang="en" className={`${montserrat.variable} ${libreBaskerville.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col font-sans">
         {/* Navigation */}
         <header className="bg-brand-navy sticky top-0 z-50">
