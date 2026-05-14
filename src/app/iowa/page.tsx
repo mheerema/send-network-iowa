@@ -119,8 +119,8 @@ export default function IowaPage() {
                 have never had a healthy church.
               </p>
               <p className="text-gray-600 text-sm leading-relaxed">
-                SNI's geographic priority framework and regional strategy goes
-                here. Content will be developed with input from Matt and the SNI
+                Send Network Iowa's geographic priority framework and regional strategy goes
+                here. Content will be developed with input from Matt and the Send Network Iowa
                 leadership team.
               </p>
             </div>
@@ -151,13 +151,13 @@ export default function IowaPage() {
             mainline denominations, the growth of the unchurched population, and
             the concentration of evangelical presence in specific regions. This
             section will be informed by Pew Research data, NAMB state data, and
-            SNI's on-the-ground intelligence. Content TBD with Matt.
+            Send Network Iowa's on-the-ground intelligence. Content TBD with Matt.
           </p>
           <Link
             href="/contact"
             className="inline-flex items-center px-6 py-3 rounded-full bg-brand-navy text-white text-sm font-semibold hover:opacity-90 transition-opacity"
           >
-            Talk to the SNI team about Iowa
+            Talk to the Send Network Iowa team about Iowa
           </Link>
         </div>
       </section>

@@ -29,7 +29,7 @@ export default function TalkCTA({ variant = "inline" }: TalkCTAProps) {
             Not sure where to start?
           </h3>
           <p className="text-sm text-gray-600 mt-1">
-            Talk to someone on the SNI team. No pressure, no forms. Just a
+            Talk to someone on the Send Network Iowa team. No pressure, no forms. Just a
             conversation.
           </p>
         </div>

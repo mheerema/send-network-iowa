@@ -24,7 +24,7 @@ const events: Event[] = [
     location: "Adel, Iowa",
     audience: "Both",
     description:
-      "SNI's flagship Iowa gathering. Worship, teaching, planter stories, and practical training for both planters and sending church leaders.",
+      "Send Network Iowa's flagship Iowa gathering. Worship, teaching, planter stories, and practical training for both planters and sending church leaders.",
   },
   {
     title: "Planter Assessment Weekend",
@@ -41,7 +41,7 @@ const events: Event[] = [
     location: "Iowa",
     audience: "Planters",
     description:
-      "A Sending Lab gathering tailored for Spanish-speaking church planting leaders and their communities. SNI's Iowa context, en español.",
+      "A Sending Lab gathering tailored for Spanish-speaking church planting leaders and their communities. Send Network Iowa's Iowa context, en español.",
   },
   {
     title: "Planter Cohort Meeting",
@@ -49,7 +49,7 @@ const events: Event[] = [
     location: "Central Iowa (location rotates)",
     audience: "Planters",
     description:
-      "Ongoing cohort gathering for active SNI-affiliated planters. Peer learning, coaching check-ins, and prayer. By invitation.",
+      "Ongoing cohort gathering for active Send Network Iowa planters. Peer learning, coaching check-ins, and prayer. By invitation.",
   },
   {
     title: "Sending Church Roundtable",
@@ -57,7 +57,7 @@ const events: Event[] = [
     location: "Iowa",
     audience: "Sending Churches",
     description:
-      "A half-day gathering for church leaders interested in becoming SNI sending church partners. Tier overview, Q&A, and next steps.",
+      "A half-day gathering for church leaders interested in becoming Send Network Iowa sending church partners. Tier overview, Q&A, and next steps.",
   },
 ];
 

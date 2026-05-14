@@ -29,14 +29,14 @@ const steps: Step[] = [
     title: "Care",
     description: "Receive ongoing coaching and community throughout the journey.",
     detail:
-      "Planting is hard. SNI matches every planter with an experienced coach for regular one-on-one support. You will also connect with a cohort of other Iowa planters so you are never doing this alone. Care is not a stage you pass through — it continues through launch and beyond.",
+      "Planting is hard. Send Network Iowa matches every planter with an experienced coach for regular one-on-one support. You will also connect with a cohort of other Iowa planters so you are never doing this alone. Care is not a stage you pass through — it continues through launch and beyond.",
   },
   {
     letter: "E",
     title: "Equip",
     description: "Train in the skills and strategies that healthy churches require.",
     detail:
-      "Through Sending Labs, regional intensives, and Send Network's online training library, you will develop competency in disciple-making, team building, generosity culture, and contextualized ministry. SNI adapts national training resources specifically to Iowa's urban, suburban, and rural contexts.",
+      "Through Sending Labs, regional intensives, and Send Network's online training library, you will develop competency in disciple-making, team building, generosity culture, and contextualized ministry. Send Network Iowa adapts national training resources specifically to Iowa's urban, suburban, and rural contexts.",
   },
 ];
 
@@ -54,7 +54,7 @@ export default function PathwaySteps() {
             The PACE Framework
           </h2>
           <p className="mt-4 text-gray-600 max-w-xl mx-auto text-sm leading-relaxed">
-            Every SNI planter moves through four stages. Each step builds on the
+            Every Send Network Iowa planter moves through four stages. Each step builds on the
             last. Click any stage to learn more.
           </p>
         </div>

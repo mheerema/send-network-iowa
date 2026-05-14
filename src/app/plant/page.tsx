@@ -53,7 +53,7 @@ export default function PlantPage() {
             <div className="relative h-72 lg:h-96 rounded-2xl overflow-hidden order-2 lg:order-1">
               <Image
                 src="/images/sending-lab-adel/2025-Sending-Lab-02.jpg"
-                alt="Planter training at SNI Sending Lab"
+                alt="Planter training at Send Network Iowa Sending Lab"
                 fill
                 className="object-cover"
                 sizes="(max-width: 1024px) 100vw, 50vw"
@@ -67,13 +67,13 @@ export default function PlantPage() {
                 Why Iowa needs you now
               </h2>
               <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                SNI's Iowa-specific planting context goes here. This section
+                Send Network Iowa's Iowa-specific planting context goes here. This section
                 will describe the spiritual landscape, the communities that need
                 churches, and why this moment is significant for Iowa church
                 planting.
               </p>
               <p className="text-gray-600 text-sm leading-relaxed">
-                Demographic data, geographic spread, and SNI's priority
+                Demographic data, geographic spread, and Send Network Iowa's priority
                 communities will be added here with input from Matt.
               </p>
             </div>
@@ -131,7 +131,7 @@ export default function PlantPage() {
             You will not plant alone
           </h2>
           <p className="text-gray-600 text-sm leading-relaxed max-w-2xl">
-            SNI coaching and cohort model description goes here. This section
+            Send Network Iowa coaching and cohort model description goes here. This section
             will explain how planters are matched with coaches, what the
             ongoing care relationship looks like, and how the Iowa planting
             cohort provides community through the process.

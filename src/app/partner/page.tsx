@@ -35,7 +35,7 @@ const tiers: PartnershipTier[] = [
     description:
       "Financial partnership that provides direct resources to planters in the field.",
     actions: [
-      "Commit a monthly or annual financial gift to SNI",
+      "Commit a monthly or annual financial gift to Send Network Iowa",
       "Designate giving to a specific planter or region",
       "Help cover assessment and training costs for new planters",
     ],
@@ -48,7 +48,7 @@ const tiers: PartnershipTier[] = [
       "A deeper partnership where your church actively commissions a planter from within your congregation.",
     actions: [
       "Identify and encourage a planter from your church family",
-      "Walk them through PACE with SNI coaching support",
+      "Walk them through PACE with Send Network Iowa coaching support",
       "Provide spiritual authority and ongoing accountability",
     ],
     accent: "border-brand-green/30 bg-brand-green/5",
@@ -59,7 +59,7 @@ const tiers: PartnershipTier[] = [
     description:
       "The fullest expression of partnership. Your church plants a daughter church in an Iowa community and commits to its growth.",
     actions: [
-      "Collaborate with SNI to identify a target community",
+      "Collaborate with Send Network Iowa to identify a target community",
       "Send a core team to form the nucleus of the new church",
       "Maintain a covenant relationship with the plant for three years",
     ],
@@ -82,7 +82,7 @@ export default function PartnerPage() {
             </h1>
             <p className="mt-6 text-white/70 leading-relaxed">
               Church planting is not the work of lone planters. It is the work
-              of whole churches. SNI connects sending churches to planters
+              of whole churches. Send Network Iowa connects sending churches to planters
               across Iowa through four partnership tiers designed for churches
               of any size.
             </p>
@@ -151,7 +151,7 @@ export default function PartnerPage() {
               How a church adopts a plant
             </h2>
             <p className="text-gray-600 text-sm leading-relaxed mb-8">
-              The process for how a sending church connects with an SNI planter
+              The process for how a sending church connects with a Send Network Iowa planter
               goes here. This section will describe the initial conversation,
               the partnership covenant, and what the ongoing relationship looks
               like in practice. Content will be added with input from Matt.
@@ -160,7 +160,7 @@ export default function PartnerPage() {
               href="/contact"
               className="inline-flex items-center px-6 py-3 rounded-full bg-brand-amber text-white text-sm font-semibold hover:opacity-90 transition-opacity"
             >
-              Talk to Someone on the SNI Team
+              Talk to Someone on the Send Network Iowa Team
             </Link>
           </div>
         </div>
