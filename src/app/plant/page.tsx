@@ -84,6 +84,70 @@ export default function PlantPage() {
       {/* PACE pathway */}
       <PathwaySteps />
 
+      {/* BCI Partnership / Funding */}
+      <section id="funding" className="py-20 bg-brand-navy">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-3">
+              Financial Support
+            </p>
+            <h2 className="text-3xl font-bold tracking-tight text-white mb-4">
+              Backed by the Baptist Convention of Iowa
+            </h2>
+            <p className="text-white/70 text-sm leading-relaxed max-w-2xl mx-auto">
+              Send Network Iowa partners with the Baptist Convention of Iowa to
+              give planters real financial footing. Qualified planters can access
+              funding packages designed to carry a plant from assessment through
+              launch and into stability.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div className="bg-white/10 rounded-2xl p-8">
+              <h3 className="text-lg font-bold text-white mb-3">
+                Church Planter Support
+              </h3>
+              <p className="text-white/70 text-sm leading-relaxed">
+                Planters who complete the Send Network Assessment may receive a
+                customized funding package — including monthly support for up to
+                four years and one-time startup grants to cover early costs.
+              </p>
+            </div>
+            <div className="bg-white/10 rounded-2xl p-8">
+              <h3 className="text-lg font-bold text-white mb-3">
+                Church Planting Apprenticeship
+              </h3>
+              <p className="text-white/70 text-sm leading-relaxed">
+                For planters still in development, partnering churches can access
+                up to $1,000/month for one year to support a planter-in-training
+                as they prepare, study their community, and build a core team.
+              </p>
+            </div>
+            <div className="bg-white/10 rounded-2xl p-8">
+              <h3 className="text-lg font-bold text-white mb-3">
+                Church Planter Incubator
+              </h3>
+              <p className="text-white/70 text-sm leading-relaxed">
+                Churches developing a staff member toward planting can receive
+                matching funds to employ that leader in a role specifically
+                oriented toward future church planting.
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <a
+              href="https://bciowa.org/churchplantingpartnership/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-6 py-3 rounded-full border border-white/30 text-white text-sm font-semibold hover:border-white/60 transition-colors"
+            >
+              Learn more at bciowa.org &rarr;
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Assessment section */}
       <section id="assessment" className="py-20 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
