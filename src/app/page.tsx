@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import HeroPathwaySplit from "@/components/HeroPathwaySplit";
 import ChurchPathwayLadder from "@/components/ChurchPathwayLadder";
@@ -77,43 +76,6 @@ export default function Home() {
           >
             See available support
           </Link>
-        </div>
-      </section>
-
-      {/* Vision / Iowa section teaser */}
-      <section className="py-20 bg-brand-green">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-4">
-                Why Iowa
-              </p>
-              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white leading-tight">
-                Iowa is not a pit stop. It&rsquo;s a mission field.
-              </h2>
-              <p className="mt-6 text-white/70 text-sm leading-relaxed">
-                Send Network Iowa's Iowa-specific vision statement and case for the state as a
-                priority church planting context goes here. This section will
-                include demographic data, geographic diversity, and the spiritual
-                landscape that makes Iowa uniquely urgent.
-              </p>
-              <Link
-                href="/iowa"
-                className="mt-8 inline-flex items-center px-6 py-3 rounded-full bg-white text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
-              >
-                See the Iowa opportunity
-              </Link>
-            </div>
-            <div className="relative h-72 lg:h-96 rounded-2xl overflow-hidden">
-              <Image
-                src="/images/sending-lab-adel/2025-Sending-Lab-03.jpg"
-                alt="Iowa church planting gathering"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            </div>
-          </div>
         </div>
       </section>
 

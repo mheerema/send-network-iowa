@@ -9,7 +9,6 @@ const navLinks = [
   { href: "/", label: "Home" },
   { href: "/plant", label: "Plant" },
   { href: "/partner", label: "Partner" },
-  { href: "/iowa", label: "Iowa" },
   { href: "/events", label: "Events" },
 ];
 
