@@ -62,7 +62,7 @@ export default function Home() {
             Partnership
           </p>
           <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-brand-navy mb-4">
-            Backed by the Baptist Convention of Iowa
+            In Partnership with the Baptist Convention of Iowa
           </h2>
           <p className="text-gray-600 text-sm leading-relaxed max-w-2xl mx-auto mb-6">
             Send Network Iowa partners with the Baptist Convention of Iowa to

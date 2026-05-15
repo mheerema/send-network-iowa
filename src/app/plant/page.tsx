@@ -92,7 +92,7 @@ export default function PlantPage() {
               Financial Support
             </p>
             <h2 className="text-3xl font-bold tracking-tight text-white mb-4">
-              Backed by the Baptist Convention of Iowa
+              In Partnership with the Baptist Convention of Iowa
             </h2>
             <p className="text-white/70 text-sm leading-relaxed max-w-2xl mx-auto">
               Send Network Iowa partners with the Baptist Convention of Iowa to
