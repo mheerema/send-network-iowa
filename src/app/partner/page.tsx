@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import TalkCTA from "@/components/TalkCTA";
 
 export const metadata: Metadata = {
   title: "Partner with Send Network Iowa",
@@ -141,33 +140,25 @@ export default function PartnerPage() {
       </section>
 
       {/* How to adopt a plant */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mx-auto text-center">
-            <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-3">
-              Getting Started
-            </p>
-            <h2 className="text-3xl font-bold tracking-tight text-brand-navy mb-4">
-              How a church adopts a plant
-            </h2>
-            <p className="text-gray-600 text-sm leading-relaxed mb-8">
-              The process for how a sending church connects with a Send Network Iowa planter
-              goes here. This section will describe the initial conversation,
-              the partnership covenant, and what the ongoing relationship looks
-              like in practice. Content will be added with input from Matt.
-            </p>
-            <Link
-              href="/contact"
-              className="inline-flex items-center px-6 py-3 rounded-full bg-brand-amber text-white text-sm font-semibold hover:opacity-90 transition-opacity"
-            >
-              Talk to Someone on the Send Network Iowa Team
-            </Link>
-          </div>
+      <section className="py-16 bg-gray-50">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-3">
+            Getting Started
+          </p>
+          <h2 className="text-3xl font-bold tracking-tight text-brand-navy mb-4">
+            How a church adopts a plant
+          </h2>
+          <p className="text-gray-600 text-sm leading-relaxed mb-8">
+            The process starts with a conversation about where your church is and what kind of partnership fits.
+          </p>
+          <Link
+            href="/contact"
+            className="inline-flex items-center px-6 py-3 rounded-full bg-brand-amber text-white text-sm font-semibold hover:opacity-90 transition-opacity"
+          >
+            Talk to Someone on the Send Network Iowa Team
+          </Link>
         </div>
       </section>
-
-      <TalkCTA variant="inline" />
-      <TalkCTA variant="sticky" />
     </>
   );
 }

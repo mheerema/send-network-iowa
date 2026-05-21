@@ -111,17 +111,12 @@ export default function IowaPage() {
               <h2 className="text-3xl font-bold tracking-tight text-brand-navy mb-4">
                 Urban, suburban, and rural — all mission fields
               </h2>
-              <p className="text-gray-600 text-sm leading-relaxed mb-4">
+              <p className="text-gray-600 text-sm leading-relaxed">
                 Iowa is not monolithic. Des Moines is growing. Cedar Rapids,
                 Davenport, and Sioux City have distinct urban contexts. College
                 towns like Ames, Iowa City, and Cedar Falls carry their own
                 cultural dynamics. And hundreds of small towns across the state
                 have never had a healthy church.
-              </p>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Send Network Iowa's geographic priority framework and regional strategy goes
-                here. Content will be developed with input from Matt and the Send Network Iowa
-                leadership team.
               </p>
             </div>
             <div className="relative h-72 lg:h-96 rounded-2xl overflow-hidden">
@@ -147,11 +142,7 @@ export default function IowaPage() {
             What Iowa believes (and what it doesn&rsquo;t)
           </h2>
           <p className="text-gray-600 text-sm leading-relaxed max-w-2xl mb-8">
-            A profile of Iowa's religious landscape, including the decline of
-            mainline denominations, the growth of the unchurched population, and
-            the concentration of evangelical presence in specific regions. This
-            section will be informed by Pew Research data, NAMB state data, and
-            Send Network Iowa's on-the-ground intelligence. Content TBD with Matt.
+            Iowa&rsquo;s religious landscape — mainline decline, unchurched growth, and evangelical pockets — tells a story that demands a planting response.
           </p>
           <Link
             href="/contact"
@@ -163,7 +154,6 @@ export default function IowaPage() {
       </section>
 
       <TalkCTA variant="inline" />
-      <TalkCTA variant="sticky" />
     </>
   );
 }

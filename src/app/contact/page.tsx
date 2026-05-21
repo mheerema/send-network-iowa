@@ -27,10 +27,6 @@ export default function ContactPage() {
         >
           info@sendnetworkiowa.org
         </a>
-        <p className="mt-8 text-xs text-gray-400">
-          Contact form stub. A real contact form or Calendly embed can be wired
-          in here once Send Network Iowa confirms the preferred intake method.
-        </p>
       </div>
     </section>
   );

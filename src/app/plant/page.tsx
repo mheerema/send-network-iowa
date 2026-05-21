@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import PathwaySteps from "@/components/PathwaySteps";
 import TalkCTA from "@/components/TalkCTA";
@@ -47,37 +46,17 @@ export default function PlantPage() {
       </section>
 
       {/* Iowa context for planters */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="relative h-72 lg:h-96 rounded-2xl overflow-hidden order-2 lg:order-1">
-              <Image
-                src="/images/sending-lab-adel/2025-Sending-Lab-02.jpg"
-                alt="Planter training at Send Network Iowa Sending Lab"
-                fill
-                className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            </div>
-            <div className="order-1 lg:order-2">
-              <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-3">
-                Iowa Context
-              </p>
-              <h2 className="text-3xl font-bold tracking-tight text-brand-navy mb-4">
-                Why Iowa needs you now
-              </h2>
-              <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                Send Network Iowa's Iowa-specific planting context goes here. This section
-                will describe the spiritual landscape, the communities that need
-                churches, and why this moment is significant for Iowa church
-                planting.
-              </p>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Demographic data, geographic spread, and Send Network Iowa's priority
-                communities will be added here with input from Matt.
-              </p>
-            </div>
-          </div>
+      <section className="py-16 bg-white">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-3">
+            Iowa Context
+          </p>
+          <h2 className="text-3xl font-bold tracking-tight text-brand-navy mb-4">
+            Why Iowa needs you now
+          </h2>
+          <p className="text-gray-600 text-sm leading-relaxed">
+            Iowa spans 77 counties — from growing Des Moines suburbs to small rural towns — with hundreds of communities that have no gospel-centered church.
+          </p>
         </div>
       </section>
 
@@ -186,25 +165,21 @@ export default function PlantPage() {
       </section>
 
       {/* Coaching section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="py-16 bg-white">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-3">
             Coaching
           </p>
           <h2 className="text-3xl font-bold tracking-tight text-brand-navy mb-4">
             You will not plant alone
           </h2>
-          <p className="text-gray-600 text-sm leading-relaxed max-w-2xl">
-            Send Network Iowa coaching and cohort model description goes here. This section
-            will explain how planters are matched with coaches, what the
-            ongoing care relationship looks like, and how the Iowa planting
-            cohort provides community through the process.
+          <p className="text-gray-600 text-sm leading-relaxed">
+            Every Send Network Iowa planter is matched with an experienced coach and connected to a cohort of Iowa planters for peer support throughout the journey.
           </p>
         </div>
       </section>
 
       <TalkCTA variant="inline" />
-      <TalkCTA variant="sticky" />
     </>
   );
 }

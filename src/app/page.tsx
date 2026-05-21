@@ -79,8 +79,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* TalkCTA sticky (mobile only) */}
-      <TalkCTA variant="sticky" />
     </>
   );
 }

@@ -161,18 +161,10 @@ export default function EventsPage() {
             ))}
           </div>
 
-          <div className="mt-12 p-6 rounded-2xl bg-gray-50 border border-gray-100 text-sm text-gray-500">
-            <strong className="text-gray-700">Note for Matt:</strong> Event
-            dates are all placeholders. Real dates, registration links, and
-            capacity info should be added once confirmed. Photos from
-            sending-lab-adel and sending-lab-espanol are available to use as
-            event thumbnails.
-          </div>
         </div>
       </section>
 
       <TalkCTA variant="inline" />
-      <TalkCTA variant="sticky" />
     </>
   );
 }
