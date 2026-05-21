@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Partner with Send Network Iowa",
@@ -139,24 +138,17 @@ export default function PartnerPage() {
         </div>
       </section>
 
-      {/* How to adopt a plant */}
+      {/* Get started CTA */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-3">
-            Getting Started
-          </p>
-          <h2 className="text-3xl font-bold tracking-tight text-brand-navy mb-4">
-            How a church adopts a plant
-          </h2>
-          <p className="text-gray-600 text-sm leading-relaxed mb-8">
-            The process starts with a conversation about where your church is and what kind of partnership fits.
-          </p>
-          <Link
-            href="/contact"
+          <a
+            href="https://www.sendnetwork.com/send/"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center px-6 py-3 rounded-full bg-brand-amber text-white text-sm font-semibold hover:opacity-90 transition-opacity"
           >
-            Talk to Someone on the Send Network Iowa Team
-          </Link>
+            Get Started on Send Network &rarr;
+          </a>
         </div>
       </section>
     </>

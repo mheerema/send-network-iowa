@@ -49,14 +49,6 @@ export default function NavHeader() {
             ))}
           </nav>
 
-          {/* Desktop CTA */}
-          <Link
-            href="/contact"
-            className="hidden md:inline-flex items-center px-4 py-2 rounded-full bg-brand-amber text-white text-sm font-semibold hover:opacity-90 transition-opacity"
-          >
-            Talk to Someone
-          </Link>
-
           {/* Hamburger */}
           <button
             className="md:hidden text-white/80 hover:text-white p-2"
@@ -97,13 +89,6 @@ export default function NavHeader() {
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/contact"
-              onClick={() => setOpen(false)}
-              className="mt-3 inline-flex items-center justify-center px-4 py-3 rounded-full bg-brand-amber text-white text-sm font-semibold hover:opacity-90 transition-opacity"
-            >
-              Talk to Someone
-            </Link>
           </nav>
         </div>
       )}

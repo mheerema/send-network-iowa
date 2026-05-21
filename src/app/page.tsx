@@ -1,31 +1,12 @@
 import Link from "next/link";
 import HeroPathwaySplit from "@/components/HeroPathwaySplit";
 import ChurchPathwayLadder from "@/components/ChurchPathwayLadder";
-import TalkCTA from "@/components/TalkCTA";
 
 export default function Home() {
   return (
     <>
       {/* Hero */}
       <HeroPathwaySplit />
-
-      {/* Mission-frame block */}
-      <section className="py-16 bg-white">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-4">
-            The Need
-          </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-brand-navy">
-            Communities Across Iowa Need Gospel Presence
-          </h2>
-          <p className="mt-6 text-gray-600 leading-relaxed">
-            Your church can participate in God&rsquo;s kingdom work through
-            church planting. Iowa has more than 900 communities with no
-            gospel-centered church — and the work of planting them belongs to
-            every church that takes the Great Commission seriously.
-          </p>
-        </div>
-      </section>
 
       {/* Church pathway ladder */}
       <ChurchPathwayLadder />
@@ -46,10 +27,10 @@ export default function Home() {
               Explore Send Network
             </Link>
             <Link
-              href="/contact"
+              href="/events"
               className="inline-flex items-center px-7 py-3 rounded-full border border-brand-navy text-brand-navy text-sm font-semibold hover:bg-brand-navy hover:text-white transition-colors"
             >
-              Talk to Someone in Iowa
+              Attend a Sending Lab
             </Link>
           </div>
         </div>
