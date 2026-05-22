@@ -25,14 +25,6 @@ export const metadata: Metadata = {
     "Planting gospel-centered churches in every Iowa community. Send Network Iowa equips, coaches, and sends church planters across the state.",
 };
 
-const footerLinks = [
-  { href: "/", label: "Home" },
-  { href: "/plant", label: "Plant" },
-  { href: "/partner", label: "Partner" },
-  { href: "/iowa", label: "Iowa" },
-  { href: "/events", label: "Events" },
-];
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -65,26 +57,7 @@ export default function RootLayout({
                 </p>
               </div>
 
-              {/* Nav links */}
-              <div>
-                <p className="text-white text-sm font-semibold mb-3 uppercase tracking-wider">
-                  Pages
-                </p>
-                <ul className="space-y-2">
-                  {footerLinks.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="text-sm hover:text-white transition-colors"
-                      >
-                        {link.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* NAMB credit */}
+{/* NAMB credit */}
               <div className="flex items-end">
                 <p className="text-xs text-white/40">
                   A ministry of the North American Mission Board (NAMB).
