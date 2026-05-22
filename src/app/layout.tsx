@@ -20,7 +20,7 @@ const libreBaskerville = Libre_Baskerville({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://sendnetworkiowa.org"),
+  metadataBase: new URL("https://sendnetworkiowa.com"),
   title: "Send Network Iowa",
   description:
     "Planting gospel-centered churches in every Iowa community. Send Network Iowa equips, coaches, and sends church planters across the state.",
@@ -42,8 +42,8 @@ export default function RootLayout({
                 "@context": "https://schema.org",
                 "@type": "Organization",
                 name: "Send Network Iowa",
-                url: "https://sendnetworkiowa.org",
-                logo: "https://sendnetworkiowa.org/images/brand/sni-logo-white.png",
+                url: "https://sendnetworkiowa.com",
+                logo: "https://sendnetworkiowa.com/images/brand/sni-logo-white.png",
                 description:
                   "Planting gospel-centered churches in every Iowa community through the Southern Baptist Convention.",
                 parentOrganization: {
@@ -56,7 +56,7 @@ export default function RootLayout({
                 "@context": "https://schema.org",
                 "@type": "WebSite",
                 name: "Send Network Iowa",
-                url: "https://sendnetworkiowa.org",
+                url: "https://sendnetworkiowa.com",
               },
             ]),
           }}

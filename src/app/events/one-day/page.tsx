@@ -130,13 +130,13 @@ const eventJsonLd = {
   organizer: {
     "@type": "Organization",
     name: "Send Network Iowa",
-    url: "https://sendnetworkiowa.org",
+    url: "https://sendnetworkiowa.com",
   },
   performer: [
     { "@type": "Person", name: "Tony Merida" },
     { "@type": "Person", name: "Brian Croft" },
   ],
-  url: "https://sendnetworkiowa.org/events/one-day",
+  url: "https://sendnetworkiowa.com/events/one-day",
 };
 
 export default function OneDayPage() {
