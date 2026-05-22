@@ -65,9 +65,22 @@ const tiers: PartnershipTier[] = [
   },
 ];
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://sendnetworkiowa.com" },
+    { "@type": "ListItem", position: 2, name: "Partner", item: "https://sendnetworkiowa.com/partner" },
+  ],
+};
+
 export default function PartnerPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Page hero */}
       <section className="bg-brand-navy py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

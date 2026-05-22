@@ -139,12 +139,26 @@ const eventJsonLd = {
   url: "https://sendnetworkiowa.com/events/one-day",
 };
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://sendnetworkiowa.com" },
+    { "@type": "ListItem", position: 2, name: "Events", item: "https://sendnetworkiowa.com/events" },
+    { "@type": "ListItem", position: 3, name: "One Day — The Work of the Pastor", item: "https://sendnetworkiowa.com/events/one-day" },
+  ],
+};
+
 export default function OneDayPage() {
   return (
     <div className={barlowCondensed.variable}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
       {/* ── Hero ─────────────────────────────────────────────────── */}

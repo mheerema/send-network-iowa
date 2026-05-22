@@ -6,9 +6,22 @@ export const metadata: Metadata = {
     "Is God calling you to plant a church in Iowa? Get started with Send Network.",
 };
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://sendnetworkiowa.com" },
+    { "@type": "ListItem", position: 2, name: "Plant", item: "https://sendnetworkiowa.com/plant" },
+  ],
+};
+
 export default function PlantPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Page hero */}
       <section className="bg-brand-navy py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

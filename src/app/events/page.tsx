@@ -50,9 +50,93 @@ const events: RegularEvent[] = [
   },
 ];
 
+const eventsJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://sendnetworkiowa.com" },
+      { "@type": "ListItem", position: 2, name: "Events", item: "https://sendnetworkiowa.com/events" },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Send Network Iowa Events",
+    url: "https://sendnetworkiowa.com/events",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        item: {
+          "@type": "Event",
+          name: "One Day — The Work of the Pastor",
+          startDate: "2026-08-28T08:30:00-05:00",
+          endDate: "2026-08-28T15:00:00-05:00",
+          eventStatus: "https://schema.org/EventScheduled",
+          eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+          isAccessibleForFree: true,
+          location: { "@type": "Place", name: "First Family Church", address: { "@type": "PostalAddress", streetAddress: "317 SE Magazine Rd", addressLocality: "Ankeny", addressRegion: "IA", postalCode: "50021", addressCountry: "US" } },
+          organizer: { "@type": "Organization", name: "Send Network Iowa", url: "https://sendnetworkiowa.com" },
+          url: "https://sendnetworkiowa.com/events/one-day",
+        },
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        item: {
+          "@type": "Event",
+          name: "Sending Lab — Ankeny",
+          startDate: "2026-09-14T09:00:00-05:00",
+          endDate: "2026-09-14T15:45:00-05:00",
+          eventStatus: "https://schema.org/EventScheduled",
+          eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+          location: { "@type": "Place", name: "First Family Church", address: { "@type": "PostalAddress", streetAddress: "317 SE Magazine Rd", addressLocality: "Ankeny", addressRegion: "IA", postalCode: "50021", addressCountry: "US" } },
+          organizer: { "@type": "Organization", name: "Send Network Iowa", url: "https://sendnetworkiowa.com" },
+          url: "https://www.sendnetwork.com/events/sending-lab-ankeny-ia/",
+        },
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        item: {
+          "@type": "Event",
+          name: "Sending Lab — Davenport",
+          startDate: "2026-10-05T09:00:00-05:00",
+          endDate: "2026-10-05T15:45:00-05:00",
+          eventStatus: "https://schema.org/EventScheduled",
+          eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+          location: { "@type": "Place", name: "Coram Deo Bible Church", address: { "@type": "PostalAddress", streetAddress: "3800 E 53rd St", addressLocality: "Davenport", addressRegion: "IA", postalCode: "52807", addressCountry: "US" } },
+          organizer: { "@type": "Organization", name: "Send Network Iowa", url: "https://sendnetworkiowa.com" },
+          url: "https://www.sendnetwork.com/events/sending-lab-davenport-ia/",
+        },
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
+        item: {
+          "@type": "Event",
+          name: "Residency Builder — Ankeny",
+          startDate: "2026-12-01T13:30:00-06:00",
+          endDate: "2026-12-02T15:30:00-06:00",
+          eventStatus: "https://schema.org/EventScheduled",
+          eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+          location: { "@type": "Place", name: "First Family Church", address: { "@type": "PostalAddress", streetAddress: "317 SE Magazine Rd", addressLocality: "Ankeny", addressRegion: "IA", postalCode: "50021", addressCountry: "US" } },
+          organizer: { "@type": "Organization", name: "Send Network Iowa", url: "https://sendnetworkiowa.com" },
+          url: "https://www.sendnetwork.com/events/residency-builder-ankeny-ia/",
+        },
+      },
+    ],
+  },
+];
+
 export default function EventsPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(eventsJsonLd) }}
+      />
       {/* Page hero */}
       <section className="bg-brand-navy py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

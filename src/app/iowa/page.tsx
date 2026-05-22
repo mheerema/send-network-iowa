@@ -36,9 +36,22 @@ const dataPoints: DataPoint[] = [
   },
 ];
 
+const breadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    { "@type": "ListItem", position: 1, name: "Home", item: "https://sendnetworkiowa.com" },
+    { "@type": "ListItem", position: 2, name: "The Iowa Opportunity", item: "https://sendnetworkiowa.com/iowa" },
+  ],
+};
+
 export default function IowaPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       {/* Page hero */}
       <section className="relative bg-brand-green py-28 overflow-hidden">
         <div className="absolute inset-0 opacity-20">
