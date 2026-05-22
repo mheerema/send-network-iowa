@@ -74,15 +74,15 @@ export default function EventsPage() {
       {/* Event list */}
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-4">
+          <ul className="space-y-4 list-none p-0">
 
             {/* One Day — featured card */}
-            <div className="rounded-2xl border-2 border-brand-amber/60 bg-brand-amber/[0.04] p-6 sm:p-8 hover:border-brand-amber transition-colors">
+            <li className="rounded-2xl border-2 border-brand-amber/60 bg-brand-amber/[0.04] p-6 sm:p-8 hover:border-brand-amber transition-colors">
               <div className="flex flex-col sm:flex-row sm:items-start gap-6">
 
                 {/* Date block */}
                 <div className="shrink-0 sm:w-28">
-                  <p className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-1">
+                  <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-1">
                     Date
                   </p>
                   <p className="text-sm font-bold text-brand-navy leading-snug">
@@ -96,11 +96,11 @@ export default function EventsPage() {
                     <h2 className="text-base font-bold text-brand-navy tracking-tight">
                       One Day — The Work of the Pastor
                     </h2>
-                    <span className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-brand-amber text-white">
+                    <span className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-brand-amber text-brand-navy">
                       Featured
                     </span>
                   </div>
-                  <p className="text-xs text-gray-400 mb-3">
+                  <p className="text-xs text-gray-500 mb-3">
                     First Family Church · 317 SE Magazine Rd, Ankeny, IA
                   </p>
                   <p className="text-sm text-gray-600 leading-relaxed mb-2">
@@ -109,7 +109,7 @@ export default function EventsPage() {
                     general sessions. Afternoon ministry tracks. Lunch provided.
                     Free.
                   </p>
-                  <p className="text-xs text-gray-400 mb-5">
+                  <p className="text-xs text-gray-500 mb-5">
                     Featuring{" "}
                     <span className="font-semibold text-brand-navy">Tony Merida</span>
                     {" "}and{" "}
@@ -120,7 +120,8 @@ export default function EventsPage() {
                       href="https://web.cvent.com/event/65de6a21-94e2-4911-b20a-9218e3e9481b/summary"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center px-5 py-2 rounded-full bg-brand-amber text-white text-xs font-semibold hover:opacity-90 transition-opacity"
+                      aria-label="Register for One Day — The Work of the Pastor"
+                      className="inline-flex items-center px-5 py-2 rounded-full bg-brand-amber text-brand-navy text-xs font-semibold hover:opacity-90 transition-opacity"
                     >
                       Register
                     </a>
@@ -134,17 +135,17 @@ export default function EventsPage() {
                 </div>
 
               </div>
-            </div>
+            </li>
 
             {/* Other Iowa events */}
             {events.map((event) => (
-              <div
+              <li
                 key={event.registrationHref}
                 className="rounded-2xl border border-gray-100 p-6 sm:p-8 flex flex-col sm:flex-row sm:items-start gap-6 hover:border-brand-amber/30 transition-colors"
               >
                 {/* Date block */}
                 <div className="shrink-0 sm:w-28">
-                  <p className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-1">
+                  <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-1">
                     Date
                   </p>
                   <p className="text-sm font-bold text-brand-navy leading-snug">
@@ -157,7 +158,7 @@ export default function EventsPage() {
                   <h3 className="text-base font-bold text-brand-navy tracking-tight mb-1">
                     {event.title}
                   </h3>
-                  <p className="text-xs text-gray-400 mb-3">{event.location}</p>
+                  <p className="text-xs text-gray-500 mb-3">{event.location}</p>
                   <p className="text-sm text-gray-600 leading-relaxed mb-5">
                     {event.description}
                   </p>
@@ -166,7 +167,8 @@ export default function EventsPage() {
                       href={event.registrationHref}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center px-5 py-2 rounded-full bg-brand-amber text-white text-xs font-semibold hover:opacity-90 transition-opacity"
+                      aria-label={`Register for ${event.title}`}
+                      className="inline-flex items-center px-5 py-2 rounded-full bg-brand-amber text-brand-navy text-xs font-semibold hover:opacity-90 transition-opacity"
                     >
                       Register
                     </a>
@@ -180,10 +182,10 @@ export default function EventsPage() {
                     </a>
                   </div>
                 </div>
-              </div>
+              </li>
             ))}
 
-          </div>
+          </ul>
         </div>
       </section>
 

@@ -159,7 +159,7 @@ export default function OneDayPage() {
             </div>
 
             <p className="text-white text-lg sm:text-xl font-semibold mb-1">
-              The Work of the Pastor
+              <span className="sr-only">One Day: </span>The Work of the Pastor
             </p>
             <p className="text-white/55 text-sm mb-10">
               First Family Church &nbsp;·&nbsp; Ankeny, Iowa
@@ -239,9 +239,9 @@ export default function OneDayPage() {
       {/* ── Speakers ─────────────────────────────────────────────── */}
       <section className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-xs font-semibold uppercase tracking-widest text-brand-amber mb-12">
+          <h2 className="text-xs font-semibold uppercase tracking-widest text-brand-amber mb-12">
             Featured Speakers
-          </p>
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 lg:gap-16">
             {speakers.map((speaker) => (
               <div key={speaker.name}>
@@ -251,7 +251,7 @@ export default function OneDayPage() {
                     alt={speaker.name}
                     fill
                     className="object-cover object-top"
-                    sizes="(max-width: 640px) 100vw, 50vw"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 576px"
                   />
                   <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/65 to-transparent" />
                   <div className="absolute bottom-5 left-6">
@@ -260,10 +260,10 @@ export default function OneDayPage() {
                     </span>
                   </div>
                 </div>
-                <h2 className="text-2xl font-bold text-brand-navy mb-1">
+                <h3 className="text-2xl font-bold text-brand-navy mb-1">
                   {speaker.name}
-                </h2>
-                <p className="text-xs font-semibold text-[#00a99d] uppercase tracking-wide mb-3">
+                </h3>
+                <p className="text-xs font-semibold text-[#00756c] uppercase tracking-wide mb-3">
                   {speaker.role}
                 </p>
                 <p className="text-gray-500 text-sm leading-relaxed">
@@ -318,7 +318,7 @@ export default function OneDayPage() {
 
                 <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 mb-1">
                   <span className="text-xs font-bold text-brand-navy">{row.time}</span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#00a99d]">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#00756c]">
                     {row.type}
                   </span>
                 </div>
@@ -364,7 +364,7 @@ export default function OneDayPage() {
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-10">
             <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Venue</p>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Venue</p>
               <p className="font-bold text-brand-navy text-lg mb-0.5">First Family Church</p>
               <p className="text-gray-500 text-sm mb-3">317 SE Magazine Rd, Ankeny, IA 50021</p>
               <a
@@ -377,10 +377,10 @@ export default function OneDayPage() {
               </a>
             </div>
             <div>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Date & Time</p>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Date & Time</p>
               <p className="font-bold text-brand-navy text-lg mb-0.5">August 28, 2026</p>
               <p className="text-gray-500 text-sm mb-4">Doors open at 8:30 AM · Dismissal at 3:00 PM</p>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Registration</p>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Registration</p>
               <p className="text-gray-500 text-sm mb-4">Free. Lunch is provided.</p>
             </div>
           </div>
@@ -389,7 +389,7 @@ export default function OneDayPage() {
 
       {/* ── Register CTA — closing bookend ───────────────────────── */}
       <section
-        className="py-28 text-white text-center"
+        className="relative py-28 text-white text-center"
         style={{ background: ONE_DAY_GRADIENT }}
       >
         <div

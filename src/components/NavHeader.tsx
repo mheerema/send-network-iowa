@@ -33,7 +33,7 @@ export default function NavHeader() {
           </Link>
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav aria-label="Main navigation" className="hidden md:flex items-center gap-6">
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -54,6 +54,7 @@ export default function NavHeader() {
             className="md:hidden text-white/80 hover:text-white p-2"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
+            aria-controls="mobile-menu"
             onClick={() => setOpen((prev) => !prev)}
           >
             {open ? (
@@ -73,8 +74,8 @@ export default function NavHeader() {
 
       {/* Mobile drawer */}
       {open && (
-        <div className="md:hidden border-t border-white/10 bg-brand-navy">
-          <nav className="flex flex-col px-4 py-4 gap-1">
+        <div id="mobile-menu" className="md:hidden border-t border-white/10 bg-brand-navy">
+          <nav aria-label="Mobile navigation" className="flex flex-col px-4 py-4 gap-1">
             {navLinks.map((link) => (
               <Link
                 key={link.href}

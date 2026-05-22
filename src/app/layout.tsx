@@ -20,6 +20,7 @@ const libreBaskerville = Libre_Baskerville({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://sendnetworkiowa.org"),
   title: "Send Network Iowa",
   description:
     "Planting gospel-centered churches in every Iowa community. Send Network Iowa equips, coaches, and sends church planters across the state.",
@@ -41,7 +42,7 @@ export default function RootLayout({
         {/* Footer */}
         <footer className="bg-brand-navy text-white/70">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {/* Brand */}
               <div>
                 <Image
@@ -59,7 +60,7 @@ export default function RootLayout({
 
 {/* NAMB credit */}
               <div className="flex items-end">
-                <p className="text-xs text-white/40">
+                <p className="text-xs text-white/60">
                   A ministry of the North American Mission Board (NAMB).
                 </p>
               </div>

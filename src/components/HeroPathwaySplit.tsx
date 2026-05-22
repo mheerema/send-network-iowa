@@ -36,6 +36,7 @@ export default function HeroPathwaySplit() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const interval = setInterval(() => {
       setActiveIndex((prev) => (prev + 1) % slides.length);
     }, 7500);
@@ -100,7 +101,7 @@ export default function HeroPathwaySplit() {
             href="https://www.sendnetwork.com/send/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-brand-amber text-white text-sm font-semibold hover:opacity-90 transition-opacity"
+            className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
           >
             Churches Start Here
           </Link>
