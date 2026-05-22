@@ -200,10 +200,11 @@ export default function OneDayPage() {
               }}
             >
               <Image
-                src="/images/speakers/tony-merida.jpg"
+                src="/images/speakers/tony-merida-hero.jpg"
                 alt="Tony Merida"
                 fill
-                className="object-cover object-top"
+                className="object-cover"
+                style={{ objectPosition: "center 20%" }}
                 sizes="25vw"
                 priority
               />
@@ -221,10 +222,11 @@ export default function OneDayPage() {
               }}
             >
               <Image
-                src="/images/speakers/brian-croft.jpg"
+                src="/images/speakers/brian-croft-hero.jpg"
                 alt="Brian Croft"
                 fill
-                className="object-cover object-top"
+                className="object-cover"
+                style={{ objectPosition: "center 20%" }}
                 sizes="25vw"
                 priority
               />
