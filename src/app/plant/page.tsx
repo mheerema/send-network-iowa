@@ -32,11 +32,6 @@ export default function PlantPage() {
             <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
               Is God calling you to plant in Iowa?
             </h1>
-            <p className="mt-6 text-white/70 leading-relaxed">
-              We walk with planters from initial calling through assessment,
-              training, coaching, and launch. Iowa-specific context. Real
-              support. No shortcuts.
-            </p>
             <div className="mt-8">
               <a
                 href="https://www.sendnetwork.com/plant/"

@@ -3,67 +3,8 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Partner with Send Network Iowa",
   description:
-    "Your church can support church planting in Iowa through prayer, finances, and sending. Four partnership tiers for churches of any size.",
+    "Send Network Iowa connects churches and planters across Iowa to resources that help them prepare, assess, care for one another, and equip their teams.",
 };
-
-interface PartnershipTier {
-  name: string;
-  commitment: string;
-  description: string;
-  actions: string[];
-  accent: string;
-}
-
-const tiers: PartnershipTier[] = [
-  {
-    name: "Prayer",
-    commitment: "Intercede",
-    description:
-      "The most foundational form of partnership. Commit to pray regularly for Iowa church planters and their communities.",
-    actions: [
-      "Receive a monthly prayer guide with specific planter requests",
-      "Include Iowa planting in your church's weekly prayer rhythms",
-      "Pray for specific communities without gospel-centered churches",
-    ],
-    accent: "border-brand-amber/30 bg-brand-amber/5",
-  },
-  {
-    name: "Supporting",
-    commitment: "Give",
-    description:
-      "Financial partnership that provides direct resources to planters in the field.",
-    actions: [
-      "Commit a monthly or annual financial gift to Send Network Iowa",
-      "Designate giving to a specific planter or region",
-      "Help cover assessment and training costs for new planters",
-    ],
-    accent: "border-brand-navy/20 bg-brand-navy/5",
-  },
-  {
-    name: "Sending",
-    commitment: "Commission",
-    description:
-      "A deeper partnership where your church actively commissions a planter from within your congregation.",
-    actions: [
-      "Identify and encourage a planter from your church family",
-      "Walk them through PACE with Send Network Iowa coaching support",
-      "Provide spiritual authority and ongoing accountability",
-    ],
-    accent: "border-brand-green/30 bg-brand-green/5",
-  },
-  {
-    name: "Multiplying",
-    commitment: "Reproduce",
-    description:
-      "The fullest expression of partnership. Your church plants a daughter church in an Iowa community and commits to its growth.",
-    actions: [
-      "Collaborate with Send Network Iowa to identify a target community",
-      "Send a core team to form the nucleus of the new church",
-      "Maintain a covenant relationship with the plant for three years",
-    ],
-    accent: "border-brand-amber/50 bg-brand-amber/10",
-  },
-];
 
 const breadcrumbJsonLd = {
   "@context": "https://schema.org",
@@ -92,61 +33,11 @@ export default function PartnerPage() {
               Your church was made to multiply
             </h1>
             <p className="mt-6 text-white/70 leading-relaxed">
-              Church planting is not the work of lone planters. It is the work
-              of whole churches. Send Network Iowa connects sending churches to planters
-              across Iowa through four partnership tiers designed for churches
-              of any size.
+              Send Network Iowa connects churches and planters across Iowa to
+              resources that help them prepare for the planting journey, assess
+              their readiness, care for one another along the way, and equip
+              their teams to reach their communities.
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Partnership tiers */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-3">
-              Partnership Tiers
-            </p>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-brand-navy">
-              Four ways your church can partner
-            </h2>
-            <p className="mt-4 text-gray-600 max-w-xl mx-auto text-sm leading-relaxed">
-              Every tier is a genuine partnership. Start where you are. Grow
-              into more.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {tiers.map((tier) => (
-              <div
-                key={tier.name}
-                className={`rounded-2xl border-2 p-5 sm:p-8 ${tier.accent}`}
-              >
-                <p className="text-brand-amber text-xs font-semibold uppercase tracking-wider mb-1">
-                  {tier.commitment}
-                </p>
-                <h3 className="text-xl font-bold text-brand-navy tracking-tight mb-3">
-                  {tier.name} Partner
-                </h3>
-                <p className="text-sm text-gray-600 leading-relaxed mb-5">
-                  {tier.description}
-                </p>
-                <ul className="space-y-2">
-                  {tier.actions.map((action) => (
-                    <li
-                      key={action}
-                      className="flex items-start gap-2 text-sm text-gray-700"
-                    >
-                      <span className="mt-0.5 text-brand-amber font-bold">
-                        &rsaquo;
-                      </span>
-                      {action}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
           </div>
         </div>
       </section>
