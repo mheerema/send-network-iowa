@@ -33,7 +33,7 @@ const speakers = [
   {
     name: "Brian Croft",
     track: "Pastoring Track",
-    photo: "/images/speakers/brian-croft.jpg",
+    photo: "/images/speakers/brian-croft.webp",
     role: "Founder, Practical Shepherding · Senior Fellow, Mathena Center, SBTS",
     bio: "Brian Croft is the founder of Practical Shepherding and Senior Fellow at the Mathena Center for Church Revitalization at Southern Seminary. He served 17 years as senior pastor of Auburndale Baptist Church in Louisville, KY, and is the author of 25+ books on pastoral ministry, shepherding, and church health.",
   },
@@ -104,9 +104,48 @@ const schedule = [
   },
 ];
 
+const eventJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Event",
+  name: "One Day — The Work of the Pastor",
+  description:
+    "A full-day gathering for pastors, church leaders, and church planters built around preaching and shepherding. Morning general sessions. Afternoon ministry tracks.",
+  startDate: "2026-08-28T08:30:00-05:00",
+  endDate: "2026-08-28T15:00:00-05:00",
+  eventStatus: "https://schema.org/EventScheduled",
+  eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
+  isAccessibleForFree: true,
+  location: {
+    "@type": "Place",
+    name: "First Family Church",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "317 SE Magazine Rd",
+      addressLocality: "Ankeny",
+      addressRegion: "IA",
+      postalCode: "50021",
+      addressCountry: "US",
+    },
+  },
+  organizer: {
+    "@type": "Organization",
+    name: "Send Network Iowa",
+    url: "https://sendnetworkiowa.org",
+  },
+  performer: [
+    { "@type": "Person", name: "Tony Merida" },
+    { "@type": "Person", name: "Brian Croft" },
+  ],
+  url: "https://sendnetworkiowa.org/events/one-day",
+};
+
 export default function OneDayPage() {
   return (
     <div className={barlowCondensed.variable}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(eventJsonLd) }}
+      />
 
       {/* ── Hero ─────────────────────────────────────────────────── */}
       <section

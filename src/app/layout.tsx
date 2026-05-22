@@ -33,6 +33,35 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${montserrat.variable} ${libreBaskerville.variable} h-full antialiased`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                name: "Send Network Iowa",
+                url: "https://sendnetworkiowa.org",
+                logo: "https://sendnetworkiowa.org/images/brand/sni-logo-white.png",
+                description:
+                  "Planting gospel-centered churches in every Iowa community through the Southern Baptist Convention.",
+                parentOrganization: {
+                  "@type": "Organization",
+                  name: "North American Mission Board",
+                  url: "https://www.namb.net",
+                },
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "WebSite",
+                name: "Send Network Iowa",
+                url: "https://sendnetworkiowa.org",
+              },
+            ]),
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-sans">
         <NavHeader />
 

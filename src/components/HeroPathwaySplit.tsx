@@ -6,27 +6,27 @@ import Link from "next/link";
 
 const slides = [
   {
-    src: "/images/stock/hero-church-welcome.jpg",
+    src: "/images/stock/hero-church-welcome.webp",
     alt: "A welcoming church community greeting newcomers",
     credit: "Kristina Paparo / Unsplash",
   },
   {
-    src: "/images/stock/hero-baptism.jpg",
+    src: "/images/stock/hero-baptism.webp",
     alt: "Community baptism gathering outdoors",
     credit: "AMONWAT DUMKRUT / Unsplash",
   },
   {
-    src: "/images/stock/hero-worship.jpg",
+    src: "/images/stock/hero-worship.webp",
     alt: "Small congregation in worship",
     credit: "Elianna Gill / Unsplash",
   },
   {
-    src: "/images/stock/hero-park-gathering.jpg",
+    src: "/images/stock/hero-park-gathering.webp",
     alt: "Large group gathered outdoors at a community picnic",
     credit: "Lucas Lemoine / Unsplash",
   },
   {
-    src: "/images/stock/hero-community-gather.jpg",
+    src: "/images/stock/hero-community-gather.webp",
     alt: "Community gathering outdoors",
     credit: "Priscilla Du Preez / Unsplash",
   },
