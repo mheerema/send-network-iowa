@@ -84,18 +84,9 @@ export default function RootLayout({
                 </ul>
               </div>
 
-              {/* Contact */}
-              <div>
-                <p className="text-white text-sm font-semibold mb-3 uppercase tracking-wider">
-                  Contact
-                </p>
-                <a
-                  href="mailto:info@sendnetworkiowa.org"
-                  className="text-sm hover:text-white transition-colors"
-                >
-                  info@sendnetworkiowa.org
-                </a>
-                <p className="text-xs mt-4 text-white/40">
+              {/* NAMB credit */}
+              <div className="flex items-end">
+                <p className="text-xs text-white/40">
                   A ministry of the North American Mission Board (NAMB).
                 </p>
               </div>

@@ -23,7 +23,6 @@ const levels: Level[] = [
     body: "Fuel church planting in Iowa by praying for planters and giving through the Cooperative Program and Annie Armstrong Easter Offering.",
     ctas: [
       { text: "Get started on Send Network", href: SEND_NETWORK_SEND },
-      { text: "Connect with Send Iowa", href: "/contact" },
     ],
   },
   {
@@ -33,7 +32,6 @@ const levels: Level[] = [
     body: "Partner with an Iowa church plant by praying, participating, and providing for their practical needs.",
     ctas: [
       { text: "Get started on Send Network", href: SEND_NETWORK_SEND },
-      { text: "Connect with Send Iowa", href: "/contact" },
     ],
   },
   {
@@ -53,7 +51,6 @@ const levels: Level[] = [
     body: "Develop church planters from within your congregation and send them to Iowa's unreached communities.",
     ctas: [
       { text: "Get started on Send Network", href: SEND_NETWORK_SEND },
-      { text: "Connect with Send Iowa", href: "/contact" },
     ],
   },
   {
@@ -63,7 +60,6 @@ const levels: Level[] = [
     body: "Radically multiply and catalyze other Iowa churches to plant churches — until there is a healthy, multiplying church in every Iowa community.",
     ctas: [
       { text: "Get started on Send Network", href: SEND_NETWORK_SEND },
-      { text: "Connect with Send Iowa", href: "/contact" },
     ],
   },
 ];

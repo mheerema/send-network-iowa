@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import TalkCTA from "@/components/TalkCTA";
 
 export const metadata: Metadata = {
   title: "Events | Send Network Iowa",
@@ -188,7 +187,6 @@ export default function EventsPage() {
         </div>
       </section>
 
-      <TalkCTA variant="inline" />
     </>
   );
 }

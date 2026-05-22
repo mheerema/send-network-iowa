@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import TalkCTA from "@/components/TalkCTA";
 
 export const metadata: Metadata = {
   title: "The Iowa Opportunity | Send Network Iowa",
@@ -144,16 +143,9 @@ export default function IowaPage() {
           <p className="text-gray-600 text-sm leading-relaxed max-w-2xl mb-8">
             Iowa&rsquo;s religious landscape — mainline decline, unchurched growth, and evangelical pockets — tells a story that demands a planting response.
           </p>
-          <Link
-            href="/contact"
-            className="inline-flex items-center px-6 py-3 rounded-full bg-brand-navy text-white text-sm font-semibold hover:opacity-90 transition-opacity"
-          >
-            Talk to the Send Network Iowa team about Iowa
-          </Link>
         </div>
       </section>
 
-      <TalkCTA variant="inline" />
     </>
   );
 }
