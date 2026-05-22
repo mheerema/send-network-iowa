@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     "Iowa Send Network gatherings — One Day, Sending Labs, Residency Builder, and more. Find the right gathering for where you are in the process.",
 };
 
-interface Event {
+interface RegularEvent {
   title: string;
   date: string;
   location: string;
@@ -17,7 +17,7 @@ interface Event {
   detailHref: string;
 }
 
-const events: Event[] = [
+const events: RegularEvent[] = [
   {
     title: "Sending Lab — Ankeny",
     date: "Sep 14, 2026",
@@ -51,26 +51,6 @@ const events: Event[] = [
   },
 ];
 
-const schedule = [
-  { time: "8:30am", item: "Registration and Fellowship" },
-  { time: "9:00am", item: "Opening Worship and Prayer" },
-  { time: "9:45–10:30am", item: "Session 1" },
-  { time: "10:45–11:30am", item: "Session 2" },
-  { time: "11:30am", item: "Lunch" },
-  {
-    time: "12:30pm",
-    item: "Ministry Tracks",
-    tracks: [
-      { label: "Preaching", leaders: "Tony Merida" },
-      { label: "Pastoring", leaders: "Brian Croft" },
-      { label: "Women", leaders: "Rivers Partin & Kari Minter" },
-      { label: "Hispanics", leaders: "David Martinez & Israel Becerra" },
-    ],
-  },
-  { time: "2:30pm", item: "Closing" },
-  { time: "3:00pm", item: "Dismissal" },
-];
-
 export default function EventsPage() {
   return (
     <>
@@ -92,134 +72,72 @@ export default function EventsPage() {
         </div>
       </section>
 
-      {/* Featured event: One Day */}
-      <section className="py-20 bg-gray-50 border-b border-gray-100">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Event header */}
-          <div className="mb-8">
-            <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-3">
-              Featured Event
-            </p>
-            <div className="flex flex-wrap items-center gap-3 mb-3">
-              <h2 className="text-2xl sm:text-3xl font-bold text-brand-navy tracking-tight">
-                One Day — The Work of the Pastor
-              </h2>
-              <span className="shrink-0 text-xs font-semibold px-3 py-1 rounded-full bg-brand-amber/15 text-brand-amber">
-                Featured
-              </span>
-            </div>
-            <p className="text-sm text-gray-500">
-              August 28, 2026 &nbsp;·&nbsp; First Family Church, Ankeny, IA
-            </p>
-          </div>
-
-          <p className="text-gray-600 text-sm leading-relaxed mb-10">
-            A full-day gathering for pastors, church leaders, and church
-            planters built around the essential work of pastoral ministry:
-            preaching and shepherding. Morning sessions bring everyone together.
-            Afternoon ministry tracks give Preaching, Pastoring, Women, and
-            Hispanics focused time. Lunch provided.
-          </p>
-
-          {/* Keynote speakers */}
-          <div className="mb-10">
-            <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-4">
-              Keynote Speakers
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-white rounded-2xl p-6 border border-gray-100">
-                <p className="text-brand-amber text-xs font-semibold uppercase tracking-wider mb-2">
-                  Preaching Track
-                </p>
-                <p className="font-bold text-brand-navy text-lg mb-1">
-                  Tony Merida
-                </p>
-                <p className="text-xs text-gray-500 leading-relaxed">
-                  Founding pastor of Imago Dei Church in Raleigh, NC.
-                  Faculty at Grimké Seminary. Council Member, The Gospel
-                  Coalition.
-                </p>
-              </div>
-              <div className="bg-white rounded-2xl p-6 border border-gray-100">
-                <p className="text-brand-amber text-xs font-semibold uppercase tracking-wider mb-2">
-                  Pastoring Track
-                </p>
-                <p className="font-bold text-brand-navy text-lg mb-1">
-                  Brian Croft
-                </p>
-                <p className="text-xs text-gray-500 leading-relaxed">
-                  Founder of Practical Shepherding. 17 years as a senior
-                  pastor in Louisville, KY. Author of 25+ books on pastoral
-                  ministry. Senior Fellow, Mathena Center, SBTS.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          {/* Schedule */}
-          <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100">
-              <p className="text-sm font-semibold text-brand-navy">Schedule</p>
-            </div>
-            <div className="divide-y divide-gray-50">
-              {schedule.map((row) => (
-                <div
-                  key={row.time}
-                  className="px-6 py-4 flex flex-col sm:flex-row sm:items-start gap-2 sm:gap-6"
-                >
-                  <span className="shrink-0 text-xs text-gray-400 font-medium sm:w-32">
-                    {row.time}
-                  </span>
-                  <div className="flex-1">
-                    <span className="text-sm text-gray-700">{row.item}</span>
-                    {"tracks" in row && row.tracks && (
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {row.tracks.map((track) => (
-                          <span
-                            key={track.label}
-                            className="inline-flex items-center gap-1.5 text-xs bg-gray-50 border border-gray-100 rounded-lg px-3 py-1.5 text-gray-600"
-                          >
-                            <span className="font-semibold text-brand-navy">
-                              {track.label}
-                            </span>
-                            <span className="text-gray-400">/</span>
-                            {track.leaders}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="mt-8 flex flex-wrap gap-3">
-            <a
-              href="https://web.cvent.com/event/65de6a21-94e2-4911-b20a-9218e3e9481b/summary"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center px-5 py-2 rounded-full bg-brand-amber text-white text-xs font-semibold hover:opacity-90 transition-opacity"
-            >
-              Register
-            </a>
-            <Link
-              href="/events/one-day"
-              className="inline-flex items-center px-5 py-2 rounded-full border border-brand-navy text-brand-navy text-xs font-semibold hover:bg-brand-navy hover:text-white transition-colors"
-            >
-              Event details
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Other Iowa events */}
+      {/* Event list */}
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-6">
-            More Iowa Events
-          </p>
           <div className="space-y-4">
+
+            {/* One Day — featured card */}
+            <div className="rounded-2xl border-2 border-brand-amber/60 bg-brand-amber/[0.04] p-6 sm:p-8 hover:border-brand-amber transition-colors">
+              <div className="flex flex-col sm:flex-row sm:items-start gap-6">
+
+                {/* Date block */}
+                <div className="shrink-0 sm:w-28">
+                  <p className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-1">
+                    Date
+                  </p>
+                  <p className="text-sm font-bold text-brand-navy leading-snug">
+                    Aug 28, 2026
+                  </p>
+                </div>
+
+                {/* Event info */}
+                <div className="flex-1">
+                  <div className="flex flex-wrap items-center gap-2 mb-1">
+                    <h2 className="text-base font-bold text-brand-navy tracking-tight">
+                      One Day — The Work of the Pastor
+                    </h2>
+                    <span className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-brand-amber text-white">
+                      Featured
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-400 mb-3">
+                    First Family Church · 317 SE Magazine Rd, Ankeny, IA
+                  </p>
+                  <p className="text-sm text-gray-600 leading-relaxed mb-2">
+                    A full-day gathering for pastors, church leaders, and church
+                    planters built around preaching and shepherding. Morning
+                    general sessions. Afternoon ministry tracks. Lunch provided.
+                    Free.
+                  </p>
+                  <p className="text-xs text-gray-400 mb-5">
+                    Featuring{" "}
+                    <span className="font-semibold text-brand-navy">Tony Merida</span>
+                    {" "}and{" "}
+                    <span className="font-semibold text-brand-navy">Brian Croft</span>
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    <a
+                      href="https://web.cvent.com/event/65de6a21-94e2-4911-b20a-9218e3e9481b/summary"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center px-5 py-2 rounded-full bg-brand-amber text-white text-xs font-semibold hover:opacity-90 transition-opacity"
+                    >
+                      Register
+                    </a>
+                    <Link
+                      href="/events/one-day"
+                      className="inline-flex items-center px-5 py-2 rounded-full border border-brand-navy text-brand-navy text-xs font-semibold hover:bg-brand-navy hover:text-white transition-colors"
+                    >
+                      Event details
+                    </Link>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            {/* Other Iowa events */}
             {events.map((event) => (
               <div
                 key={event.registrationHref}
@@ -265,6 +183,7 @@ export default function EventsPage() {
                 </div>
               </div>
             ))}
+
           </div>
         </div>
       </section>
