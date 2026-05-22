@@ -53,14 +53,16 @@ export default function IowaPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       {/* Page hero */}
-      <section className="relative bg-brand-green py-28 overflow-hidden">
+      <section className="relative bg-brand-green py-16 sm:py-20 md:py-28 overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <Image
             src="/images/sending-lab-adel/2025-Sending-Lab-05.jpg"
-            alt="Iowa gathering"
+            alt=""
+            aria-hidden="true"
             fill
             className="object-cover"
-            sizes="100vw"
+            sizes="(max-width: 768px) 50vw, 100vw"
+            loading="lazy"
           />
         </div>
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -95,7 +97,7 @@ export default function IowaPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {dataPoints.map((dp) => (
               <div key={dp.label} className="text-center">
                 <p className="text-5xl font-bold text-brand-amber leading-none mb-2">

@@ -82,7 +82,7 @@ export default function PartnerPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       {/* Page hero */}
-      <section className="bg-brand-navy py-24">
+      <section className="bg-brand-navy py-16 sm:py-20 md:py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl">
             <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-4">
@@ -121,7 +121,7 @@ export default function PartnerPage() {
             {tiers.map((tier) => (
               <div
                 key={tier.name}
-                className={`rounded-2xl border-2 p-8 ${tier.accent}`}
+                className={`rounded-2xl border-2 p-5 sm:p-8 ${tier.accent}`}
               >
                 <p className="text-brand-amber text-xs font-semibold uppercase tracking-wider mb-1">
                   {tier.commitment}
@@ -158,7 +158,7 @@ export default function PartnerPage() {
             href="https://www.sendnetwork.com/send/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center px-6 py-3 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
+            className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
           >
             Get Started on Send Network &rarr;
           </a>

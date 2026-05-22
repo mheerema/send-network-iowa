@@ -38,7 +38,7 @@ export default function NavHeader() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm transition-colors ${
+                className={`text-sm py-1 transition-colors ${
                   pathname === link.href
                     ? "text-white font-semibold"
                     : "text-white/70 hover:text-white"
@@ -51,7 +51,7 @@ export default function NavHeader() {
 
           {/* Hamburger */}
           <button
-            className="md:hidden text-white/80 hover:text-white p-2"
+            className="md:hidden text-white/80 hover:text-white p-3 min-w-[44px] min-h-[44px] flex items-center justify-center"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             aria-controls="mobile-menu"
@@ -75,7 +75,7 @@ export default function NavHeader() {
       {/* Mobile drawer */}
       {open && (
         <div id="mobile-menu" className="md:hidden border-t border-white/10 bg-brand-navy">
-          <nav aria-label="Mobile navigation" className="flex flex-col px-4 py-4 gap-1">
+          <nav aria-label="Mobile navigation" className="flex flex-col px-4 py-4 gap-2">
             {navLinks.map((link) => (
               <Link
                 key={link.href}

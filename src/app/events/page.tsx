@@ -205,13 +205,13 @@ export default function EventsPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="Register for One Day — The Work of the Pastor"
-                      className="inline-flex items-center px-5 py-2 rounded-full bg-brand-amber text-brand-navy text-xs font-semibold hover:opacity-90 transition-opacity"
+                      className="inline-flex items-center px-5 py-3 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
                     >
                       Register
                     </a>
                     <Link
                       href="/events/one-day"
-                      className="inline-flex items-center px-5 py-2 rounded-full border border-brand-navy text-brand-navy text-xs font-semibold hover:bg-brand-navy hover:text-white transition-colors"
+                      className="inline-flex items-center px-5 py-3 rounded-full border border-brand-navy text-brand-navy text-sm font-semibold hover:bg-brand-navy hover:text-white transition-colors"
                     >
                       Event details
                     </Link>
@@ -252,7 +252,7 @@ export default function EventsPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Register for ${event.title}`}
-                      className="inline-flex items-center px-5 py-2 rounded-full bg-brand-amber text-brand-navy text-xs font-semibold hover:opacity-90 transition-opacity"
+                      className="inline-flex items-center px-5 py-3 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
                     >
                       Register
                     </a>
@@ -260,7 +260,7 @@ export default function EventsPage() {
                       href={event.detailHref}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center px-5 py-2 rounded-full border border-brand-navy text-brand-navy text-xs font-semibold hover:bg-brand-navy hover:text-white transition-colors"
+                      className="inline-flex items-center px-5 py-3 rounded-full border border-brand-navy text-brand-navy text-sm font-semibold hover:bg-brand-navy hover:text-white transition-colors"
                     >
                       Event details
                     </a>

@@ -23,7 +23,7 @@ export default function PlantPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       {/* Page hero */}
-      <section className="bg-brand-navy py-24">
+      <section className="bg-brand-navy py-16 sm:py-20 md:py-24">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-2xl">
             <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-4">
@@ -42,7 +42,7 @@ export default function PlantPage() {
                 href="https://www.sendnetwork.com/plant/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-6 py-3 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
+                className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
               >
                 Get Started on Send Network
               </a>
@@ -67,7 +67,7 @@ export default function PlantPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div className="bg-gray-50 rounded-2xl p-8">
+            <div className="bg-gray-50 rounded-2xl p-5 sm:p-8">
               <h3 className="text-lg font-bold text-brand-navy mb-3">
                 Church Planter Support
               </h3>
@@ -77,7 +77,7 @@ export default function PlantPage() {
                 four years and one-time startup grants to cover early costs.
               </p>
             </div>
-            <div className="bg-gray-50 rounded-2xl p-8">
+            <div className="bg-gray-50 rounded-2xl p-5 sm:p-8">
               <h3 className="text-lg font-bold text-brand-navy mb-3">
                 Church Planting Apprenticeship
               </h3>
@@ -87,7 +87,7 @@ export default function PlantPage() {
                 as they prepare, study their community, and build a core team.
               </p>
             </div>
-            <div className="bg-gray-50 rounded-2xl p-8">
+            <div className="bg-gray-50 rounded-2xl p-5 sm:p-8">
               <h3 className="text-lg font-bold text-brand-navy mb-3">
                 Church Planter Incubator
               </h3>
@@ -104,7 +104,7 @@ export default function PlantPage() {
               href="https://bciowa.org/churchplantingpartnership/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center px-6 py-3 rounded-full border-2 border-brand-navy text-brand-navy text-sm font-semibold hover:bg-brand-navy hover:text-white transition-colors"
+              className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-full border-2 border-brand-navy text-brand-navy text-sm font-semibold hover:bg-brand-navy hover:text-white transition-colors"
             >
               Learn more at bciowa.org &rarr;
             </a>

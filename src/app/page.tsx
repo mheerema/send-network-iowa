@@ -28,7 +28,7 @@ export default function Home() {
           </p>
           <Link
             href="/plant#funding"
-            className="inline-flex items-center px-6 py-3 rounded-full bg-brand-navy text-white text-sm font-semibold hover:opacity-90 transition-opacity"
+            className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-full bg-brand-navy text-white text-sm font-semibold hover:opacity-90 transition-opacity"
           >
             See available support
           </Link>

@@ -61,7 +61,7 @@ export default function HeroPathwaySplit() {
       ))}
 
       {/* Dark overlay */}
-      <div className="absolute inset-0 bg-brand-navy/70" />
+      <div className="absolute inset-0 bg-brand-navy/80" />
 
       {/* Photo credit */}
       <p className="absolute bottom-2 right-3 z-10 text-white/30 text-[10px]">
@@ -93,7 +93,7 @@ export default function HeroPathwaySplit() {
             href="https://www.sendnetwork.com/plant/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-white text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
+            className="inline-flex items-center justify-center w-full sm:w-auto px-8 py-4 rounded-full bg-white text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
           >
             Planters Start Here
           </Link>
@@ -101,7 +101,7 @@ export default function HeroPathwaySplit() {
             href="https://www.sendnetwork.com/send/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-8 py-4 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
+            className="inline-flex items-center justify-center w-full sm:w-auto px-8 py-4 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
           >
             Churches Start Here
           </Link>

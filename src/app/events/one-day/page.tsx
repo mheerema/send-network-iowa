@@ -190,7 +190,7 @@ export default function OneDayPage() {
         <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center min-h-[92vh]">
 
           {/* Text — left */}
-          <div className="relative z-10 w-full lg:w-[52%] py-28 lg:py-0">
+          <div className="relative z-10 w-full lg:w-[52%] py-16 sm:py-20 lg:py-0">
             <p className="text-white/60 text-xs font-semibold uppercase tracking-[0.2em] mb-5">
               Send Network Iowa &nbsp;·&nbsp; August 28, 2026
             </p>
@@ -258,8 +258,7 @@ export default function OneDayPage() {
                 fill
                 className="object-cover"
                 style={{ objectPosition: "center 20%" }}
-                sizes="25vw"
-                priority
+                sizes="(max-width: 1024px) 0px, 25vw"
               />
             </div>
 
@@ -280,8 +279,7 @@ export default function OneDayPage() {
                 fill
                 className="object-cover"
                 style={{ objectPosition: "center 20%" }}
-                sizes="25vw"
-                priority
+                sizes="(max-width: 1024px) 0px, 25vw"
               />
             </div>
           </div>
@@ -371,7 +369,7 @@ export default function OneDayPage() {
 
                 <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5 mb-1">
                   <span className="text-xs font-bold text-brand-navy">{row.time}</span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#00756c]">
+                  <span className="text-xs font-bold uppercase tracking-widest text-[#00756c]">
                     {row.type}
                   </span>
                 </div>
@@ -424,7 +422,7 @@ export default function OneDayPage() {
                 href="https://maps.google.com/?q=317+SE+Magazine+Rd+Ankeny+IA+50021"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm font-semibold text-brand-amber hover:opacity-75 transition-opacity"
+                className="inline-block py-1 text-sm font-semibold text-brand-amber hover:opacity-75 transition-opacity"
               >
                 Get directions &rarr;
               </a>
