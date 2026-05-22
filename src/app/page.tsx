@@ -11,31 +11,6 @@ export default function Home() {
       {/* Church pathway ladder */}
       <ChurchPathwayLadder />
 
-      {/* Pathway escape hatch */}
-      <section className="py-12 bg-white">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-700 font-medium mb-5">
-            Not sure where your church fits?
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              href="https://www.sendnetwork.com/send/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center px-7 py-3 rounded-full bg-brand-amber text-white text-sm font-semibold hover:opacity-90 transition-opacity"
-            >
-              Explore Send Network
-            </Link>
-            <Link
-              href="/events"
-              className="inline-flex items-center px-7 py-3 rounded-full border border-brand-navy text-brand-navy text-sm font-semibold hover:bg-brand-navy hover:text-white transition-colors"
-            >
-              Attend a Sending Lab
-            </Link>
-          </div>
-        </div>
-      </section>
-
       {/* BCI Partnership callout */}
       <section className="py-14 bg-gray-50 border-y border-gray-100">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
