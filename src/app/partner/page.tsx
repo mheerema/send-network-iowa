@@ -32,13 +32,19 @@ export default function PartnerPage() {
             <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
               Your church was made to multiply
             </h1>
-            <p className="mt-6 text-white/70 leading-relaxed">
-              Send Network Iowa connects churches and planters across Iowa to
-              resources that help them prepare for the planting journey, assess
-              their readiness, care for one another along the way, and equip
-              their teams to reach their communities.
-            </p>
           </div>
+        </div>
+      </section>
+
+      {/* Body */}
+      <section className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-gray-700 leading-relaxed max-w-2xl">
+            Send Network Iowa connects churches and planters across Iowa to
+            resources that help them prepare for the planting journey, assess
+            their readiness, care for one another along the way, and equip
+            their teams to reach their communities.
+          </p>
         </div>
       </section>
 
