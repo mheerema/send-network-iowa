@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import TalkCTA from "@/components/TalkCTA";
 
 export const metadata: Metadata = {
@@ -104,7 +105,7 @@ export default function EventsPage() {
                 One Day — The Work of the Pastor
               </h2>
               <span className="shrink-0 text-xs font-semibold px-3 py-1 rounded-full bg-brand-amber/15 text-brand-amber">
-                Registration coming soon
+                Featured
               </span>
             </div>
             <p className="text-sm text-gray-500">
@@ -193,9 +194,22 @@ export default function EventsPage() {
             </div>
           </div>
 
-          <p className="mt-6 text-xs text-gray-400">
-            Registration details will be available on Send Network soon.
-          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a
+              href="https://web.cvent.com/event/65de6a21-94e2-4911-b20a-9218e3e9481b/summary"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center px-5 py-2 rounded-full bg-brand-amber text-white text-xs font-semibold hover:opacity-90 transition-opacity"
+            >
+              Register
+            </a>
+            <Link
+              href="/events/one-day"
+              className="inline-flex items-center px-5 py-2 rounded-full border border-brand-navy text-brand-navy text-xs font-semibold hover:bg-brand-navy hover:text-white transition-colors"
+            >
+              Event details
+            </Link>
+          </div>
         </div>
       </section>
 
