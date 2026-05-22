@@ -378,8 +378,8 @@ export default function OneDayPage() {
               <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Date & Time</p>
               <p className="font-bold text-brand-navy text-lg mb-0.5">August 28, 2026</p>
               <p className="text-gray-500 text-sm mb-4">Doors open at 8:30 AM · Dismissal at 3:00 PM</p>
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Meals</p>
-              <p className="text-gray-500 text-sm">Lunch is provided. Coffee available at registration.</p>
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Registration</p>
+              <p className="text-gray-500 text-sm mb-4">Free. Lunch is provided.</p>
             </div>
           </div>
         </div>
