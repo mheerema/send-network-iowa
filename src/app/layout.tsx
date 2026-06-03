@@ -95,9 +95,17 @@ export default function RootLayout({
               </div>
             </div>
 
-            <div className="border-t border-white/10 mt-10 pt-6 text-xs text-white/40">
-              &copy; {new Date().getFullYear()} Send Network Iowa. All rights
-              reserved.
+            <div className="border-t border-white/10 mt-10 pt-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 text-xs text-white/40">
+              <span>
+                &copy; {new Date().getFullYear()} Send Network Iowa. All rights
+                reserved.
+              </span>
+              <Link
+                href="/privacy"
+                className="text-white/60 hover:text-white transition-colors"
+              >
+                Privacy
+              </Link>
             </div>
           </div>
         </footer>
