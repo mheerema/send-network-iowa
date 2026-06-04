@@ -89,10 +89,10 @@ const schedule = [
     ],
   },
   {
-    time: "2:30 PM",
-    type: "CLOSING",
-    title: "Closing Session",
-    speaker: null,
+    time: "2:15 PM",
+    type: "PANEL",
+    title: "One Day Panel",
+    speaker: "Tony Merida & Brian Croft",
     description: null,
   },
   {
