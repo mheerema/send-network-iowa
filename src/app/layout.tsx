@@ -24,6 +24,21 @@ export const metadata: Metadata = {
   title: "Send Network Iowa",
   description:
     "Planting gospel-centered churches in every Iowa community. Send Network Iowa equips, coaches, and sends church planters across the state.",
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: "Send Network Iowa",
+    locale: "en_US",
+    title: "Send Network Iowa",
+    description:
+      "Planting gospel-centered churches in every Iowa community. Send Network Iowa equips, coaches, and sends church planters across the state.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Send Network Iowa",
+    description:
+      "Planting gospel-centered churches in every Iowa community through the Southern Baptist Convention.",
+  },
 };
 
 export default function RootLayout({

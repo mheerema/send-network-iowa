@@ -13,7 +13,25 @@ const barlowCondensed = Barlow_Condensed({
 export const metadata: Metadata = {
   title: "One Day — The Work of the Pastor | Send Network Iowa",
   description:
-    "A full-day gathering for pastors, church leaders, and church planters. August 28, 2026 · First Family Church, Ankeny, IA. Featuring Tony Merida and Brian Croft.",
+    "A free full-day gathering for pastors, church leaders, and church planters. August 28, 2026 · First Family Church, Ankeny, IA. Featuring Tony Merida and Brian Croft.",
+  alternates: {
+    canonical: "/events/one-day",
+  },
+  openGraph: {
+    type: "website",
+    url: "/events/one-day",
+    siteName: "Send Network Iowa",
+    locale: "en_US",
+    title: "One Day — The Work of the Pastor",
+    description:
+      "A free full-day gathering for pastors, church leaders, and church planters. August 28, 2026 in Ankeny, Iowa. Featuring Tony Merida & Brian Croft.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "One Day — The Work of the Pastor",
+    description:
+      "Free full-day gathering for pastors & church planters. Aug 28, 2026 · Ankeny, IA. With Tony Merida & Brian Croft.",
+  },
 };
 
 const REGISTRATION_URL =
