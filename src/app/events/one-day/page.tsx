@@ -10,6 +10,11 @@ const barlowCondensed = Barlow_Condensed({
   display: "swap",
 });
 
+// Alt text for the official One Day 2026 share card (public/og-one-day.png),
+// shared by both the Open Graph and Twitter image declarations.
+const ONE_DAY_OG_ALT =
+  "One Day — The Work of the Pastor. A free full-day gathering for pastors, church leaders, and church planters. August 28, 2026 in Ankeny, Iowa, featuring Tony Merida and Brian Croft.";
+
 export const metadata: Metadata = {
   title: "One Day — The Work of the Pastor | Send Network Iowa",
   description:
@@ -25,12 +30,28 @@ export const metadata: Metadata = {
     title: "One Day — The Work of the Pastor",
     description:
       "A free full-day gathering for pastors, church leaders, and church planters. August 28, 2026 in Ankeny, Iowa. Featuring Tony Merida & Brian Croft.",
+    images: [
+      {
+        url: "/og-one-day.png",
+        width: 1200,
+        height: 630,
+        alt: ONE_DAY_OG_ALT,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "One Day — The Work of the Pastor",
     description:
       "Free full-day gathering for pastors & church planters. Aug 28, 2026 · Ankeny, IA. With Tony Merida & Brian Croft.",
+    images: [
+      {
+        url: "/og-one-day.png",
+        width: 1200,
+        height: 630,
+        alt: ONE_DAY_OG_ALT,
+      },
+    ],
   },
 };
 
