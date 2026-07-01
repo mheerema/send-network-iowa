@@ -10,6 +10,7 @@ const navLinks = [
   { href: "/plant", label: "Plant" },
   { href: "/partner", label: "Partner" },
   { href: "/events", label: "Events" },
+  { href: "/resources", label: "Resources" },
 ];
 
 export default function NavHeader() {

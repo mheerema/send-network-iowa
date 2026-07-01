@@ -11,5 +11,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/events`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/events/one-day`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${base}/iowa`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${base}/resources`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
   ];
 }
