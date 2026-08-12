@@ -1,6 +1,14 @@
 import Link from "next/link";
 import HeroPathwaySplit from "@/components/HeroPathwaySplit";
 import ChurchPathwayLadder from "@/components/ChurchPathwayLadder";
+import { spiritual, formatNumber } from "@/data/iowa-demographics";
+
+const needStats = [
+  { stat: `${spiritual.nonesPct}%`, label: "of Iowans have no religious affiliation" },
+  { stat: formatNumber(spiritual.nones), label: "people with no church home" },
+  { stat: formatNumber(spiritual.congregations), label: "congregations statewide" },
+  { stat: spiritual.sbcPctLabel, label: "of Iowa is Southern Baptist" },
+];
 
 export default function Home() {
   return (
@@ -10,6 +18,42 @@ export default function Home() {
 
       {/* Church pathway ladder */}
       <ChurchPathwayLadder />
+
+      {/* The need in Iowa */}
+      <section className="py-20 bg-brand-navy">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-3">
+              The Need in Iowa
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
+              Most of Iowa has no church home
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+            {needStats.map((item) => (
+              <div key={item.label} className="text-center">
+                <p className="text-4xl sm:text-5xl font-bold text-brand-amber leading-none mb-3">
+                  {item.stat}
+                </p>
+                <p className="text-sm text-white/60 leading-relaxed">
+                  {item.label}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <Link
+              href="/iowa"
+              className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
+            >
+              See the full picture
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* BCI Partnership callout */}
       <section className="py-14 bg-gray-50 border-y border-gray-100">
