@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Resources | Send Network Iowa",
@@ -47,7 +48,28 @@ export default function ResourcesPage() {
           </p>
 
           <div className="grid gap-6 md:grid-cols-2">
-            {/* Card 1: Iowa Church Planting Resources (coming soon) */}
+            {/* Card: Articles (internal) */}
+            <Link
+              href="/resources/articles"
+              className="group flex flex-col rounded-2xl border border-brand-light-gray bg-white p-8 transition-colors hover:border-brand-amber focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-amber"
+            >
+              <span className="inline-flex w-fit items-center rounded-full bg-brand-amber/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-brand-navy">
+                Send Network Iowa
+              </span>
+              <h2 className="mt-5 text-2xl font-bold text-brand-navy">
+                Articles
+              </h2>
+              <p className="mt-3 text-gray-700 leading-relaxed">
+                News and commentary for the work in Iowa &mdash; what
+                we&rsquo;re reading and sharing.
+              </p>
+              <span className="mt-6 inline-flex w-fit items-center text-sm font-semibold text-brand-navy group-hover:text-brand-amber transition-colors">
+                Browse articles
+                <span aria-hidden="true" className="ml-1">&rarr;</span>
+              </span>
+            </Link>
+
+            {/* Card: Iowa Church Planting Resources (coming soon) */}
             <div className="flex flex-col rounded-2xl border border-brand-light-gray bg-brand-off-white p-8">
               <span className="inline-flex w-fit items-center rounded-full bg-brand-navy/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-brand-navy">
                 Coming Soon
@@ -68,7 +90,7 @@ export default function ResourcesPage() {
               </span>
             </div>
 
-            {/* Card 2: Send Network Resources (external) */}
+            {/* Card: Send Network Resources (external) */}
             <a
               href="https://www.sendnetwork.com/resources/"
               target="_blank"

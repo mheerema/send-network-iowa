@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -29,7 +30,7 @@ export async function generateMetadata({
       type: "article",
       title: article.title,
       description: article.excerpt,
-      url: `/articles/${article.slug}`,
+      url: `/resources/articles/${article.slug}`,
       publishedTime: article.date,
     },
   };
@@ -42,9 +43,27 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
   return (
     <>
-      {/* Article hero */}
-      <section className="bg-brand-navy py-20">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Article hero — photo behind the title when frontmatter provides one,
+          solid navy otherwise (same treatment as HeroPathwaySplit) */}
+      <section
+        className={`relative overflow-hidden bg-brand-navy ${
+          article.image ? "py-28 sm:py-36" : "py-20"
+        }`}
+      >
+        {article.image && (
+          <>
+            <Image
+              src={article.image}
+              alt={article.imageAlt ?? ""}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-brand-navy/80" />
+          </>
+        )}
+        <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-4">
             {formatArticleDate(article.date)}
             {article.sourceName && <> · via {article.sourceName}</>}
@@ -53,13 +72,29 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
             {article.title}
           </h1>
         </div>
+        {article.image && article.imageCredit && (
+          <p className="absolute bottom-2 right-3 z-10 text-white/30 text-[10px]">
+            {article.imageCreditUrl ? (
+              <a
+                href={article.imageCreditUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white/60 transition-colors"
+              >
+                Photo: {article.imageCredit}
+              </a>
+            ) : (
+              <>Photo: {article.imageCredit}</>
+            )}
+          </p>
+        )}
       </section>
 
       {/* Commentary / body */}
       <section className="py-20 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <div
-            className="prose-article text-gray-700 leading-relaxed space-y-5 [&_a]:text-brand-navy [&_a]:font-semibold [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-brand-amber [&_h2]:text-brand-navy [&_h2]:font-bold [&_h2]:text-xl [&_h2]:mt-8 [&_h3]:text-brand-navy [&_h3]:font-bold [&_blockquote]:border-l-4 [&_blockquote]:border-brand-amber [&_blockquote]:pl-4 [&_blockquote]:italic [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6"
+            className="prose-article text-gray-700 leading-relaxed space-y-5 [&_a]:text-brand-navy [&_a]:font-semibold [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-brand-amber [&_h2]:text-brand-navy [&_h2]:font-bold [&_h2]:text-xl [&_h2]:mt-8 [&_h3]:text-brand-navy [&_h3]:font-bold [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6"
             dangerouslySetInnerHTML={{ __html: article.html }}
           />
 
@@ -84,7 +119,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           {/* Back link */}
           <div className="mt-12 pt-8 border-t border-gray-100">
             <Link
-              href="/articles"
+              href="/resources/articles"
               className="text-sm font-semibold text-brand-navy hover:text-brand-amber transition-colors"
             >
               &larr; All articles

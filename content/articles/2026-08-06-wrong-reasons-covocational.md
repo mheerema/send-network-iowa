@@ -5,10 +5,16 @@ sourceName: "NewChurches.com"
 sourceUrl: "https://www.newchurches.com/article/why-you-shouldnt-be-a-covocational-pastor/"
 excerpt: "Phil Thompson names six wrong reasons to become a covocational pastor. In Iowa, where the planting math almost always runs covocational, the motives matter."
 tags: ["covocational", "church planting", "calling"]
+image: "https://images.unsplash.com/photo-1497219055242-93359eeed651?q=80&w=2400&auto=format&fit=crop"
+imageAlt: "Close-up of a woodworker's hands guiding a chisel across a workpiece at a workbench."
+imageCredit: "Dominik Scythe / Unsplash"
+imageCreditUrl: "https://unsplash.com/photos/3cIvvzjE6Lk"
 ---
 
-Phil Thompson planted Christ Fellowship Eastside and has pastored it covocationally for five years. His piece at NewChurches.com names six wrong reasons for taking that path: a hero complex, a lack of faith that God will provide, avoiding the discomfort of asking for money, undervaluing full-time staff, delegating to escape the workload, and wanting to be appreciated.
+Phil Thompson has pastored Christ Fellowship Eastside covocationally for five years, and at NewChurches.com he names six wrong reasons to take that path, from a hero complex to wanting to be appreciated. Under all six sits the same correction.
 
-Underneath all six is the same correction: covocational ministry demands more faith and harder prioritization than full-time work. "Covocational pastors need immense faith." Thompson also pushes back on the stigma that a real call comes with a full-time salary.
+> Covocational pastors need immense faith.
+>
+> — Phil Thompson, via NewChurches.com
 
-The math of planting and replanting in Iowa almost always runs through covocational work, so we need this vocabulary. Planters need it to examine their own motives. Sending churches need it to shape what they ask of the people they send. Read it before you write the job description.
+The math of planting and replanting in Iowa almost always runs through covocational work, so the motives matter here. Planters need Thompson's list to examine their own hearts, and sending churches need it to shape what they ask of the people they send. Read it before you write the job description.

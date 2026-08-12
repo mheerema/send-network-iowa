@@ -32,3 +32,21 @@ body {
   color: var(--foreground);
   font-family: var(--font-montserrat), Arial, Helvetica, sans-serif;
 }
+
+/* ─── Article body (markdown rendered via marked in src/lib/articles.ts) ───
+   Blockquotes carry pull-quote excerpts on reposts. marked emits:
+   <blockquote><p>quote…</p><p>— Attribution</p></blockquote>
+   The em-dash attribution line is the last <p> — styled smaller only when the
+   quote has more than one paragraph, so plain quotes are unaffected. */
+
+.prose-article blockquote {
+  @apply border-l-4 border-brand-amber pl-6 pr-2 py-1 font-serif italic text-lg leading-relaxed text-brand-navy;
+}
+
+.prose-article blockquote p + p {
+  @apply mt-3;
+}
+
+.prose-article blockquote p:last-child:not(:only-child) {
+  @apply mt-4 font-sans not-italic text-sm font-semibold tracking-wide text-brand-slate;
+}

@@ -1,13 +1,13 @@
 import Link from "next/link";
 import HeroPathwaySplit from "@/components/HeroPathwaySplit";
 import ChurchPathwayLadder from "@/components/ChurchPathwayLadder";
-import { spiritual, formatNumber } from "@/data/iowa-demographics";
+import { spiritual, formatNumber, evangelicalCongregations, notEvangelical, notEvangelicalPctLabel, } from "@/data/iowa-demographics";
 
 const needStats = [
-  { stat: `${spiritual.nonesPct}%`, label: "of Iowans have no religious affiliation" },
-  { stat: formatNumber(spiritual.nones), label: "people with no church home" },
-  { stat: formatNumber(spiritual.congregations), label: "congregations statewide" },
-  { stat: "1 in 9", label: "Iowans connected to an evangelical church" },
+  { stat: notEvangelicalPctLabel, label: "of Iowans are not connected to an evangelical church" },
+  { stat: formatNumber(notEvangelical), label: "people, and most towns have no evangelical church to reach them" },
+  { stat: formatNumber(evangelicalCongregations), label: "evangelical congregations statewide" },
+  { stat: `${spiritual.nonesPct}%`, label: "claim no religious affiliation of any kind" },
 ];
 
 export default function Home() {

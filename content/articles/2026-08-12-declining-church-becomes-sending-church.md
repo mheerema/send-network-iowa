@@ -5,10 +5,16 @@ sourceName: "Send Network"
 sourceUrl: "https://www.sendnetwork.com/article/a-church-renewed-for-the-mission/"
 excerpt: "Golden Avenue Church was in decline by 2019. Send Network tells how renewal around missional outreach led to 46 baptisms in a year and, this Easter, a church plant in a rural Missouri county."
 tags: ["church renewal", "sending churches", "rural planting"]
+image: "https://images.unsplash.com/photo-1599059813005-11265ba4b4ce?q=80&w=2400&auto=format&fit=crop"
+imageAlt: "Volunteers standing at a table sorting canned food donations at a community food pantry."
+imageCredit: "Joel Muniz / Unsplash"
+imageCreditUrl: "https://unsplash.com/photos/3k3l2brxmwQ"
 ---
 
-Send Network has published the story of Golden Avenue Church, a congregation that was in decline by 2019. Under Pastor Jeffrey Stoneking the church rebuilt around ordinary missional work: a weekly grocery distribution that serves 100 to 120 families and puts members into gospel conversations, a discipleship pathway, and a leadership internship. In one year they baptized 46 people.
+Send Network tells the story of Golden Avenue Church, a congregation in decline by 2019 that renewed under Pastor Jeffrey Stoneking and this Easter planted River Fellowship in rural Shannon County, Missouri. Harley Mottsenbocker pastors the plant, and he states the conviction behind it plainly.
 
-Then the renewed church sent. This Easter, Golden Avenue planted River Fellowship in rural Shannon County, Missouri, launching with about 50 people under Pastor Harley Mottsenbocker, who states the conviction behind it plainly: "Churches plant churches. People don't plant churches." Golden Avenue now aims for four plants in five years.
+> Churches plant churches. People don't plant churches.
+>
+> — Harley Mottsenbocker, via Send Network
 
-I hear the same objection all over Iowa: we're too small to plant, or too far gone. Golden Avenue was both. Renewal came first, and sending grew out of it, into a rural county that looks a lot like ours. Stoneking is honest that the sending life costs something. If your church has quietly written itself off, start here.
+I hear the same objection all over Iowa: we're too small to plant, or too far gone. Golden Avenue was both, and renewal came first, then sending grew out of it into a rural county that looks a lot like ours. If your church has quietly written itself off, start here.

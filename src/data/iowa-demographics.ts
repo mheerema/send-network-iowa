@@ -4,6 +4,8 @@
  * Do not duplicate these figures as literals in JSX — import from here.
  */
 
+import stateAdherence from "./state-adherence-2020.json";
+
 export const source =
   "NAMB Demographics Report for Send Network Iowa, Aug 2026. Demographic data: Esri 2026 estimates. Religious data: 2020 U.S. Religion Census (ARDA, corrected June 2023); tradition classification per ARDA (RELTRAD).";
 
@@ -126,27 +128,48 @@ export interface StateAdherence {
   name: string;
   /** Percent of population counted as adherents, 2020 U.S. Religion Census. */
   adherencePct: number;
-  /** Render with a "~" prefix — reported as an approximate figure. */
-  approximate?: boolean;
 }
 
-/** National adherence rate, 2020 U.S. Religion Census. */
-export const nationalAdherenceRate = 48.6;
+/**
+ * Convenience figures derived from `traditions` (Evangelical Protestant row).
+ * evangelicalCongregations excludes nothing: it is ARDA's congregation count,
+ * which includes the 472 congregations that report no adherent figures.
+ */
+export const evangelicalCongregations = 2_153;
+/**
+ * The headline need framing: Iowans NOT connected to an evangelical
+ * congregation = religionCensusPopulation2020 - evangelical adherents
+ * (3,190,369 - 352,568). Slightly overstated by the same 472-congregation
+ * reporting gap that understates evangelical adherents (see note above).
+ */
+export const notEvangelical = 2_837_801;
+export const notEvangelicalPctLabel = "89%";
+export const evangelicalPctLabel = "11%";
+
+/** National adherence rate, 2020 U.S. Religion Census (derived from the payload). */
+export const nationalAdherenceRate = stateAdherence.usTotal.adherenceRate;
 
 /**
- * Adherence rates for Iowa's six neighboring states, 2020 U.S. Religion
- * Census. Per-state evangelical shares were deliberately excluded: they are
- * floor estimates (non-reporting congregations) and would mislead in a
- * side-by-side comparison. Adherence rate only.
+ * Which states border Iowa is an editorial fact; their adherence RATES are
+ * derived from the 2020 U.S. Religion Census payload so they can never
+ * drift from it (an earlier hand-copied approximate Illinois figure did
+ * exactly that — the corrected figure is 50.8%). Per-state evangelical
+ * shares were deliberately excluded: they are floor estimates
+ * (non-reporting congregations) and would mislead in a side-by-side
+ * comparison.
  */
-export const neighborAdherence: StateAdherence[] = [
-  { name: "Wisconsin", adherencePct: 48.0 },
-  { name: "Missouri", adherencePct: 48.4 },
-  { name: "Nebraska", adherencePct: 49.3 },
-  { name: "Minnesota", adherencePct: 49.5 },
-  { name: "Illinois", adherencePct: 51, approximate: true },
-  { name: "South Dakota", adherencePct: 55.4 },
-];
+const NEIGHBOR_STATES = [
+  "Wisconsin",
+  "Missouri",
+  "Nebraska",
+  "Minnesota",
+  "Illinois",
+  "South Dakota",
+] as const;
+
+export const neighborAdherence: StateAdherence[] = NEIGHBOR_STATES.map(
+  (name) => ({ name, adherencePct: stateAdherence.states[name].adherenceRate })
+);
 
 /** Pew Research Religious Landscape Study (2023-24): Iowans self-identifying as religiously unaffiliated. */
 export const pewSelfIdentifiedNones = 31;

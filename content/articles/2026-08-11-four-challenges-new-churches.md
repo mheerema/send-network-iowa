@@ -5,10 +5,18 @@ sourceName: "NewChurches.com"
 sourceUrl: "https://www.newchurches.com/article/4-challenges-for-new-churches-to-navigate/"
 excerpt: "Noah Oldham surveyed more than 700 church planters and found four challenges behind nearly two-thirds of their struggles. The takeaway for Iowa: get the sequence right before you spend."
 tags: ["church planting", "new churches", "strategy"]
+image: "https://images.unsplash.com/photo-1778086170602-f40da010e5fb?q=80&w=2400&auto=format&fit=crop"
+imageAlt: "Rows of empty chairs set up in a plain wood-paneled community hall awaiting a gathering."
+imageCredit: "Adolfo Félix / Unsplash"
+imageCreditUrl: "https://unsplash.com/photos/6hSBcpa7qVI"
 ---
 
-Noah Oldham surveyed more than 700 church planters in years one through four of their plants. Four challenges accounted for nearly two-thirds of everything they named: meeting space, committed leaders, financial sustainability, and evangelistic reach.
+Noah Oldham surveyed more than 700 church planters for NewChurches.com and found four challenges behind nearly two-thirds of their struggles: meeting space, committed leaders, financial sustainability, and evangelistic reach. His counsel on how the four interlock runs against instinct.
 
-The four interlock. Lock in a facility before you have an outreach strategy, and the financial pressure that follows will starve your leader development. So Oldham's counsel runs against instinct: delay the emphasis on the Sunday gathering, start small groups early, develop leaders before you are desperate for them, and keep fixed costs low. "Don't spend tomorrow's mission on today's image."
+> Don't spend tomorrow's mission on today's image.
+>
+> A building can't compensate for the absence of a missionary strategy.
+>
+> — Noah Oldham, via NewChurches.com
 
-Small-town Iowa is a hard place to find meeting space, and most of our core teams are small. Those are exactly the constraints Oldham is describing, which means the order of operations matters here more than almost anywhere. If you are planting in Iowa, get the sequence right before you sign anything.
+Small-town Iowa is short on meeting space and most of our core teams are small, which are exactly the constraints Oldham describes. That makes the order of operations matter here more than almost anywhere. Get the sequence right before you sign anything.

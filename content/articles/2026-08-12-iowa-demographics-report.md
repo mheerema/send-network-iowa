@@ -3,6 +3,10 @@ title: "New Statewide Demographics Report: The Need in Iowa by the Numbers"
 date: "2026-08-12"
 excerpt: "A new NAMB demographics report for Send Network Iowa shows 55% of Iowans — more than 1.7 million people — have no religious affiliation. Here is what the numbers say about the mission field we call home."
 tags: ["demographics", "iowa", "church planting"]
+image: "https://images.unsplash.com/photo-1645911078505-0581e7e372a9?q=80&w=2400&auto=format&fit=crop"
+imageAlt: "A red barn standing in a golden cornfield at harvest time near Jesup, Iowa."
+imageCredit: "Shawn Schroeder / Unsplash"
+imageCreditUrl: "https://unsplash.com/photos/vpJpv5X03qE"
 ---
 
 A new demographics report prepared by the North American Mission Board for Send Network Iowa puts numbers to something many of us have sensed for years: Iowa is a mission field. Of the 3,274,155 people who live in this state, 1,759,020 — 55% — have no religious affiliation at all. That is more than every church, of every kind, combined.

@@ -18,7 +18,7 @@ export function GET() {
 
   const items = articles
     .map((article) => {
-      const url = `${SITE_URL}/articles/${article.slug}`;
+      const url = `${SITE_URL}/resources/articles/${article.slug}`;
       const pubDate = new Date(`${article.date}T12:00:00Z`).toUTCString();
       const sourceLine = article.sourceUrl
         ? `\n      <source url="${escapeXml(article.sourceUrl)}">${escapeXml(article.sourceName ?? "Original article")}</source>`
@@ -38,8 +38,8 @@ export function GET() {
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Send Network Iowa Articles</title>
-    <link>${SITE_URL}/articles</link>
-    <atom:link href="${SITE_URL}/articles/feed.xml" rel="self" type="application/rss+xml"/>
+    <link>${SITE_URL}/resources/articles</link>
+    <atom:link href="${SITE_URL}/resources/articles/feed.xml" rel="self" type="application/rss+xml"/>
     <description>News and commentary on church planting in Iowa from Send Network Iowa.</description>
     <language>en-us</language>
 ${items}
