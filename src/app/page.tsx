@@ -7,7 +7,7 @@ const needStats = [
   { stat: `${spiritual.nonesPct}%`, label: "of Iowans have no religious affiliation" },
   { stat: formatNumber(spiritual.nones), label: "people with no church home" },
   { stat: formatNumber(spiritual.congregations), label: "congregations statewide" },
-  { stat: spiritual.sbcPctLabel, label: "of Iowa is Southern Baptist" },
+  { stat: "1 in 9", label: "Iowans connected to an evangelical church" },
 ];
 
 export default function Home() {

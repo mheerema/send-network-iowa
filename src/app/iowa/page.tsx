@@ -129,14 +129,14 @@ export default function IowaPage() {
             </div>
             <div className="text-center">
               <p className="text-5xl font-bold text-brand-amber leading-none mb-2">
-                {spiritual.sbcPctLabel}
+                1 in 9
               </p>
               <p className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
-                Southern Baptist
+                Evangelical
               </p>
               <p className="text-sm text-white/50 leading-relaxed">
-                Just {formatNumber(spiritual.sbcAdherents)} SBC adherents in the
-                whole state.
+                Only 11% of Iowans are connected to an evangelical church of
+                any kind.
               </p>
             </div>
           </div>
