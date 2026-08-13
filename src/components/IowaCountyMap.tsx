@@ -25,13 +25,24 @@ import { countyPaths, IOWA_MAP_VIEWBOX } from "@/data/iowa-county-paths";
 
 const counties = census.counties;
 
-/** Ramp shared with UsEvangelicalMap so the two maps read as one system. */
+/**
+ * Ramp shared with UsEvangelicalMap so the two maps read as one system —
+ * which is exactly why it runs the direction it does.
+ *
+ * DARK = MORE EVANGELICAL COVERAGE, LIGHT = THE LACK. On the national map
+ * dark means a higher evangelical share (the Deep South is darkest, Utah
+ * lightest). This measure is inverted relative to that one — FEWER people per
+ * congregation is BETTER coverage — so the ramp has to be inverted against the
+ * thresholds to keep the two maps saying the same thing with the same ink.
+ * The darkest step is therefore the LOWEST band, and "3,000 or more" is the
+ * palest. Do not "fix" this by sorting the fills light-to-dark.
+ */
 const CLASSES = [
-  { below: 750, label: "Under 750", fill: "#e2e8f2" },
-  { below: 1250, label: "750–1,250", fill: "#b9c6dd" },
+  { below: 750, label: "Under 750", fill: "#10294c" },
+  { below: 1250, label: "750–1,250", fill: "#46608c" },
   { below: 2000, label: "1,250–2,000", fill: "#7e93b7" },
-  { below: 3000, label: "2,000–3,000", fill: "#46608c" },
-  { below: Infinity, label: "3,000 or more", fill: "#10294c" },
+  { below: 3000, label: "2,000–3,000", fill: "#b9c6dd" },
+  { below: Infinity, label: "3,000 or more", fill: "#e2e8f2" },
 ] as const;
 
 function fillFor(peoplePerCongregation: number): string {
@@ -122,10 +133,35 @@ function round(n: number): string {
   return Math.round(n).toLocaleString("en-US");
 }
 
+/**
+ * Direction guard. The whole point of the ramp above is that the darkest step
+ * belongs to the best-covered counties. If someone re-sorts the fills, the map
+ * silently starts arguing the opposite of its own caption — so assert it.
+ */
+const DARKEST = CLASSES[0].fill;
+const LIGHTEST = CLASSES[CLASSES.length - 1].fill;
+if (
+  fillFor(countyStats.best.peoplePerCongregation) !== DARKEST ||
+  fillFor(countyStats.worst.peoplePerCongregation) !== LIGHTEST
+) {
+  throw new Error(
+    `Iowa county ramp is pointing the wrong way. Darker must mean better ` +
+      `evangelical coverage: ${countyStats.best.name} (densest, ` +
+      `${round(countyStats.best.peoplePerCongregation)} per congregation) must ` +
+      `render ${DARKEST} but renders ` +
+      `${fillFor(countyStats.best.peoplePerCongregation)}; ` +
+      `${countyStats.worst.name} (thinnest, ` +
+      `${round(countyStats.worst.peoplePerCongregation)}) must render ` +
+      `${LIGHTEST} but renders ` +
+      `${fillFor(countyStats.worst.peoplePerCongregation)}.`
+  );
+}
+
 const MAP_LABEL =
   `Map of Iowa's ${countyStats.countyCount} counties, shaded by how many ` +
   `people there are for each evangelical congregation in the 2020 U.S. ` +
-  `Religion Census. Darker means fewer congregations for the population. ` +
+  `Religion Census. Darker counties have the most evangelical churches for ` +
+  `their population; the palest counties have the fewest. ` +
   `Statewide there is one evangelical congregation for every ` +
   `${round(countyStats.statewide)} Iowans. ${countyStats.worst.name} County ` +
   `is thinnest at one for every ${round(countyStats.worst.peoplePerCongregation)}; ` +
@@ -156,36 +192,62 @@ export default function IowaCountyMap() {
             />
           ))}
         </g>
-        {/* Drawn last so the highlight stroke sits above its neighbors. */}
+        {/* Drawn last so the highlight sits above its neighbors. Two strokes,
+            not one: the called-out county is now the PALEST on the map, and
+            brand amber on #e2e8f2 is about 1.5:1 — well under the 3:1 floor
+            for non-text contrast. The navy underlay shows as a hairline on
+            either side of the amber, so the callout stays findable against a
+            near-white fill without changing the callout color the US map
+            uses. */}
         <path
           d={highlight.d}
           fill={fillFor(countyStats.worst.peoplePerCongregation)}
+          stroke="#10294c"
+          strokeWidth={6}
+          strokeLinejoin="round"
+        />
+        <path
+          d={highlight.d}
+          fill="none"
           stroke="#fbac33"
-          strokeWidth={4}
+          strokeWidth={3.5}
           strokeLinejoin="round"
         />
       </svg>
 
-      {/* Legend; the aria-label and the data table carry this for AT. */}
-      <div
-        aria-hidden="true"
-        className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2"
-      >
-        <span className="text-xs font-semibold text-brand-navy">
-          People per evangelical congregation
-        </span>
-        {CLASSES.map((c) => (
-          <span
-            key={c.label}
-            className="flex items-center gap-1.5 text-xs text-gray-500"
-          >
-            <span
-              className="inline-block h-3 w-3 rounded-[2px] ring-1 ring-inset ring-black/10"
-              style={{ backgroundColor: c.fill }}
-            />
-            {c.label}
+      {/* Legend; the aria-label and the data table carry this for AT.
+          Ordered dark → light so the strip itself reads as the direction, and
+          the two extreme swatches say the direction in words — a wrapping chip
+          row cannot rely on "left end / right end" labels holding position at
+          375px, so the direction rides on the chips that never separate from
+          their own color. */}
+      <div aria-hidden="true" className="mt-4">
+        <p className="text-xs font-semibold text-brand-navy">
+          Evangelical coverage{" "}
+          <span className="font-normal text-gray-500">
+            — Iowans per evangelical congregation
           </span>
-        ))}
+        </p>
+        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2">
+          {CLASSES.map((c, i) => (
+            <span
+              key={c.label}
+              className="flex items-center gap-1.5 text-xs text-gray-500"
+            >
+              <span
+                className="inline-block h-3 w-3 rounded-[2px] ring-1 ring-inset ring-black/10"
+                style={{ backgroundColor: c.fill }}
+              />
+              {c.label}
+              {i === 0 && (
+                <span className="text-gray-400">(more coverage)</span>
+              )}
+              {i === CLASSES.length - 1 && (
+                <span className="text-gray-400">(less coverage)</span>
+              )}
+            </span>
+          ))}
+        </div>
       </div>
     </div>
   );

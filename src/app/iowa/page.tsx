@@ -170,7 +170,12 @@ export default function IowaPage() {
       {/* Key-stat band */}
       <section className="py-20 bg-brand-navy border-t border-white/10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Three cards, not four. Every card here has to frame the need on
+              its own — a bare congregation count ("2,153") gives the reader no
+              reference for whether that is a lot or a little, so it was cut.
+              The count still lives in the sr-only data table and in the county
+              map's caption, where the population it serves is right beside it. */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-8">
             <div className="text-center">
               <p className="text-5xl font-bold text-brand-amber leading-none mb-2">
                 {formatMillions(population.population2026)}
@@ -179,8 +184,7 @@ export default function IowaPage() {
                 People in Iowa
               </p>
               <p className="text-sm text-white/50 leading-relaxed">
-                Projected to grow by {formatNumber(population.projectedGrowth)}{" "}
-                by 2031.
+                Growing less than 2% by 2031.
               </p>
             </div>
             <div className="text-center">
@@ -192,17 +196,6 @@ export default function IowaPage() {
               </p>
               <p className="text-sm text-white/50 leading-relaxed">
                 {formatNumber(notEvangelical)} people.
-              </p>
-            </div>
-            <div className="text-center">
-              <p className="text-5xl font-bold text-brand-amber leading-none mb-2">
-                {formatNumber(evangelicalCongregations)}
-              </p>
-              <p className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
-                Evangelical congregations
-              </p>
-              <p className="text-sm text-white/50 leading-relaxed">
-                Statewide.
               </p>
             </div>
             <div className="text-center">
@@ -412,10 +405,13 @@ export default function IowaPage() {
             className="mt-3 max-w-3xl mx-auto text-xs text-gray-500 leading-relaxed"
             aria-hidden="true"
           >
-            People per evangelical congregation by county, 2020 U.S. Religion
-            Census. Darker means fewer congregations for the population.{" "}
-            {countyStats.worst.name} County, outlined, is thinnest at one for
-            every {formatNumber(peoplePerCongregation(countyStats.worst.name))}{" "}
+            Iowa&rsquo;s {formatNumber(countyStats.totalCongregations)}{" "}
+            evangelical congregations, mapped as the number of people each one
+            carries, 2020 U.S. Religion Census. Darker counties have the most
+            evangelical churches for their population; the palest counties have
+            the fewest. {countyStats.worst.name} County, outlined, is thinnest
+            at one congregation for every{" "}
+            {formatNumber(peoplePerCongregation(countyStats.worst.name))}{" "}
             people; {countyStats.best.name} County is densest at one for every{" "}
             {formatNumber(peoplePerCongregation(countyStats.best.name))}.
           </p>
@@ -477,7 +473,7 @@ export default function IowaPage() {
             <BigStat figure={population.medianAge} label="Median age" />
             <BigStat
               figure={formatNumber(population.children)}
-              label="Children in the state"
+              label="Children in the state — about 1 in 5 Iowans"
             />
             <BigStat
               figure={`$${formatNumber(population.medianHouseholdIncome)}`}
@@ -496,7 +492,9 @@ export default function IowaPage() {
                   {formatNumber(population.spanishAtHomeAdults)}
                 </p>
                 <p className="text-base text-gray-700 leading-snug">
-                  Adults in Iowa speak Spanish at home
+                  Adults in Iowa speak Spanish at home, and{" "}
+                  {population.hispanicOriginPct}% of Iowans — about 1 in 13 —
+                  are of Hispanic origin
                 </p>
               </div>
               <p className="text-lg text-gray-700 leading-snug">
