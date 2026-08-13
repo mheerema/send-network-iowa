@@ -360,21 +360,11 @@ export default function IowaPage() {
               {formatNumber(countyStats.belowSaturationGoal.population)}{" "}
               Iowans live in counties with too few churches
               <NoteRef n={3} />
-            </h2>
-            <p className="text-lg text-gray-700 leading-snug">
-              These {countyStats.belowSaturationGoal.countyCount} counties fall
-              short of one evangelical congregation per{" "}
-              {formatNumber(scaleAnchors.gacxSaturationGoal)}{" "}
-              people, and they
-              are the church planting targets. The counties that meet the goal
-              are Iowa&rsquo;s least populated ones, and they have enough
-              churches.
               <NoteRef n={6} />
-            </p>
+            </h2>
           </div>
 
-          {/* Inline figures. Both are the same fact seen twice: coverage counted
-              by county looks good, and coverage counted by person does not. */}
+          {/* Inline figures: the shortfall counted in counties, then in people. */}
           <dl className="mb-10 grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-3xl">
             <div>
               <dt className="sr-only">
@@ -491,7 +481,10 @@ export default function IowaPage() {
         </div>
       </section>
 
-      {/* Who lives here */}
+      {/* Spanish-speaking Iowans. Promoted to its own section; the general
+          population and household figures it used to sit beneath are
+          demographic context rather than evangelical coverage, so they now
+          live only in the data tables at the foot of the page. */}
       <section className="py-20 bg-gray-50">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-12">
@@ -499,43 +492,20 @@ export default function IowaPage() {
               Who Lives Here
             </p>
             <h2 className="text-3xl font-bold tracking-tight text-brand-navy">
-              Population and households
+              {formatNumber(population.spanishAtHomeAdults)} Iowa adults speak
+              Spanish at home
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-8 max-w-4xl">
-            <BigStat figure={population.medianAge} label="Median age" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 sm:gap-8 max-w-4xl">
             <BigStat
-              figure={formatNumber(population.children)}
-              label="Children in the state — about 1 in 5 Iowans"
+              figure={formatNumber(population.spanishAtHomeAdults)}
+              label="Adults who speak Spanish at home"
             />
             <BigStat
-              figure={`$${formatNumber(population.medianHouseholdIncome)}`}
-              label="Median household income"
+              figure={`${population.hispanicOriginPct}%`}
+              label="Of Iowans are of Hispanic origin — about 1 in 13"
             />
-          </div>
-
-          {/* Spanish-language opportunity */}
-          <div className="mt-16 rounded-2xl border-2 border-brand-amber/60 bg-brand-amber/[0.04] p-6 sm:p-8">
-            <h3 className="text-lg font-bold text-brand-navy mb-6">
-              Spanish-speaking Iowans
-            </h3>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
-              <div>
-                <p className="text-5xl sm:text-6xl font-bold text-brand-navy leading-none mb-3">
-                  {formatNumber(population.spanishAtHomeAdults)}
-                </p>
-                <p className="text-base text-gray-700 leading-snug">
-                  Adults in Iowa speak Spanish at home, and{" "}
-                  {population.hispanicOriginPct}% of Iowans — about 1 in 13 —
-                  are of Hispanic origin
-                </p>
-              </div>
-              <p className="text-lg text-gray-700 leading-snug">
-                Spanish-language church planting is one of the clearest open
-                doors in Iowa today.
-              </p>
-            </div>
           </div>
         </div>
       </section>
