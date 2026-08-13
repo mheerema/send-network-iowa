@@ -75,12 +75,7 @@ const US_AVERAGE = Math.round(
   stateCensus.usTotal.population / stateCensus.usTotal.evangelicalCongregations
 );
 
-/**
- * The one break that anchors to nothing. It is not a reference point and is
- * not presented as one — it exists only so the long tail above the US average
- * (19 counties from 1,660 to 6,495) does not collapse into a single flat
- * class. If a citable anchor ever turns up for this range, replace it.
- */
+/** Top of the even gradient; everything above falls in the palest class. */
 const LONG_TAIL_BREAK = 3000;
 
 /**
@@ -95,19 +90,21 @@ const LONG_TAIL_BREAK = 3000;
  * The darkest step is therefore the LOWEST band, and the top band is the
  * palest. Do not "fix" this by sorting the fills light-to-dark.
  *
- * `anchor` is the short name shown on the chip; the map's caption spells the
- * anchors out in full. Only the two anchored classes carry one — five annotated
- * chips do not stay legible at 375px.
+ * `anchor` is the short name shown on the chip; the map's caption spells it
+ * out in full. Only the GACX boundary carries one — annotating more chips does
+ * not stay legible at 375px across seven of them.
  */
 const BREAKS = [
+  { below: 500, anchor: null, fill: "#10294c" },
   {
     below: GACX_SATURATION_GOAL,
     anchor: "meets GACX goal",
-    fill: "#10294c",
+    fill: "#344e77",
   },
-  { below: IOWA_AVERAGE, anchor: null, fill: "#46608c" },
-  { below: US_AVERAGE, anchor: null, fill: "#7e93b7" },
-  { below: LONG_TAIL_BREAK, anchor: "below the US average", fill: "#b9c6dd" },
+  { below: 1500, anchor: null, fill: "#59719a" },
+  { below: 2000, anchor: null, fill: "#7e93b7" },
+  { below: 2500, anchor: null, fill: "#a5b5d0" },
+  { below: LONG_TAIL_BREAK, anchor: null, fill: "#c7d1e4" },
   { below: Infinity, anchor: null, fill: "#e2e8f2" },
 ] as const;
 
@@ -127,9 +124,9 @@ function fillFor(peoplePerCongregation: number): string {
 }
 
 /**
- * Ordering guard. Two of the four breaks are computed from census payloads
- * rather than typed in, so a data revision could push Iowa's average past the
- * national one. `fillFor` takes the first match, so a non-ascending break list
+ * Ordering guard. The bands are an even 500-person gradient, but the GACX goal
+ * among them is a named constant, so a future edit could still push the list
+ * out of order. `fillFor` takes the first match, so a non-ascending break list
  * silently produces an empty class and a mislabeled ramp rather than an error.
  */
 const outOfOrder = CLASSES.findIndex(
@@ -138,10 +135,9 @@ const outOfOrder = CLASSES.findIndex(
 if (outOfOrder > -1) {
   throw new Error(
     `Iowa county class breaks are not ascending: ` +
-      `${CLASSES.map((c) => c.below).join(", ")}. The anchors crossed — ` +
-      `Iowa's average (${IOWA_AVERAGE}) and the US average (${US_AVERAGE}) ` +
-      `are derived from the payloads, so re-order the ramp rather than ` +
-      `hardcoding the old order.`
+      `${CLASSES.map((c) => c.below).join(", ")}. The bands run in even ` +
+      `500-person steps with GACX's goal (${GACX_SATURATION_GOAL}) on a ` +
+      `boundary — re-order the ramp rather than hardcoding the old order.`
   );
 }
 
@@ -297,12 +293,13 @@ const MAP_LABEL =
   `Map of Iowa's ${countyStats.countyCount} counties, shaded by how many ` +
   `people there are for each evangelical congregation in the 2020 U.S. ` +
   `Religion Census. Darker counties have the most evangelical churches for ` +
-  `their population; the palest counties have the fewest. The five shading ` +
-  `bands break at one congregation per ${round(GACX_SATURATION_GOAL)} people, ` +
-  `the saturation goal stated by the Global Alliance for Church ` +
-  `Multiplication; at one per ${round(IOWA_AVERAGE)}, Iowa's own average; at ` +
-  `one per ${round(US_AVERAGE)}, the United States evangelical average; and ` +
-  `at one per ${round(LONG_TAIL_BREAK)}. ` +
+  `their population; the palest counties have the fewest. The seven shading ` +
+  `bands run in even steps of 500 people per congregation, from under 500 to ` +
+  `${round(LONG_TAIL_BREAK)} or more, with one boundary at ` +
+  `${round(GACX_SATURATION_GOAL)}, the saturation goal stated by the Global ` +
+  `Alliance for Church Multiplication. For reference, Iowa averages one ` +
+  `congregation per ${round(IOWA_AVERAGE)} people and the United States one ` +
+  `per ${round(US_AVERAGE)}. ` +
   `${countyStats.meetsSaturationGoal.countyCount} counties are in the ` +
   `darkest band and ${countyStats.belowUsAverage.countyCount} fall below the ` +
   `United States average. ${countyStats.worst.name} County is thinnest at one ` +
