@@ -17,4 +17,10 @@ Send Network tells the story of Golden Avenue Church, a congregation in decline 
 >
 > — Harley Mottsenbocker, via Send Network
 
+Stoneking, whose church did the sending, is just as plain about the cost.
+
+> It's not for the faint of heart.
+>
+> — Jeffrey Stoneking, via Send Network
+
 I hear the same objection all over Iowa: we're too small to plant, or too far gone. Golden Avenue was both, and renewal came first, then sending grew out of it into a rural county that looks a lot like ours. If your church has quietly written itself off, start here.
