@@ -364,7 +364,8 @@ export default function IowaPage() {
             <p className="text-lg text-gray-700 leading-snug">
               These {countyStats.belowSaturationGoal.countyCount} counties fall
               short of one evangelical congregation per{" "}
-              {formatNumber(scaleAnchors.gacxSaturationGoal)} people, and they
+              {formatNumber(scaleAnchors.gacxSaturationGoal)}{" "}
+              people, and they
               are the church planting targets. The counties that meet the goal
               are Iowa&rsquo;s least populated ones, and they have enough
               churches.
