@@ -164,6 +164,15 @@ export interface CountyRow {
   peoplePerCongregation: number;
   /** Upper bound — see the reporting-gap note above. */
   notEvangelicalPct: number;
+  /**
+   * Congregations this county would have to gain to reach GACX's stated goal
+   * of one per 1,000 residents. Clamped at zero: a county already past the
+   * goal needs none, and its surplus is NOT allowed to offset a neighbour's
+   * shortfall, because a church in one county does not serve another. That
+   * clamp is the whole difference between the county-aware statewide total
+   * and the smaller figure you get by dividing Iowa's population by 1,000.
+   */
+  churchesNeeded: number;
 }
 
 /** Every county row, derived from the census payload — never hand-listed. */
@@ -175,6 +184,11 @@ export const countyRows: CountyRow[] = counties
     evangelicalCongregations: c.evangelicalCongregations,
     peoplePerCongregation: c.population / c.evangelicalCongregations,
     notEvangelicalPct: c.notEvangelicalPct,
+    churchesNeeded: Math.max(
+      0,
+      Math.ceil(c.population / GACX_SATURATION_GOAL) -
+        c.evangelicalCongregations
+    ),
   }))
   .sort((a, b) => a.name.localeCompare(b.name));
 
@@ -213,6 +227,56 @@ function bandOf(test: (ratio: number) => boolean) {
   };
 }
 
+/**
+ * THE SHORTFALL, AND WHY IT IS MARKED ON ONLY TEN COUNTIES.
+ *
+ * 58 of the 99 counties fall short of GACX's stated goal. Ringing all 58 —
+ * or checking the 41 that meet it — marks so much of the map that the marks
+ * stop carrying information; the choropleth already says which counties are
+ * short, in seven bands. What the choropleth CANNOT say is where the missing
+ * churches actually are, because a ratio is per-capita and the need is not:
+ * Polk is one county out of 58 and carries 263 of the 1,243 congregations
+ * needed. Ten markers put the concentration on the map. The count is a
+ * design constant, not a natural break in the data — say so rather than
+ * implying the 10th county is meaningfully different from the 11th.
+ */
+const MARKED_COUNTY_COUNT = 10;
+
+const shortCounties = countyRows.filter((r) => r.churchesNeeded > 0);
+const shortfallTotal = shortCounties.reduce((s, r) => s + r.churchesNeeded, 0);
+
+const topShortCounties = [...shortCounties]
+  .sort((a, b) => b.churchesNeeded - a.churchesNeeded || a.name.localeCompare(b.name))
+  .slice(0, MARKED_COUNTY_COUNT);
+const topShortfallTotal = topShortCounties.reduce(
+  (s, r) => s + r.churchesNeeded,
+  0
+);
+
+/**
+ * Cutoff guard. "Top ten" is only an honest phrase while the 10th county is
+ * strictly ahead of the 11th. On a tie the slice picks a winner alphabetically
+ * and the map silently asserts a distinction the data does not support, so
+ * fail the build and make someone choose a different count.
+ */
+const nextShortCounty = [...shortCounties].sort(
+  (a, b) => b.churchesNeeded - a.churchesNeeded || a.name.localeCompare(b.name)
+)[MARKED_COUNTY_COUNT];
+if (
+  nextShortCounty &&
+  nextShortCounty.churchesNeeded ===
+    topShortCounties[topShortCounties.length - 1].churchesNeeded
+) {
+  throw new Error(
+    `Iowa county markers: a tie at the ${MARKED_COUNTY_COUNT}-county cutoff. ` +
+      `${topShortCounties[topShortCounties.length - 1].name} and ` +
+      `${nextShortCounty.name} both need ${nextShortCounty.churchesNeeded} ` +
+      `congregations, so "the ${MARKED_COUNTY_COUNT} counties that need the ` +
+      `most" would exclude one of them arbitrarily. Change ` +
+      `MARKED_COUNTY_COUNT rather than letting the sort break the tie.`
+  );
+}
+
 /** Derived figures the page quotes in prose. Computed, not typed in. */
 export const countyStats = {
   statewide: IOWA_AVERAGE,
@@ -239,6 +303,28 @@ export const countyStats = {
    * leads with — the shortfall, counted in counties and in people.
    */
   belowSaturationGoal: bandOf((ratio) => ratio >= GACX_SATURATION_GOAL),
+  /**
+   * The shortfall, counted county by county. `total` is the sum of every
+   * county's own gap, which is NOT the same number as dividing Iowa's
+   * population by the goal and subtracting its congregations —
+   * `statewideDivision` below is that smaller figure, kept so the page can
+   * name the difference instead of leaving two defensible totals in the wild.
+   */
+  shortfall: {
+    goal: GACX_SATURATION_GOAL,
+    countyCount: shortCounties.length,
+    total: shortfallTotal,
+    /** The naive alternative, for the note that distinguishes the two. */
+    statewideDivision: Math.max(
+      0,
+      Math.ceil(statewidePopulation / GACX_SATURATION_GOAL) -
+        statewideCongregations
+    ),
+    top: topShortCounties,
+    topCount: MARKED_COUNTY_COUNT,
+    topTotal: topShortfallTotal,
+    topPctOfTotal: Math.round((topShortfallTotal / shortfallTotal) * 100),
+  },
   /**
    * Ratio noise. A county's ratio moves by 1/(n+1) when it gains one church,
    * so at three congregations a single church swings it 25%. These are the
@@ -289,6 +375,191 @@ if (
   );
 }
 
+/* ---------------------------------------------------------------------------
+ * MARKER GEOMETRY
+ *
+ * Centroids come from the basemap paths themselves, so a regenerated basemap
+ * moves the markers with the shapes. Nothing here is a typed-in coordinate.
+ * ------------------------------------------------------------------------ */
+
+/**
+ * The basemap is a GENERATED file of straight-line polygons — `M`, `L`, `Z`
+ * only, one subpath per county, verified at the time this was written. The
+ * shoelace centroid below is exact for that shape and silently wrong for
+ * anything else, so refuse to guess if the generator ever emits curves or a
+ * second ring (islands, a county split by a river). A bbox centre would be
+ * the fallback; it is not the default, because a bbox centre drifts on the
+ * counties with a Mississippi boundary — Dubuque's is 11 units east of its
+ * true centroid, which is a fifth of a county width.
+ */
+function polygonPoints(d: string): Array<[number, number]> {
+  if (/[^MLZ\d.,\-\s]/.test(d)) {
+    throw new Error(
+      `Iowa basemap path contains a command this centroid math does not ` +
+        `handle (expected only M, L and Z): ${d.slice(0, 60)}…`
+    );
+  }
+  if ((d.match(/M/g) ?? []).length !== 1) {
+    throw new Error(
+      `Iowa basemap path has more than one subpath, so a single-ring ` +
+        `shoelace centroid is not valid for it: ${d.slice(0, 60)}…`
+    );
+  }
+  return d
+    .replace(/[MLZ]/g, " ")
+    .trim()
+    .split(/\s+/)
+    .map((pair) => {
+      const [x, y] = pair.split(",").map(Number);
+      if (!Number.isFinite(x) || !Number.isFinite(y)) {
+        throw new Error(`Iowa basemap path has a bad coordinate: "${pair}"`);
+      }
+      return [x, y] as [number, number];
+    });
+}
+
+/** Area-weighted (shoelace) polygon centroid. */
+function centroidOf(d: string): { cx: number; cy: number } {
+  const pts = polygonPoints(d);
+  let twiceArea = 0;
+  let cx = 0;
+  let cy = 0;
+  for (let i = 0; i < pts.length; i++) {
+    const [x0, y0] = pts[i];
+    const [x1, y1] = pts[(i + 1) % pts.length];
+    const cross = x0 * y1 - x1 * y0;
+    twiceArea += cross;
+    cx += (x0 + x1) * cross;
+    cy += (y0 + y1) * cross;
+  }
+  const area = twiceArea / 2;
+  if (area === 0) throw new Error("Iowa basemap path encloses no area.");
+  return { cx: cx / (6 * area), cy: cy / (6 * area) };
+}
+
+/** Ray-casting containment test, for the guard below. */
+function contains(d: string, x: number, y: number): boolean {
+  const pts = polygonPoints(d);
+  let inside = false;
+  for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) {
+    const [xi, yi] = pts[i];
+    const [xj, yj] = pts[j];
+    if (
+      yi > y !== yj > y &&
+      x < ((xj - xi) * (y - yi)) / (yj - yi) + xi
+    ) {
+      inside = !inside;
+    }
+  }
+  return inside;
+}
+
+/**
+ * Proportional symbols: radius ∝ √value, so the AREA of the circle is
+ * proportional to the churches needed. Sizing by radius instead would make
+ * Polk look 6.7× Pottawattamie rather than 2.6×, which is the classic
+ * over-statement in a bubble map.
+ */
+const MARKER_RADIUS_SCALE = 1;
+
+const VIEWBOX_WIDTH = Number(IOWA_MAP_VIEWBOX.split(" ")[2]);
+
+/**
+ * The map sits in a `max-w-3xl` column, so 768px is the widest it ever
+ * renders. Used only to check the smallest marker against an 8px minimum
+ * diameter — if the container class changes, this constant has to follow.
+ */
+const DESKTOP_MAP_WIDTH_PX = 768;
+const MIN_MARKER_DIAMETER_PX = 8;
+
+export const countyMarkers = topShortCounties
+  .map((row) => {
+    const path = countyPaths.find((p) => p.fips === row.fips)!;
+    const { cx, cy } = centroidOf(path.d);
+    return {
+      fips: row.fips,
+      name: row.name,
+      churchesNeeded: row.churchesNeeded,
+      cx,
+      cy,
+      r: MARKER_RADIUS_SCALE * Math.sqrt(row.churchesNeeded),
+      d: path.d,
+    };
+  })
+  // Largest first so a small marker can never be buried under a large one.
+  .sort((a, b) => b.r - a.r);
+
+/**
+ * Placement guard. A centroid outside its own county means the marker is
+ * making a claim about the wrong place — the single failure this whole
+ * feature cannot survive. Concave counties can legitimately have an exterior
+ * centroid; Iowa's are near-rectangular and none of them do, so assert it
+ * rather than assuming.
+ */
+const misplaced = countyMarkers.filter((m) => !contains(m.d, m.cx, m.cy));
+if (misplaced.length) {
+  throw new Error(
+    `Iowa county markers fall outside the county they mark: ` +
+      `${misplaced.map((m) => `${m.name} (${m.cx.toFixed(1)}, ${m.cy.toFixed(1)})`).join(", ")}. ` +
+      `Use a point-on-surface fallback for those shapes.`
+  );
+}
+
+/** Legibility guard: the smallest marker has to survive the smallest ramp step. */
+const smallestDiameterPx =
+  Math.min(...countyMarkers.map((m) => m.r)) *
+  2 *
+  (DESKTOP_MAP_WIDTH_PX / VIEWBOX_WIDTH);
+if (smallestDiameterPx < MIN_MARKER_DIAMETER_PX) {
+  throw new Error(
+    `The smallest Iowa county marker renders at ` +
+      `${smallestDiameterPx.toFixed(1)}px across at ${DESKTOP_MAP_WIDTH_PX}px ` +
+      `wide, under the ${MIN_MARKER_DIAMETER_PX}px floor. Raise ` +
+      `MARKER_RADIUS_SCALE or drop MARKED_COUNTY_COUNT — do not add a radius ` +
+      `floor, which would break the proportional encoding.`
+  );
+}
+
+/**
+ * Collision guard. The markers are drawn as a bare amber disc with a navy
+ * ring; that reads cleanly only while no two of them touch. Today the closest
+ * pair (Polk and Dallas) clears by more than 40 units, so the surface-coloured
+ * separator ring is deliberately NOT paid for. If a data revision ever closes
+ * that gap, the fix is a third, white stroke outside the navy one — not a
+ * smaller MARKER_RADIUS_SCALE, which would quietly rescale the encoding.
+ */
+const collisions = countyMarkers.flatMap((a, i) =>
+  countyMarkers.slice(i + 1).flatMap((b) => {
+    const gap = Math.hypot(a.cx - b.cx, a.cy - b.cy) - a.r - b.r;
+    return gap < 2 ? [`${a.name}/${b.name} (${gap.toFixed(1)} units)`] : [];
+  })
+);
+if (collisions.length) {
+  throw new Error(
+    `Iowa county markers overlap: ${collisions.join(", ")}. Add a 2-unit ` +
+      `white separator ring outside the navy one; do not shrink the markers.`
+  );
+}
+
+/**
+ * Legend swatch geometry, derived from the markers actually drawn so the two
+ * sample circles are in true proportion to each other and to the map. Padded
+ * by the stroke width so neither ring is clipped by the viewBox.
+ */
+const legendSwatch = (() => {
+  const pad = 2;
+  const small = countyMarkers[countyMarkers.length - 1].r;
+  const large = countyMarkers[0].r;
+  /** Wide enough that the two navy rings read as separate discs at 18px. */
+  const gap = 7;
+  return {
+    viewBox: `0 0 ${pad + small * 2 + gap + large * 2 + pad} ${pad + large * 2 + pad}`,
+    cy: pad + large,
+    small: { cx: pad + small, r: small },
+    large: { cx: pad + small * 2 + gap + large, r: large },
+  };
+})();
+
 const MAP_LABEL =
   `Map of Iowa's ${countyStats.countyCount} counties, shaded by how many ` +
   `people there are for each evangelical congregation in the 2020 U.S. ` +
@@ -305,15 +576,20 @@ const MAP_LABEL =
   `United States average. ${countyStats.worst.name} County is thinnest at one ` +
   `for every ${round(countyStats.worst.peoplePerCongregation)}; ` +
   `${countyStats.best.name} County is densest at one for every ` +
-  `${round(countyStats.best.peoplePerCongregation)}. County-by-county figures ` +
-  `follow in the table.`;
-
-/** The extreme; outlined in amber, the same highlight the US map uses. */
-const HIGHLIGHT_FIPS = countyStats.worst.fips;
+  `${round(countyStats.best.peoplePerCongregation)}. ` +
+  `Amber circles mark the ${countyStats.shortfall.topCount} counties that ` +
+  `need the most new churches, drawn larger where more are needed. ` +
+  `Statewide, ${countyStats.shortfall.countyCount} counties are short a ` +
+  `combined ${round(countyStats.shortfall.total)} evangelical congregations ` +
+  `of one per ${round(GACX_SATURATION_GOAL)} people, and the ` +
+  `${countyStats.shortfall.topCount} marked counties account for ` +
+  `${round(countyStats.shortfall.topTotal)} of them, ` +
+  `${countyStats.shortfall.topPctOfTotal} percent. They are ` +
+  `${countyStats.shortfall.top
+    .map((r) => `${r.name}, needing ${round(r.churchesNeeded)}`)
+    .join("; ")}. County-by-county figures follow in the table.`;
 
 export default function IowaCountyMap() {
-  const highlight = countyPaths.find((p) => p.fips === HIGHLIGHT_FIPS)!;
-
   return (
     <div>
       <svg
@@ -331,27 +607,19 @@ export default function IowaCountyMap() {
             />
           ))}
         </g>
-        {/* Drawn last so the highlight sits above its neighbors. Two strokes,
-            not one: the called-out county is now the PALEST on the map, and
-            brand amber on #e2e8f2 is about 1.5:1 — well under the 3:1 floor
-            for non-text contrast. The navy underlay shows as a hairline on
-            either side of the amber, so the callout stays findable against a
-            near-white fill without changing the callout color the US map
-            uses. */}
-        <path
-          d={highlight.d}
-          fill={fillFor(countyStats.worst.peoplePerCongregation)}
-          stroke="#10294c"
-          strokeWidth={6}
-          strokeLinejoin="round"
-        />
-        <path
-          d={highlight.d}
-          fill="none"
-          stroke="#fbac33"
-          strokeWidth={3.5}
-          strokeLinejoin="round"
-        />
+        {/* Proportional symbols for the ten counties that need the most new
+            churches. Amber disc, navy ring, and the ring is doing real work:
+            brand amber is 7:1 against the darkest fill but about 1.5:1
+            against the palest, so on a pale county the amber alone would sit
+            under the 3:1 floor for non-text contrast (1.4.11). Navy carries
+            the edge on every pale fill; on the dark fills the ring vanishes
+            and the amber disc carries itself. One ring, not two — see the
+            collision guard for why the white separator is not paid for. */}
+        <g fill="#fbac33" stroke="#10294c" strokeWidth={2}>
+          {countyMarkers.map((m) => (
+            <circle key={m.fips} cx={m.cx} cy={m.cy} r={m.r} />
+          ))}
+        </g>
       </svg>
 
       {/* Legend; the aria-label and the data table carry this for AT.
@@ -387,6 +655,37 @@ export default function IowaCountyMap() {
               </span>
             </span>
           ))}
+        </div>
+
+        {/* Second encoding, so it gets its own row rather than a chip in the
+            ramp: the circles are a count, the fills are a ratio, and putting
+            them in one row would read as an eighth band. The swatch is drawn
+            from the real smallest and largest radii, so it cannot drift out
+            of proportion with the map. */}
+        <div className="mt-3 flex items-center gap-1.5 text-xs text-gray-500">
+          <svg
+            viewBox={legendSwatch.viewBox}
+            className="h-[18px] w-auto shrink-0 overflow-visible"
+            aria-hidden="true"
+          >
+            <g fill="#fbac33" stroke="#10294c" strokeWidth={2}>
+              <circle
+                cx={legendSwatch.small.cx}
+                cy={legendSwatch.cy}
+                r={legendSwatch.small.r}
+              />
+              <circle
+                cx={legendSwatch.large.cx}
+                cy={legendSwatch.cy}
+                r={legendSwatch.large.r}
+              />
+            </g>
+          </svg>
+          <span>
+            The {countyStats.shortfall.topCount} counties needing the most new
+            churches, sized by how many — {countyStats.shortfall.top[0].name}{" "}
+            needs {round(countyStats.shortfall.top[0].churchesNeeded)}
+          </span>
         </div>
       </div>
     </div>

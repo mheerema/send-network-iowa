@@ -364,8 +364,11 @@ export default function IowaPage() {
             </h2>
           </div>
 
-          {/* Inline figures: the shortfall counted in counties, then in people. */}
-          <dl className="mb-10 grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-3xl">
+          {/* Inline figures: the shortfall counted in counties, then in
+              people, then in churches. Three columns start at `md`, not `sm`:
+              at 640px a third of this 3xl column is ~180px and the 48px
+              figures ("2,640,125") overflow it. */}
+          <dl className="mb-10 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-3xl">
             <div>
               <dt className="sr-only">
                 Iowa counties with fewer than one evangelical congregation
@@ -412,6 +415,36 @@ export default function IowaPage() {
                 </span>
               </dd>
             </div>
+            <div>
+              <dt className="sr-only">
+                New evangelical congregations needed to bring every Iowa county
+                to one per{" "}
+                {formatNumber(countyStats.shortfall.goal)} people, and the
+                share of that shortfall concentrated in the{" "}
+                {countyStats.shortfall.topCount} counties needing the most
+              </dt>
+              <dd>
+                {/* The note ref rides the figure, not the supporting line:
+                    the supporting line is aria-hidden, so a ref inside it
+                    would be unreachable, and a ref after it orphans onto a
+                    line of its own. Same treatment as the h2 above. */}
+                <span className="block text-4xl sm:text-5xl font-bold text-brand-navy leading-none mb-1">
+                  {formatNumber(countyStats.shortfall.total)}
+                  <NoteRef n={6} />
+                </span>
+                <span className="block text-xl font-bold text-brand-amber leading-none mb-3">
+                  {countyStats.shortfall.topPctOfTotal}% in{" "}
+                  {countyStats.shortfall.topCount} counties
+                </span>
+                <span
+                  className="block text-base text-gray-700 leading-snug"
+                  aria-hidden="true"
+                >
+                  more evangelical congregations would bring every county to
+                  one per {formatNumber(countyStats.shortfall.goal)} people
+                </span>
+              </dd>
+            </div>
           </dl>
 
           {/* Choropleth: people per evangelical congregation, by county */}
@@ -432,11 +465,26 @@ export default function IowaPage() {
             reference, Iowa averages one per{" "}
             {formatNumber(scaleAnchors.iowaAverage)} and the United States one
             per {formatNumber(scaleAnchors.usAverage)}.{" "}
-            {countyStats.worst.name} County, outlined, carries the most people
-            per congregation —{" "}
+            {countyStats.worst.name} County carries the most people per
+            congregation —{" "}
             {formatNumber(peoplePerCongregation(countyStats.worst.name))};{" "}
             {countyStats.best.name} County the fewest, at{" "}
-            {formatNumber(peoplePerCongregation(countyStats.best.name))}.
+            {formatNumber(peoplePerCongregation(countyStats.best.name))}.{" "}
+            The amber circles mark the {countyStats.shortfall.topCount}{" "}
+            counties that need the most new churches, sized by how many:{" "}
+            {countyStats.shortfall.top[0].name} needs{" "}
+            {formatNumber(countyStats.shortfall.top[0].churchesNeeded)}, more
+            than any other, then{" "}
+            {countyStats.shortfall.top
+              .slice(1, 5)
+              .map((r) => r.name)
+              .join(", ")}
+            . Between them the {countyStats.shortfall.topCount} account for{" "}
+            {countyStats.shortfall.topPctOfTotal}% of the{" "}
+            {formatNumber(countyStats.shortfall.total)}{" "}
+            congregations Iowa is
+            short — a sum of each county&rsquo;s own gap, not a division of
+            the state total.
           </p>
 
           {/* Accessible data table for the map. sr-only lives on a wrapping
@@ -448,12 +496,18 @@ export default function IowaPage() {
               <caption>
                 Iowa counties in the 2020 U.S. Religion Census: population,
                 evangelical congregations, people per evangelical congregation,
-                and the share of the population not counted as adherents of an
-                evangelical congregation. All {countyStats.countyCount} counties
-                on the map appear here, in alphabetical order. The share not
-                counted is an upper bound; see note 3 at the foot of the page.
-                In counties with only a handful of congregations, the figure
-                for people per congregation is approximate; see note 6.
+                new congregations needed, and the share of the population not
+                counted as adherents of an evangelical congregation. All{" "}
+                {countyStats.countyCount} counties on the map appear here, in
+                alphabetical order. New congregations needed is how many the
+                county would have to gain to reach one per{" "}
+                {formatNumber(countyStats.shortfall.goal)} residents; 0 means
+                it is already there. The{" "}
+                {countyStats.shortfall.topCount} counties needing the most are
+                the ones marked with circles on the map. The share not counted
+                is an upper bound; see note 3 at the foot of the page. In
+                counties with only a handful of congregations, the figure for
+                people per congregation is approximate.
               </caption>
               <thead>
                 <tr>
@@ -461,6 +515,7 @@ export default function IowaPage() {
                   <th scope="col">Population</th>
                   <th scope="col">Evangelical congregations</th>
                   <th scope="col">People per evangelical congregation</th>
+                  <th scope="col">New congregations needed</th>
                   <th scope="col">Not counted as adherents</th>
                 </tr>
               </thead>
@@ -473,6 +528,7 @@ export default function IowaPage() {
                     <td>
                       {formatNumber(Math.round(row.peoplePerCongregation))}
                     </td>
+                    <td>{formatNumber(row.churchesNeeded)}</td>
                     <td>{row.notEvangelicalPct.toFixed(1)}%</td>
                   </tr>
                 ))}
@@ -517,15 +573,18 @@ export default function IowaPage() {
           <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-3">
             What This Asks of Us
           </p>
+          {/* The county-aware total, the same figure the county section
+              publishes — see note 6 for why it is not the statewide
+              division. Plain statement of fact, no rhetorical framing. */}
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-6">
-            One evangelical congregation for every{" "}
-            {formatNumber(countyStats.statewide)} Iowans.
+            Iowa needs {formatNumber(countyStats.shortfall.total)} more
+            evangelical congregations.
           </h2>
           <p className="text-lg text-white/80 leading-relaxed max-w-2xl mx-auto mb-8">
-            Every one of them lives on a street, in a town, within reach of a
-            church that does not yet exist. Whether God is calling you to plant
-            or calling your church to send, there is a place for you in this
-            work.
+            Behind that number are {formatNumber(notEvangelical)} Iowans on
+            streets and in towns within reach of a church that does not yet
+            exist. Whether God is calling you to plant or calling your church
+            to send, there is a place for you in this work.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Link
@@ -622,6 +681,32 @@ export default function IowaPage() {
               overshoots. The ordering holds at the extremes; the middle of the
               map, where Iowa sits, is soft.
               <NoteBack n={5} />
+            </li>
+            <li id="note-6">
+              The shortfall is counted county by county: for each county, one
+              congregation per{" "}
+              {formatNumber(countyStats.shortfall.goal)} residents, minus the
+              congregations it already has, summed across the{" "}
+              {countyStats.shortfall.countyCount}{" "}
+              counties that fall short.
+              Counties already past the goal contribute nothing, and their
+              surplus is not subtracted from anyone else&rsquo;s gap, because a
+              church in one county does not serve another. Running the same
+              arithmetic on Iowa as a whole instead — one congregation per{" "}
+              {formatNumber(countyStats.shortfall.goal)} residents statewide,
+              minus its{" "}
+              {formatNumber(countyStats.totalCongregations)} congregations —
+              gives a smaller figure,{" "}
+              {formatNumber(countyStats.shortfall.statewideDivision)}, because
+              that version lets a surplus in a small rural county cancel a
+              shortfall in Polk. The gap between the two is the whole point. One congregation per{" "}
+              {formatNumber(scaleAnchors.gacxSaturationGoal)}{" "}
+              people is the
+              Global Alliance for Church Multiplication&rsquo;s stated
+              saturation goal ({scaleAnchors.gacxUrl}) — a goal for global
+              evangelization, not an empirical benchmark, and no accepted
+              standard for how many churches a population needs exists.
+              <NoteBack n={6} />
             </li>
           </ol>
 
