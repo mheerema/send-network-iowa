@@ -121,6 +121,19 @@ export const countyStats = {
     (s, c) => s + c.evangelicalCongregationsWithoutAdherentCount,
     0
   ),
+  /**
+   * The thinnest-covered counties (2,000+ people per evangelical congregation,
+   * the bottom two legend classes) and the share of Iowans who live in them.
+   */
+  thinlyCovered: (() => {
+    const thin = countyRows.filter((r) => r.peoplePerCongregation >= 2000);
+    const pop = thin.reduce((sum, r) => sum + r.population, 0);
+    return {
+      countyCount: thin.length,
+      population: pop,
+      pctOfState: Math.round((pop / statewidePopulation) * 100),
+    };
+  })(),
 };
 
 export function peoplePerCongregation(countyName: string): number {

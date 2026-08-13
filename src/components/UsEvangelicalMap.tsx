@@ -262,10 +262,20 @@ export default function UsEvangelicalMap() {
         </g>
         {/* Divider around the Alaska and Hawaii insets. */}
         <path d={AK_HI_SEPARATOR} fill="none" stroke="#d1d5db" strokeWidth={1.5} />
-        {/* Iowa last so its highlight stroke sits above its neighbors. */}
+        {/* Iowa last so its highlight stroke sits above its neighbors.
+            Drawn twice: a navy under-stroke gives the amber callout a dark
+            hairline on both edges, since amber on the pale fills of the low
+            classes is only ~1.1:1 on its own. Same fix as IowaCountyMap. */}
         <path
           d={iowaPath.d}
           fill={fillFor(iowaRate)}
+          stroke="#10294c"
+          strokeWidth={5}
+          strokeLinejoin="round"
+        />
+        <path
+          d={iowaPath.d}
+          fill="none"
           stroke="#fbac33"
           strokeWidth={2.5}
           strokeLinejoin="round"

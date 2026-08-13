@@ -376,22 +376,23 @@ export default function IowaPage() {
             </div>
             <div>
               <dt className="sr-only">
-                Iowans not counted as adherents of an evangelical congregation,
-                statewide
+                Share of Iowans living in the counties with the thinnest
+                evangelical coverage
               </dt>
               <dd>
                 <span className="block text-4xl sm:text-5xl font-bold text-brand-navy leading-none mb-3">
-                  {formatNumber(notEvangelical)}{" "}
+                  {formatNumber(countyStats.thinlyCovered.population)}{" "}
                   <span className="text-brand-amber">
-                    ({notEvangelicalPctLabel})
+                    ({countyStats.thinlyCovered.pctOfState}%)
                   </span>
                 </span>
                 <span
                   className="block text-base text-gray-700 leading-snug"
                   aria-hidden="true"
                 >
-                  Iowans statewide not counted as adherents of an evangelical
-                  congregation
+                  Iowans live in the {countyStats.thinlyCovered.countyCount}{" "}
+                  counties with fewer than one evangelical congregation per
+                  2,000 people
                 </span>
               </dd>
             </div>
