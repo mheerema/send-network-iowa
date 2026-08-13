@@ -211,6 +211,7 @@ function bandOf(test: (ratio: number) => boolean) {
   const pop = band.reduce((sum, r) => sum + r.population, 0);
   return {
     countyCount: band.length,
+    pctOfCounties: Math.round((band.length / countyRows.length) * 100),
     population: pop,
     pctOfState: Math.round((pop / statewidePopulation) * 100),
   };
@@ -236,6 +237,12 @@ export const countyStats = {
   meetsSaturationGoal: bandOf((ratio) => ratio < GACX_SATURATION_GOAL),
   /** The two palest classes: counties thinner than the US evangelical average. */
   belowUsAverage: bandOf((ratio) => ratio >= US_AVERAGE),
+  /**
+   * The inverse of meetsSaturationGoal: counties that fall short of GACX's
+   * goal of one congregation per 1,000 people. This is the framing the page
+   * leads with — the shortfall, counted in counties and in people.
+   */
+  belowSaturationGoal: bandOf((ratio) => ratio >= GACX_SATURATION_GOAL),
   /**
    * Ratio noise. A county's ratio moves by 1/(n+1) when it gains one church,
    * so at three congregations a single church swings it 25%. These are the

@@ -169,11 +169,11 @@ export default function IowaPage() {
               The Need in Iowa
             </p>
             <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
-              Nine in ten Iowans have no evangelical church home.
+              89% of Iowans are not connected to an evangelical church.
             </h1>
             <p className="mt-6 text-xl text-white/80 leading-relaxed">
-              A new statewide demographics report puts numbers to what many of
-              us have sensed for years.
+              2,837,801 people. Evangelical adherents are 11% of the state,
+              against 16.5% nationally.
               <NoteRef n={1} />
             </p>
           </div>
@@ -234,7 +234,7 @@ export default function IowaPage() {
               Spiritual Landscape
             </p>
             <h2 className="text-3xl font-bold tracking-tight text-brand-navy">
-              About 1 in 9 Iowans is connected to an evangelical church.
+              11% of Iowans are connected to an evangelical church.
               <NoteRef n={2} />
             </h2>
           </div>
@@ -357,11 +357,15 @@ export default function IowaPage() {
               County by County
             </p>
             <h2 className="text-3xl font-bold tracking-tight text-brand-navy mb-4">
-              The churches are where the people aren&rsquo;t
+              {formatNumber(countyStats.belowUsAverage.population)} Iowans
+              live in counties with too few churches
               <NoteRef n={3} />
             </h2>
             <p className="text-lg text-gray-700 leading-snug">
-              Iowa&rsquo;s best-covered counties are its emptiest ones.
+              These {countyStats.belowUsAverage.countyCount} counties are the
+              church planting targets. The counties that meet the goal are
+              Iowa&rsquo;s least populated ones, and they have enough churches.
+              <NoteRef n={6} />
             </p>
           </div>
 
@@ -370,38 +374,34 @@ export default function IowaPage() {
           <dl className="mb-10 grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-3xl">
             <div>
               <dt className="sr-only">
-                Iowa counties with at least one evangelical congregation for
-                every {formatNumber(scaleAnchors.gacxSaturationGoal)} people,
-                and the share of Iowans who live in them
+                Iowa counties below the US evangelical average of one
+                congregation per {formatNumber(scaleAnchors.usAverage)} people
               </dt>
               {/* Two tiers, not one line: the count and the share are the
                   two halves of the argument, and at 48px a parenthetical
                   breaks mid-phrase in a half-width column. */}
               <dd>
                 <span className="block text-4xl sm:text-5xl font-bold text-brand-navy leading-none mb-1">
-                  {countyStats.meetsSaturationGoal.countyCount} of{" "}
+                  {countyStats.belowUsAverage.countyCount} of{" "}
                   {countyStats.countyCount}
                 </span>
                 <span className="block text-xl font-bold text-brand-amber leading-none mb-3">
-                  {countyStats.meetsSaturationGoal.pctOfState}% of Iowans
+                  {countyStats.belowUsAverage.pctOfCounties}% of counties
                 </span>
                 <span
                   className="block text-base text-gray-700 leading-snug"
                   aria-hidden="true"
                 >
-                  Iowa counties already have one evangelical congregation for
-                  every {formatNumber(scaleAnchors.gacxSaturationGoal)} people
-                  — but only{" "}
-                  {formatNumber(countyStats.meetsSaturationGoal.population)}{" "}
-                  Iowans live there
+                  Iowa counties fall below the US evangelical average of one
+                  congregation per {formatNumber(scaleAnchors.usAverage)}{" "}
+                  people
                 </span>
               </dd>
             </div>
             <div>
               <dt className="sr-only">
-                Share of Iowans living in counties below the US evangelical
-                average of one congregation per{" "}
-                {formatNumber(scaleAnchors.usAverage)} people
+                Share of Iowans living in the counties below the US
+                evangelical average
               </dt>
               <dd>
                 <span className="block text-4xl sm:text-5xl font-bold text-brand-navy leading-none mb-1">
@@ -414,26 +414,12 @@ export default function IowaPage() {
                   className="block text-base text-gray-700 leading-snug"
                   aria-hidden="true"
                 >
-                  live in the {countyStats.belowUsAverage.countyCount} counties
-                  with fewer churches per person than the US evangelical
-                  average of one per {formatNumber(scaleAnchors.usAverage)}
+                  live in those {countyStats.belowUsAverage.countyCount}{" "}
+                  counties
                 </span>
               </dd>
             </div>
           </dl>
-
-          {/* The map's premise, at reading size. The scale has no standard
-              behind it and the page says so before the reader interprets a
-              single fill. */}
-          <p className="max-w-3xl mx-auto mb-5 text-base text-gray-700 leading-snug">
-            There is no accepted standard for how many churches a population
-            needs, so this map is anchored to the US evangelical average of one
-            congregation per {formatNumber(scaleAnchors.usAverage)}{" "}
-            people and to GACX&rsquo;s stated saturation goal of one church for
-            every{" "}
-            {formatNumber(scaleAnchors.gacxSaturationGoal)}.
-            <NoteRef n={6} />
-          </p>
 
           {/* Choropleth: people per evangelical congregation, by county */}
           <div className="max-w-3xl mx-auto">
@@ -510,7 +496,7 @@ export default function IowaPage() {
               Who Lives Here
             </p>
             <h2 className="text-3xl font-bold tracking-tight text-brand-navy">
-              A state of small towns and steady households
+              Population and households
             </h2>
           </div>
 
@@ -529,7 +515,7 @@ export default function IowaPage() {
           {/* Spanish-language opportunity */}
           <div className="mt-16 rounded-2xl border-2 border-brand-amber/60 bg-brand-amber/[0.04] p-6 sm:p-8">
             <h3 className="text-lg font-bold text-brand-navy mb-6">
-              The Spanish-language opportunity
+              Spanish-speaking Iowans
             </h3>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
               <div>
@@ -558,7 +544,8 @@ export default function IowaPage() {
             What This Asks of Us
           </p>
           <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-6">
-            {formatNumber(notEvangelical)} people. One clear answer.
+            One evangelical congregation for every{" "}
+            {formatNumber(countyStats.statewide)} Iowans.
           </h2>
           <p className="text-lg text-white/80 leading-relaxed max-w-2xl mx-auto mb-8">
             Every one of them lives on a street, in a town, within reach of a
