@@ -1,6 +1,9 @@
 import { getAllArticles } from "@/lib/articles";
 
 export const dynamic = "force-static";
+// ISR: scheduled posts enter the feed on the first revalidation after their
+// date lands in Iowa. See src/lib/articles.ts.
+export const revalidate = 3600;
 
 const SITE_URL = "https://sendnetworkiowa.com";
 

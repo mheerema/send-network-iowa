@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
-  getAllArticles,
+  getAllArticleSlugs,
   getArticleBySlug,
   formatArticleDate,
 } from "@/lib/articles";
@@ -12,8 +12,14 @@ interface ArticlePageProps {
   params: Promise<{ slug: string }>;
 }
 
+// ISR: scheduled posts are prerendered as 404s and flip to live on the first
+// revalidation after their date lands in Iowa. See src/lib/articles.ts.
+export const revalidate = 3600;
+
+// Every slug, scheduled ones included — the date gate lives in the page below,
+// not here, so the prebuilt page can flip without a rebuild.
 export function generateStaticParams() {
-  return getAllArticles().map((article) => ({ slug: article.slug }));
+  return getAllArticleSlugs().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({

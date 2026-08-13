@@ -1,6 +1,10 @@
 import type { MetadataRoute } from "next";
 import { getAllArticles } from "@/lib/articles";
 
+// ISR: without this the sitemap would keep the build-time article set and a
+// scheduled post would go live unlisted. See src/lib/articles.ts.
+export const revalidate = 3600;
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = "https://sendnetworkiowa.com";
   const now = new Date();

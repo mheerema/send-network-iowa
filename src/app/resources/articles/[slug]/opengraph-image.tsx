@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 import {
-  getAllArticles,
+  getAllArticleSlugs,
   getArticleBySlug,
   formatArticleDate,
 } from "@/lib/articles";
@@ -17,8 +17,13 @@ export const alt = "Send Network Iowa article";
 export const size = OG_SIZE;
 export const contentType = "image/png";
 
+// ISR, matching the article page: a scheduled post's card is prebuilt with the
+// generic fallback below (its title must not leak early) and picks up the real
+// title on the first revalidation after it publishes. See src/lib/articles.ts.
+export const revalidate = 3600;
+
 export function generateStaticParams() {
-  return getAllArticles().map((article) => ({ slug: article.slug }));
+  return getAllArticleSlugs().map((slug) => ({ slug }));
 }
 
 export default async function Image({

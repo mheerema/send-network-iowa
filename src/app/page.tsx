@@ -1,13 +1,26 @@
 import Link from "next/link";
 import HeroPathwaySplit from "@/components/HeroPathwaySplit";
 import ChurchPathwayLadder from "@/components/ChurchPathwayLadder";
-import { spiritual, formatNumber, evangelicalCongregations, notEvangelical, notEvangelicalPctLabel, } from "@/data/iowa-demographics";
+import {
+  population,
+  formatMillions,
+  notEvangelical,
+  notEvangelicalPctLabel,
+} from "@/data/iowa-demographics";
 
+/* Mirrors the key-stat band on /iowa — same three figures, same order, so the
+   two pages state the need identically. Reads as the calculation it is:
+   population, the share not connected, the resulting count of people. */
 const needStats = [
-  { stat: notEvangelicalPctLabel, label: "of Iowans are not connected to an evangelical church" },
-  { stat: formatNumber(notEvangelical), label: "people, and most towns have no evangelical church to reach them" },
-  { stat: formatNumber(evangelicalCongregations), label: "evangelical congregations statewide" },
-  { stat: `${spiritual.nonesPct}%`, label: "claim no religious affiliation of any kind" },
+  { stat: formatMillions(population.population2026), label: "People in Iowa" },
+  {
+    stat: notEvangelicalPctLabel,
+    label: "Not connected to an evangelical church",
+  },
+  {
+    stat: formatMillions(notEvangelical),
+    label: "People not connected to an evangelical church",
+  },
 ];
 
 export default function Home() {
@@ -27,11 +40,11 @@ export default function Home() {
               The Need in Iowa
             </p>
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white">
-              Most of Iowa has no church home
+              89% of Iowans are not connected to an evangelical church
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-12">
             {needStats.map((item) => (
               <div key={item.label} className="text-center">
                 <p className="text-4xl sm:text-5xl font-bold text-brand-amber leading-none mb-3">

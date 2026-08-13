@@ -368,7 +368,7 @@ export default function IowaPage() {
               people, then in churches. Three columns start at `md`, not `sm`:
               at 640px a third of this 3xl column is ~180px and the 48px
               figures ("2,640,125") overflow it. */}
-          <dl className="mb-10 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 max-w-3xl">
+          <dl className="mb-10 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 md:gap-12">
             <div>
               <dt className="sr-only">
                 Iowa counties with fewer than one evangelical congregation
@@ -484,7 +484,12 @@ export default function IowaPage() {
             {formatNumber(countyStats.shortfall.total)}{" "}
             congregations Iowa is
             short — a sum of each county&rsquo;s own gap, not a division of
-            the state total.
+            the state total. Thin coverage and a large shortfall are not the
+            same thing: {countyStats.worst.name} County has the thinnest
+            coverage in Iowa but only{" "}
+            {formatNumber(countyStats.worst.population)} residents, so it needs{" "}
+            {formatNumber(countyStats.worst.churchesNeeded)} more churches
+            rather than the hundreds the largest counties need.
           </p>
 
           {/* Accessible data table for the map. sr-only lives on a wrapping

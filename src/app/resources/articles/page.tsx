@@ -3,6 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { getAllArticles, formatArticleDate } from "@/lib/articles";
 
+// ISR: scheduled posts (see src/lib/articles.ts) join this list on the first
+// revalidation after their date lands in Iowa — no deploy needed.
+export const revalidate = 3600;
+
 export const metadata: Metadata = {
   title: "Articles | Send Network Iowa",
   description:
