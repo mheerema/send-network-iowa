@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import UsAdherenceMap from "@/components/UsAdherenceMap";
+import UsEvangelicalMap, {
+  stateRows,
+  stateStats,
+  reportingGap,
+} from "@/components/UsEvangelicalMap";
 import IowaCountyMap, {
   countyRows,
   countyStats,
   peoplePerCongregation,
 } from "@/components/IowaCountyMap";
-import stateAdherenceCensus from "@/data/state-adherence-2020.json";
 import {
   source,
   population,
@@ -17,9 +20,6 @@ import {
   traditions,
   largestBodies,
   tapestrySegments,
-  evangelicalAdherentsNote,
-  nationalAdherenceRate,
-  neighborAdherence,
   pewSelfIdentifiedNones,
   comparisonSource,
   formatNumber,
@@ -47,30 +47,86 @@ const breadcrumbJsonLd = {
   ],
 };
 
-/** Iowa + its six neighbors + the US, for the compact neighbor bar chart. */
-const adherenceRows = [
-  { name: "Iowa", adherencePct: spiritual.adherentsPctPrecise },
-  ...neighborAdherence,
-  { name: "United States", adherencePct: nationalAdherenceRate },
-].sort((a, b) => a.adherencePct - b.adherencePct);
+/**
+ * The three traditions that carry the evangelical argument: the evangelical
+ * figure itself, and the two larger traditions that make it meaningful.
+ * Derived from `traditions`, never re-listed — the other three rows are in
+ * the screen-reader table at the foot of the page.
+ */
+const CONTRAST_TRADITIONS = [
+  "Evangelical Protestant",
+  "Mainline Protestant",
+  "Catholic",
+];
+const contrastTraditions = traditions.filter((t) =>
+  CONTRAST_TRADITIONS.includes(t.name)
+);
 
 /**
- * Every state on the map, for the sr-only data table — derived from the
- * census payload, never hand-listed.
+ * "How Iowa compares" shades evangelical adherence — the share of each
+ * state's population counted as adherents of an Evangelical Protestant
+ * congregation. It used to shade the census's GENERAL adherence measure,
+ * which answered a different question (Utah led the country on that one).
+ * All figures come from `stateStats`, derived from the payload.
  */
-const allStateRows = [
-  ...Object.entries(stateAdherenceCensus.states).map(([name, s]) => ({
-    name,
-    adherencePct: s.adherenceRate,
-  })),
-  {
-    name: "United States",
-    adherencePct: stateAdherenceCensus.usTotal.adherenceRate,
-  },
-].sort((a, b) => a.adherencePct - b.adherencePct);
+const compareMeasure = "counted as adherents of an evangelical congregation";
 
-function formatAdherencePct(pct: number): string {
+function formatPct(pct: number): string {
   return `${pct.toFixed(1)}%`;
+}
+
+/** Ranks are interpolated, so the suffix has to be computed, not typed. */
+function ordinal(n: number): string {
+  const teens = n % 100;
+  if (teens >= 11 && teens <= 13) return `${n}th`;
+  return `${n}${["th", "st", "nd", "rd"][n % 10] ?? "th"}`;
+}
+
+/** Footnote reference. One ref per note, so the back-link target is unique. */
+function NoteRef({ n }: { n: number }) {
+  return (
+    <sup className="ml-0.5 align-super text-[0.55em] font-semibold leading-none">
+      <a
+        id={`ref-note-${n}`}
+        href={`#note-${n}`}
+        className="text-brand-amber underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-amber"
+      >
+        <span className="sr-only">See note </span>
+        {n}
+      </a>
+    </sup>
+  );
+}
+
+/** Back-link from a note to the section that referenced it. */
+function NoteBack({ n }: { n: number }) {
+  return (
+    <a
+      href={`#ref-note-${n}`}
+      className="ml-1 whitespace-nowrap text-gray-600 underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-amber"
+    >
+      <span aria-hidden="true">↩</span>
+      <span className="sr-only">Back to note {n} reference</span>
+    </a>
+  );
+}
+
+/** Large figure with its label. The page's default unit of content. */
+function BigStat({
+  figure,
+  label,
+}: {
+  figure: React.ReactNode;
+  label: string;
+}) {
+  return (
+    <div>
+      <p className="text-4xl sm:text-5xl font-bold text-brand-navy leading-none mb-3">
+        {figure}
+      </p>
+      <p className="text-base text-gray-700 leading-snug">{label}</p>
+    </div>
+  );
 }
 
 export default function IowaPage() {
@@ -102,13 +158,10 @@ export default function IowaPage() {
             <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white leading-tight">
               Nine in ten Iowans have no evangelical church home.
             </h1>
-            <p className="mt-6 text-white/80 leading-relaxed">
+            <p className="mt-6 text-xl text-white/80 leading-relaxed">
               A new statewide demographics report puts numbers to what many of
-              us have sensed for years. {notEvangelicalPctLabel} of Iowans —{" "}
-              {formatNumber(notEvangelical)} people — are not connected to an
-              evangelical congregation, and more than half claim no religious
-              affiliation at all. This page is the honest picture — who lives
-              here, what they believe, and why new churches are the answer.
+              us have sensed for years.
+              <NoteRef n={1} />
             </p>
           </div>
         </div>
@@ -126,8 +179,8 @@ export default function IowaPage() {
                 People in Iowa
               </p>
               <p className="text-sm text-white/50 leading-relaxed">
-                {formatNumber(population.population2026)} people, projected to
-                grow by {formatNumber(population.projectedGrowth)} by 2031.
+                Projected to grow by {formatNumber(population.projectedGrowth)}{" "}
+                by 2031.
               </p>
             </div>
             <div className="text-center">
@@ -138,8 +191,7 @@ export default function IowaPage() {
                 Not connected to an evangelical church
               </p>
               <p className="text-sm text-white/50 leading-relaxed">
-                {formatNumber(notEvangelical)} people. Most towns have no
-                evangelical church to reach them.
+                {formatNumber(notEvangelical)} people.
               </p>
             </div>
             <div className="text-center">
@@ -150,277 +202,143 @@ export default function IowaPage() {
                 Evangelical congregations
               </p>
               <p className="text-sm text-white/50 leading-relaxed">
-                Of {formatNumber(spiritual.congregations)} congregations of
-                every kind statewide.
+                Statewide.
               </p>
             </div>
             <div className="text-center">
               <p className="text-5xl font-bold text-brand-amber leading-none mb-2">
-                {spiritual.nonesPct}%
+                {formatNumber(countyStats.statewide)}
               </p>
               <p className="text-sm font-semibold text-white uppercase tracking-wider mb-3">
-                No religious affiliation
+                Iowans per evangelical congregation
               </p>
               <p className="text-sm text-white/50 leading-relaxed">
-                {formatNumber(spiritual.nones)} Iowans claim no religious
-                affiliation of any kind.
+                Statewide average.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Spiritual landscape */}
+      {/* Evangelical affiliation */}
       <section className="py-20 bg-white">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
+          <div className="max-w-3xl mb-12">
             <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-3">
               Spiritual Landscape
             </p>
-            <h2 className="text-3xl font-bold tracking-tight text-brand-navy mb-4">
-              What Iowa believes — and what it doesn&rsquo;t
+            <h2 className="text-3xl font-bold tracking-tight text-brand-navy">
+              About 1 in 9 Iowans is connected to an evangelical church.
+              <NoteRef n={2} />
             </h2>
-            <p className="text-gray-600 text-sm leading-relaxed mb-4">
-              Of Iowa&rsquo;s {formatNumber(population.population2026)} people,
-              {" "}{formatNumber(spiritual.adherents)} ({spiritual.adherentsPct}%)
-              are counted as adherents of some religious body. The other{" "}
-              {formatNumber(spiritual.nones)} — {spiritual.nonesPct}% of the
-              state — belong to none. Self-reported membership is thinner
-              still: only {formatNumber(spiritual.memberOfPlaceOfWorship)}{" "}
-              Iowans (about {spiritual.memberOfPlaceOfWorshipPct}% of the
-              population) say they are a member of a place of worship.
-            </p>
-            <p className="text-gray-600 text-sm leading-relaxed mb-10">
-              When Iowans were asked whether they attend church regularly,{" "}
-              {formatNumber(spiritual.attendSurvey.disagreeTotal)} said no —
-              including {formatNumber(spiritual.attendSurvey.disagreeCompletely)}{" "}
-              who disagreed completely — while{" "}
-              {formatNumber(spiritual.attendSurvey.agreeTotal)} said yes. For
-              every Iowan in a pew on a given Sunday, there are far more who
-              have no meaningful connection to any church.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Attendance comparison */}
-            <div className="bg-gray-50 rounded-2xl p-6 sm:p-8">
-              <h3 className="text-lg font-bold text-brand-navy mb-4">
-                &ldquo;Do you attend church regularly?&rdquo;
-              </h3>
-              <dl className="space-y-3 text-sm">
-                <div className="flex items-center justify-between gap-4">
-                  <dt className="text-gray-600">Disagree completely</dt>
-                  <dd className="font-bold text-brand-navy">
-                    {formatNumber(spiritual.attendSurvey.disagreeCompletely)}
-                  </dd>
-                </div>
-                <div className="flex items-center justify-between gap-4">
-                  <dt className="text-gray-600">Disagree somewhat</dt>
-                  <dd className="font-bold text-brand-navy">
-                    {formatNumber(spiritual.attendSurvey.disagreeSomewhat)}
-                  </dd>
-                </div>
-                <div className="flex items-center justify-between gap-4">
-                  <dt className="text-gray-600">Agree somewhat</dt>
-                  <dd className="font-bold text-brand-navy">
-                    {formatNumber(spiritual.attendSurvey.agreeSomewhat)}
-                  </dd>
-                </div>
-                <div className="flex items-center justify-between gap-4">
-                  <dt className="text-gray-600">Agree completely</dt>
-                  <dd className="font-bold text-brand-navy">
-                    {formatNumber(spiritual.attendSurvey.agreeCompletely)}
-                  </dd>
-                </div>
-              </dl>
-              <p className="mt-4 pt-4 border-t border-gray-200 text-xs text-gray-500 leading-relaxed">
-                {formatNumber(spiritual.attendSurvey.disagreeTotal)} disagree
-                vs. {formatNumber(spiritual.attendSurvey.agreeTotal)} agree.
-              </p>
-            </div>
-
-            {/* Largest bodies */}
-            <div className="bg-gray-50 rounded-2xl p-6 sm:p-8">
-              <h3 className="text-lg font-bold text-brand-navy mb-4">
-                Largest religious bodies by adherents
-              </h3>
-              <dl className="space-y-3 text-sm">
-                {largestBodies.map((body) => (
-                  <div
-                    key={body.name}
-                    className="flex items-center justify-between gap-4"
-                  >
-                    <dt className="text-gray-600">{body.name}</dt>
-                    <dd className="font-bold text-brand-navy">
-                      {formatNumber(body.adherents)}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-              <p className="mt-4 pt-4 border-t border-gray-200 text-xs text-gray-500 leading-relaxed">
-                Southern Baptists: {formatNumber(spiritual.sbcAdherents)}{" "}
-                adherents — about {spiritual.sbcPctLabel} of Iowa.
-              </p>
-            </div>
           </div>
 
           {/* Tradition breakdown */}
-          <div className="mt-12 bg-gray-50 rounded-2xl p-6 sm:p-8">
-            <h3 className="text-lg font-bold text-brand-navy mb-6">
-              The affiliated, by tradition
-            </h3>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          <div className="bg-gray-50 rounded-2xl p-6 sm:p-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               <div>
-                <p className="text-5xl font-bold text-brand-amber leading-none mb-2">
+                <p className="text-7xl font-bold text-brand-amber leading-none mb-3">
                   {evangelicalPctLabel}
                 </p>
-                <p className="text-sm font-semibold text-brand-navy uppercase tracking-wider mb-3">
+                <p className="text-base font-semibold text-brand-navy uppercase tracking-wider">
                   Iowans connected to an evangelical church
                 </p>
-                <p className="text-sm text-gray-600 leading-relaxed">
-                  About 1 in 9 Iowans is connected to an evangelical
-                  church. Of the {spiritual.adherentsPct}% of Iowans who are
-                  religiously affiliated, more than two-thirds attend Catholic
-                  or mainline Protestant churches.
+              </div>
+              <div>
+                <dl className="space-y-3 text-base">
+                  {contrastTraditions.map((t) => (
+                    <div
+                      key={t.name}
+                      className="flex items-center justify-between gap-4"
+                    >
+                      <dt className="text-gray-700">{t.name}</dt>
+                      <dd className="font-bold text-brand-navy tabular-nums">
+                        {formatNumber(t.adherents)}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+                <p className="mt-5 text-lg text-gray-700 leading-snug">
+                  Of the Iowans who are religiously affiliated, more than
+                  two-thirds attend Catholic or mainline Protestant churches.
                 </p>
               </div>
-              <dl className="space-y-3 text-sm">
-                {traditions.map((t) => (
-                  <div
-                    key={t.name}
-                    className="flex items-center justify-between gap-4"
-                  >
-                    <dt className="text-gray-600">{t.name}</dt>
-                    <dd className="font-bold text-brand-navy">
-                      {formatNumber(t.adherents)}{" "}
-                      <span className="font-normal text-gray-400">
-                        ({t.pctOfPopulation.toFixed(2)}%)
-                      </span>
-                    </dd>
-                  </div>
-                ))}
-              </dl>
             </div>
           </div>
 
           {/* How Iowa compares */}
           <div className="mt-12 bg-gray-50 rounded-2xl p-6 sm:p-8">
-            <h3 className="text-lg font-bold text-brand-navy mb-6">
+            <h3 className="text-lg font-bold text-brand-navy mb-4">
               How Iowa compares
+              <NoteRef n={4} />
             </h3>
-            <p className="text-sm text-gray-600 leading-relaxed">
-              Iowa has the lowest share of people connected to a congregation
-              of any of its six neighboring states —{" "}
-              {spiritual.adherentsPctPrecise}%, a little below the national{" "}
-              {nationalAdherenceRate}%.
+            <p className="text-lg text-gray-700 leading-snug">
+              Iowa is {formatPct(stateStats.iowaRate)} evangelical — below the
+              national {formatPct(stateStats.usRate)},{" "}
+              {ordinal(stateStats.iowaRank)} of {stateStats.rankedStateCount}{" "}
+              states, and last among its six neighbors.
+              <NoteRef n={5} />
             </p>
 
-            {/* Choropleth map: the lead comparison visual */}
-            <div className="mt-6 max-w-2xl mx-auto">
-              <UsAdherenceMap />
+            {/* Choropleth map: the comparison visual */}
+            <div className="mt-8 max-w-2xl mx-auto">
+              <UsEvangelicalMap />
             </div>
             <p
               className="mt-3 text-xs text-gray-500 leading-relaxed"
               aria-hidden="true"
             >
-              Share of each state&rsquo;s population connected to a
-              congregation, 2020 U.S. Religion Census. Iowa outlined.
+              Share of each state&rsquo;s population {compareMeasure}, 2020
+              U.S. Religion Census. Iowa outlined.
             </p>
 
-            {/* Accessible data table; the map and bar chart are labeled/decorative.
+            {/* Accessible data table; the map is labeled/decorative.
                 sr-only lives on a wrapping div, not the table: overflow:hidden
                 does not apply to table boxes, so a sr-only table lays out at
                 full nowrap width and adds horizontal page scroll. */}
             <div className="sr-only">
             <table>
               <caption>
-                Share of population connected to a congregation, 2020 U.S.
-                Religion Census. All 50 states and the District of Columbia
-                appear on the map; this table lists every one of them, lowest
-                to highest, with the United States overall for comparison.
+                Share of population {compareMeasure}, 2020 U.S. Religion
+                Census. All 50 states and the District of Columbia appear on
+                the map; this table lists every one of them, lowest to highest,
+                with the United States overall for comparison. Rank runs 1 to{" "}
+                {stateStats.rankedStateCount}, highest share first; the
+                District of Columbia is shaded on the map but not ranked,
+                because it is not a state. Every share here is understated —
+                see note 5 at the foot of the page.
               </caption>
               <thead>
                 <tr>
                   <th scope="col">State</th>
-                  <th scope="col">Connected to a congregation</th>
+                  <th scope="col">
+                    Counted as adherents of an evangelical congregation
+                  </th>
+                  <th scope="col">Rank</th>
+                  <th scope="col">Population</th>
+                  <th scope="col">Evangelical congregations</th>
                 </tr>
               </thead>
               <tbody>
-                {allStateRows.map((row) => (
-                  <tr key={row.name}>
+                {stateRows.map((row) => (
+                  <tr key={row.code}>
                     <th scope="row">{row.name}</th>
-                    <td>{formatAdherencePct(row.adherencePct)}</td>
+                    <td>{formatPct(row.rate)}</td>
+                    <td>{row.rank === null ? "Not ranked" : row.rank}</td>
+                    <td>{formatNumber(row.population)}</td>
+                    <td>{formatNumber(row.congregations)}</td>
                   </tr>
                 ))}
+                <tr>
+                  <th scope="row">United States</th>
+                  <td>{formatPct(stateStats.usRate)}</td>
+                  <td>Not ranked</td>
+                  <td>{formatNumber(stateStats.usPopulation)}</td>
+                  <td>{formatNumber(stateStats.usCongregations)}</td>
+                </tr>
               </tbody>
             </table>
             </div>
-
-            {/* Compact secondary block: the precise neighbor comparison */}
-            <h4 className="mt-8 text-sm font-bold text-brand-navy">
-              Iowa and its neighbors
-            </h4>
-            {/* Zero-based horizontal bar chart; track = 0–100% of population */}
-            <div aria-hidden="true" className="mt-3 space-y-2.5 sm:space-y-2">
-              {adherenceRows.map((row) => {
-                const isIowa = row.name === "Iowa";
-                const isUS = row.name === "United States";
-                return (
-                  <div
-                    key={row.name}
-                    className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 sm:grid-cols-[8rem_minmax(0,1fr)_3.5rem]"
-                  >
-                    <span
-                      className={`text-sm sm:col-start-1 sm:row-start-1 ${
-                        isIowa
-                          ? "font-semibold text-brand-navy"
-                          : "text-gray-700"
-                      }`}
-                    >
-                      {row.name}
-                    </span>
-                    <span
-                      className={`text-sm text-right tabular-nums sm:col-start-3 sm:row-start-1 ${
-                        isIowa
-                          ? "font-semibold text-brand-navy"
-                          : "text-gray-500"
-                      }`}
-                    >
-                      {formatAdherencePct(row.adherencePct)}
-                    </span>
-                    <div className="col-span-2 h-3.5 rounded-r-full bg-gray-200/60 sm:col-span-1 sm:col-start-2 sm:row-start-1">
-                      <div
-                        className={`h-full rounded-r-full ${
-                          isIowa
-                            ? "bg-brand-amber"
-                            : isUS
-                              ? ""
-                              : "bg-brand-navy/20"
-                        }`}
-                        style={{
-                          width: `${row.adherencePct}%`,
-                          ...(isUS
-                            ? {
-                                backgroundImage:
-                                  "repeating-linear-gradient(135deg, #6a7282 0 3px, transparent 3px 6px)",
-                              }
-                            : {}),
-                        }}
-                      />
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <p className="mt-6 pt-4 border-t border-gray-200 text-xs text-gray-500 leading-relaxed">
-              &ldquo;Connected to a congregation&rdquo; is the census&rsquo;s
-              measure — it counts people a church can name. By
-              self-identification (Pew Research, 2023&ndash;24),{" "}
-              {pewSelfIdentifiedNones}% of Iowans say they have no religion.
-              The distance between those numbers — hundreds of thousands of
-              Iowans who would call themselves Christian but are connected to
-              no church — is a large part of the mission field.
-            </p>
           </div>
         </div>
       </section>
@@ -434,17 +352,11 @@ export default function IowaPage() {
             </p>
             <h2 className="text-3xl font-bold tracking-tight text-brand-navy mb-4">
               Where the coverage stretches thinnest
+              <NoteRef n={3} />
             </h2>
-            <p className="text-gray-600 text-sm leading-relaxed">
-              Across Iowa there is one evangelical congregation for every{" "}
-              {formatNumber(countyStats.statewide)} people. The map shows where
-              that stretches furthest. In Jackson County there is one for every{" "}
-              {formatNumber(peoplePerCongregation("Jackson"))} people, and in
-              Dubuque County one for every{" "}
-              {formatNumber(peoplePerCongregation("Dubuque"))}. And the thinnest
-              coverage is not only rural: Linn, Scott and Johnson counties —
-              three of the largest in the state — each sit between one
-              congregation per 2,500 and one per 2,700 residents.
+            <p className="text-lg text-gray-700 leading-snug">
+              In Jackson County there is one evangelical congregation for every{" "}
+              {formatNumber(peoplePerCongregation("Jackson"))} people.
             </p>
           </div>
 
@@ -456,12 +368,12 @@ export default function IowaPage() {
                 adherents of an evangelical congregation
               </dt>
               <dd>
-                <span className="block text-4xl font-bold text-brand-navy leading-none mb-2">
+                <span className="block text-4xl sm:text-5xl font-bold text-brand-navy leading-none mb-3">
                   {countyStats.countiesOver90PctUnconnected} of{" "}
                   {countyStats.countyCount}
                 </span>
                 <span
-                  className="block text-sm text-gray-600 leading-relaxed"
+                  className="block text-base text-gray-700 leading-snug"
                   aria-hidden="true"
                 >
                   Iowa counties where more than 9 in 10 people are not counted
@@ -475,14 +387,14 @@ export default function IowaPage() {
                 statewide
               </dt>
               <dd>
-                <span className="block text-4xl font-bold text-brand-navy leading-none mb-2">
+                <span className="block text-4xl sm:text-5xl font-bold text-brand-navy leading-none mb-3">
                   {formatNumber(notEvangelical)}{" "}
                   <span className="text-brand-amber">
                     ({notEvangelicalPctLabel})
                   </span>
                 </span>
                 <span
-                  className="block text-sm text-gray-600 leading-relaxed"
+                  className="block text-base text-gray-700 leading-snug"
                   aria-hidden="true"
                 >
                   Iowans statewide not counted as adherents of an evangelical
@@ -520,7 +432,7 @@ export default function IowaPage() {
                 and the share of the population not counted as adherents of an
                 evangelical congregation. All {countyStats.countyCount} counties
                 on the map appear here, in alphabetical order. The share not
-                counted is an upper bound; see the note below the table.
+                counted is an upper bound; see note 3 at the foot of the page.
               </caption>
               <thead>
                 <tr>
@@ -546,25 +458,6 @@ export default function IowaPage() {
               </tbody>
             </table>
           </div>
-
-          <div className="mt-8 max-w-3xl mx-auto pt-4 border-t border-gray-200">
-            <p className="text-xs text-gray-500 leading-relaxed">
-              A note on the numbers:{" "}
-              {formatNumber(countyStats.congregationsWithoutAdherentCount)}{" "}
-              of Iowa&rsquo;s {formatNumber(countyStats.totalCongregations)}{" "}
-              evangelical congregations were counted by the 2020 census but
-              reported no adherent figures. Those churches are not spread
-              evenly, so in the counties where they cluster, the share of
-              people &ldquo;not counted as adherents&rdquo; comes out higher
-              than the reality on the ground. Read those percentages as an
-              upper bound. Congregation counts, on the other hand, are complete
-              and add up exactly to the state total — which is why the map
-              shades people per congregation rather than the percentage.
-            </p>
-            <p className="mt-2 text-xs text-gray-500 leading-relaxed">
-              Source: 2020 U.S. Religion Census (ARDA), county detail.
-            </p>
-          </div>
         </div>
       </section>
 
@@ -575,87 +468,42 @@ export default function IowaPage() {
             <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-3">
               Who Lives Here
             </p>
-            <h2 className="text-3xl font-bold tracking-tight text-brand-navy mb-4">
+            <h2 className="text-3xl font-bold tracking-tight text-brand-navy">
               A state of small towns and steady households
             </h2>
-            <p className="text-gray-600 text-sm leading-relaxed">
-              Iowa is {formatNumber(population.households)} households averaging{" "}
-              {population.avgHouseholdSize} people, with a median age of{" "}
-              {population.medianAge} and a median household income of $
-              {formatNumber(population.medianHouseholdIncome)}. There are{" "}
-              {formatNumber(population.children)} children in the state. The
-              character is rural and small-town: the top community segments are{" "}
-              {tapestrySegments.map((s, i) => (
-                <span key={s.name}>
-                  {i > 0 && (i === tapestrySegments.length - 1 ? ", and " : ", ")}
-                  {s.name} ({s.pct}%)
-                </span>
-              ))}
-              . It is also a state with real need:{" "}
-              {formatNumber(population.householdsBelowPoverty)} households live
-              below the poverty line and{" "}
-              {formatNumber(population.householdsOnSNAP)} receive SNAP benefits.
-            </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-            {/* Generations */}
-            <div className="bg-white rounded-2xl p-6 sm:p-8">
-              <h3 className="text-lg font-bold text-brand-navy mb-4">
-                Iowans by generation
-              </h3>
-              <dl className="space-y-3 text-sm">
-                {generations.map((gen) => (
-                  <div
-                    key={gen.name}
-                    className="flex items-center justify-between gap-4"
-                  >
-                    <dt className="text-gray-600">{gen.name}</dt>
-                    <dd className="font-bold text-brand-navy">
-                      {formatNumber(gen.population)}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-
-            {/* Education */}
-            <div className="bg-white rounded-2xl p-6 sm:p-8">
-              <h3 className="text-lg font-bold text-brand-navy mb-4">
-                Educational attainment
-              </h3>
-              <dl className="space-y-3 text-sm">
-                {education.map((level) => (
-                  <div
-                    key={level.label}
-                    className="flex items-center justify-between gap-4"
-                  >
-                    <dt className="text-gray-600">{level.label}</dt>
-                    <dd className="font-bold text-brand-navy">{level.pct}%</dd>
-                  </div>
-                ))}
-              </dl>
-              <p className="mt-4 pt-4 border-t border-gray-200 text-xs text-gray-500 leading-relaxed">
-                {population.whiteAlonePct}% of Iowans are White alone;{" "}
-                {population.hispanicOriginPct}% are of Hispanic origin (any
-                race).
-              </p>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-8 max-w-4xl">
+            <BigStat figure={population.medianAge} label="Median age" />
+            <BigStat
+              figure={formatNumber(population.children)}
+              label="Children in the state"
+            />
+            <BigStat
+              figure={`$${formatNumber(population.medianHouseholdIncome)}`}
+              label="Median household income"
+            />
           </div>
 
           {/* Spanish-language opportunity */}
-          <div className="mt-12 rounded-2xl border-2 border-brand-amber/60 bg-brand-amber/[0.04] p-6 sm:p-8">
-            <h3 className="text-lg font-bold text-brand-navy mb-3">
+          <div className="mt-16 rounded-2xl border-2 border-brand-amber/60 bg-brand-amber/[0.04] p-6 sm:p-8">
+            <h3 className="text-lg font-bold text-brand-navy mb-6">
               The Spanish-language opportunity
             </h3>
-            <p className="text-gray-600 text-sm leading-relaxed">
-              Roughly {formatNumber(population.spanishAtHomeAdults)} adults in
-              Iowa speak Spanish at home. Spanish-speaking communities are
-              growing across the state — in meatpacking towns, county seats,
-              and metro neighborhoods alike — and very few churches are
-              positioned to reach them. Spanish-language church planting is one
-              of the clearest open doors in Iowa today.
-            </p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
+              <div>
+                <p className="text-5xl sm:text-6xl font-bold text-brand-navy leading-none mb-3">
+                  {formatNumber(population.spanishAtHomeAdults)}
+                </p>
+                <p className="text-base text-gray-700 leading-snug">
+                  Adults in Iowa speak Spanish at home
+                </p>
+              </div>
+              <p className="text-lg text-gray-700 leading-snug">
+                Spanish-language church planting is one of the clearest open
+                doors in Iowa today.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -666,10 +514,10 @@ export default function IowaPage() {
           <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-3">
             What This Asks of Us
           </p>
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-white mb-6">
             {formatNumber(notEvangelical)} people. One clear answer.
           </h2>
-          <p className="text-white/70 text-sm leading-relaxed max-w-2xl mx-auto mb-8">
+          <p className="text-lg text-white/80 leading-relaxed max-w-2xl mx-auto mb-8">
             Every one of them lives on a street, in a town, within reach of a
             church that does not yet exist. Whether God is calling you to plant
             or calling your church to send, there is a place for you in this
@@ -689,16 +537,352 @@ export default function IowaPage() {
               Partner with us
             </Link>
           </div>
-          <p className="mt-12 text-xs text-white/40 leading-relaxed max-w-2xl mx-auto">
-            Source: {source}
-          </p>
-          <p className="mt-2 text-xs text-white/40 leading-relaxed max-w-2xl mx-auto">
-            {evangelicalAdherentsNote}{" "}Classification per ARDA&rsquo;s
-            tradition scheme.
-          </p>
-          <p className="mt-2 text-xs text-white/40 leading-relaxed max-w-2xl mx-auto">
-            {comparisonSource}
-          </p>
+        </div>
+      </section>
+
+      {/* Notes, sources, and the full data behind the page.
+          This is the only place on /iowa where small grey type belongs. */}
+      <section
+        aria-labelledby="notes-heading"
+        className="bg-gray-100 border-t border-gray-200 py-12"
+      >
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2
+            id="notes-heading"
+            className="text-xs font-semibold uppercase tracking-widest text-gray-500 mb-5"
+          >
+            Notes and sources
+          </h2>
+          <ol className="list-decimal pl-5 space-y-3 text-xs text-gray-500 leading-relaxed marker:text-gray-400">
+            <li id="note-1">
+              Source: {source}
+              <NoteBack n={1} />
+            </li>
+            <li id="note-2">
+              The evangelical figures on this page are understated, because
+              some evangelical churches were counted by the census without
+              reporting how many people they serve — see note 3. Classification
+              per ARDA&rsquo;s tradition scheme (RELTRAD).
+              <NoteBack n={2} />
+            </li>
+            <li id="note-3">
+              {formatNumber(countyStats.congregationsWithoutAdherentCount)}{" "}
+              of Iowa&rsquo;s {formatNumber(countyStats.totalCongregations)}{" "}
+              evangelical congregations were counted by the 2020 census but
+              reported no adherent figures. Those churches are not spread
+              evenly, so in the counties where they cluster, the share of people
+              &ldquo;not counted as adherents&rdquo; comes out higher than the
+              reality on the ground. Read those percentages as an upper bound.
+              Congregation counts, on the other hand, are complete and add up
+              exactly to the state total — which is why the map shades people
+              per congregation rather than the percentage. Source: 2020 U.S.
+              Religion Census (ARDA), county detail.
+              <NoteBack n={3} />
+            </li>
+            <li id="note-4">
+              &ldquo;Counted as an adherent&rdquo; is the census&rsquo;s
+              measure — it counts people a church can name, not people who hold
+              evangelical convictions. Evangelical Protestant is ARDA&rsquo;s
+              classification, applied to the denomination rather than the
+              congregation; nondenominational churches are counted evangelical.
+              By self-identification (Pew Research, 2023&ndash;24),{" "}
+              {pewSelfIdentifiedNones}% of Iowans say they have no religion. The
+              distance between those numbers — hundreds of thousands of Iowans
+              who would call themselves Christian but are connected to no church
+              — is a large part of the mission field. {comparisonSource}
+              <NoteBack n={4} />
+            </li>
+            <li id="note-5">
+              Every state&rsquo;s share on this map is understated, and not
+              evenly. Nationally{" "}
+              {formatNumber(reportingGap.nationalCongregations)} evangelical
+              congregations ({formatPct(reportingGap.nationalPct)}{" "}
+              of them) reported a congregation count but no adherent figure, so
+              they
+              contribute zero adherents to their state&rsquo;s rate.{" "}
+              <strong className="font-semibold text-gray-700">
+                Iowa is the {ordinal(reportingGap.iowaAffectedPosition)} most
+                affected state, at {formatPct(reportingGap.iowaPct)}
+              </strong>{" "}
+              — so Iowa&rsquo;s own figure is understated more than most of the
+              states it is being compared against here. Giving each
+              state&rsquo;s non-reporting congregations that state&rsquo;s own
+              average size moves Iowa from {reportingGap.iowaRatePublished}% to
+              roughly {formatPct(reportingGap.iowaRateImputed)} and from rank{" "}
+              {reportingGap.iowaRankPublished} to{" "}
+              {reportingGap.iowaRankImputed}, while {reportingGap.topStateName}{" "}
+              slips from 1st to {ordinal(reportingGap.topStateRankImputed)}.
+              Those
+              adjusted figures are an upper bound and are not the published
+              numbers — non-reporting churches skew small, so the correction
+              overshoots. The ordering holds at the extremes; the middle of the
+              map, where Iowa sits, is soft.
+              <NoteBack n={5} />
+            </li>
+          </ol>
+
+          {/* Reference data cut from the visible page for legibility. It is
+              still reachable here for screen-reader users, exactly as the
+              county and state tables above are. sr-only lives on the wrapping
+              div, never on a table element. */}
+          <div className="sr-only">
+            <h2>Detailed data tables</h2>
+
+            <table>
+              <caption>
+                Religious adherence in Iowa, 2020 U.S. Religion Census.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Measure</th>
+                  <th scope="col">Number</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Adherents of any religious body</th>
+                  <td>
+                    {formatNumber(spiritual.adherents)} (
+                    {spiritual.adherentsPctPrecise}%)
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">No religious affiliation</th>
+                  <td>
+                    {formatNumber(spiritual.nones)} ({spiritual.nonesPctPrecise}
+                    %)
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">
+                    Say they are a member of a place of worship
+                  </th>
+                  <td>
+                    {formatNumber(spiritual.memberOfPlaceOfWorship)} (
+                    {spiritual.memberOfPlaceOfWorshipPct}%)
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Congregations of every kind</th>
+                  <td>{formatNumber(spiritual.congregations)}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Evangelical congregations</th>
+                  <td>{formatNumber(evangelicalCongregations)}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table>
+              <caption>
+                Iowans responding to &ldquo;Do you attend church
+                regularly?&rdquo;
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Response</th>
+                  <th scope="col">Iowans</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Disagree completely</th>
+                  <td>{formatNumber(spiritual.attendSurvey.disagreeCompletely)}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Disagree somewhat</th>
+                  <td>{formatNumber(spiritual.attendSurvey.disagreeSomewhat)}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Agree somewhat</th>
+                  <td>{formatNumber(spiritual.attendSurvey.agreeSomewhat)}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Agree completely</th>
+                  <td>{formatNumber(spiritual.attendSurvey.agreeCompletely)}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Disagree, total</th>
+                  <td>{formatNumber(spiritual.attendSurvey.disagreeTotal)}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Agree, total</th>
+                  <td>{formatNumber(spiritual.attendSurvey.agreeTotal)}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table>
+              <caption>
+                Adherents by religious tradition, classified per ARDA
+                (RELTRAD), 2020 U.S. Religion Census.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Tradition</th>
+                  <th scope="col">Adherents</th>
+                  <th scope="col">Share of population</th>
+                </tr>
+              </thead>
+              <tbody>
+                {traditions.map((t) => (
+                  <tr key={t.name}>
+                    <th scope="row">{t.name}</th>
+                    <td>{formatNumber(t.adherents)}</td>
+                    <td>{t.pctOfPopulation.toFixed(2)}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <table>
+              <caption>
+                Largest religious bodies in Iowa by adherents, 2020 U.S.
+                Religion Census.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Body</th>
+                  <th scope="col">Adherents</th>
+                </tr>
+              </thead>
+              <tbody>
+                {largestBodies.map((body) => (
+                  <tr key={body.name}>
+                    <th scope="row">{body.name}</th>
+                    <td>{formatNumber(body.adherents)}</td>
+                  </tr>
+                ))}
+                <tr>
+                  <th scope="row">Southern Baptist</th>
+                  <td>
+                    {formatNumber(spiritual.sbcAdherents)} (
+                    {spiritual.sbcPctLabel} of Iowa)
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table>
+              <caption>Iowans by generation, Esri 2026 estimates.</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Generation</th>
+                  <th scope="col">Iowans</th>
+                </tr>
+              </thead>
+              <tbody>
+                {generations.map((gen) => (
+                  <tr key={gen.name}>
+                    <th scope="row">{gen.name}</th>
+                    <td>{formatNumber(gen.population)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <table>
+              <caption>
+                Educational attainment in Iowa, Esri 2026 estimates.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Level</th>
+                  <th scope="col">Share of Iowans</th>
+                </tr>
+              </thead>
+              <tbody>
+                {education.map((level) => (
+                  <tr key={level.label}>
+                    <th scope="row">{level.label}</th>
+                    <td>{level.pct}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            <table>
+              <caption>
+                Iowa population and household detail, Esri 2026 estimates.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Measure</th>
+                  <th scope="col">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Population</th>
+                  <td>{formatNumber(population.population2026)}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Projected population, 2031</th>
+                  <td>{formatNumber(population.projected2031)}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Households</th>
+                  <td>{formatNumber(population.households)}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Average household size</th>
+                  <td>{population.avgHouseholdSize}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Median age</th>
+                  <td>{population.medianAge}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Children</th>
+                  <td>{formatNumber(population.children)}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Median household income</th>
+                  <td>${formatNumber(population.medianHouseholdIncome)}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Households below the poverty line</th>
+                  <td>{formatNumber(population.householdsBelowPoverty)}</td>
+                </tr>
+                <tr>
+                  <th scope="row">Households receiving SNAP benefits</th>
+                  <td>{formatNumber(population.householdsOnSNAP)}</td>
+                </tr>
+                <tr>
+                  <th scope="row">White alone</th>
+                  <td>{population.whiteAlonePct}%</td>
+                </tr>
+                <tr>
+                  <th scope="row">Hispanic origin, any race</th>
+                  <td>{population.hispanicOriginPct}%</td>
+                </tr>
+                <tr>
+                  <th scope="row">Adults who speak Spanish at home</th>
+                  <td>{formatNumber(population.spanishAtHomeAdults)}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <table>
+              <caption>
+                Largest community segments in Iowa, Esri Tapestry 2026.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Segment</th>
+                  <th scope="col">Share of households</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tapestrySegments.map((s) => (
+                  <tr key={s.name}>
+                    <th scope="row">{s.name}</th>
+                    <td>{s.pct}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
     </>

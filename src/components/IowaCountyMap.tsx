@@ -25,7 +25,7 @@ import { countyPaths, IOWA_MAP_VIEWBOX } from "@/data/iowa-county-paths";
 
 const counties = census.counties;
 
-/** Ramp shared with UsAdherenceMap so the two maps read as one system. */
+/** Ramp shared with UsEvangelicalMap so the two maps read as one system. */
 const CLASSES = [
   { below: 750, label: "Under 750", fill: "#e2e8f2" },
   { below: 1250, label: "750–1,250", fill: "#b9c6dd" },
