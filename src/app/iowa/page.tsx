@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import UsAdherenceMap from "@/components/UsAdherenceMap";
+import IowaCountyMap, {
+  countyRows,
+  countyStats,
+  peoplePerCongregation,
+} from "@/components/IowaCountyMap";
 import stateAdherenceCensus from "@/data/state-adherence-2020.json";
 import {
   source,
@@ -415,6 +420,149 @@ export default function IowaPage() {
               The distance between those numbers — hundreds of thousands of
               Iowans who would call themselves Christian but are connected to
               no church — is a large part of the mission field.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* County by county */}
+      <section className="py-20 bg-white border-t border-gray-200">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mb-10">
+            <p className="text-brand-amber text-sm font-semibold uppercase tracking-widest mb-3">
+              County by County
+            </p>
+            <h2 className="text-3xl font-bold tracking-tight text-brand-navy mb-4">
+              Where the coverage stretches thinnest
+            </h2>
+            <p className="text-gray-600 text-sm leading-relaxed">
+              Across Iowa there is one evangelical congregation for every{" "}
+              {formatNumber(countyStats.statewide)} people. The map shows where
+              that stretches furthest. In Jackson County there is one for every{" "}
+              {formatNumber(peoplePerCongregation("Jackson"))} people, and in
+              Dubuque County one for every{" "}
+              {formatNumber(peoplePerCongregation("Dubuque"))}. And the thinnest
+              coverage is not only rural: Linn, Scott and Johnson counties —
+              three of the largest in the state — each sit between one
+              congregation per 2,500 and one per 2,700 residents.
+            </p>
+          </div>
+
+          {/* Inline figures */}
+          <dl className="mb-10 grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-3xl">
+            <div>
+              <dt className="sr-only">
+                Counties where more than 9 in 10 people are not counted as
+                adherents of an evangelical congregation
+              </dt>
+              <dd>
+                <span className="block text-4xl font-bold text-brand-navy leading-none mb-2">
+                  {countyStats.countiesOver90PctUnconnected} of{" "}
+                  {countyStats.countyCount}
+                </span>
+                <span
+                  className="block text-sm text-gray-600 leading-relaxed"
+                  aria-hidden="true"
+                >
+                  Iowa counties where more than 9 in 10 people are not counted
+                  as adherents of an evangelical congregation
+                </span>
+              </dd>
+            </div>
+            <div>
+              <dt className="sr-only">
+                Iowans not counted as adherents of an evangelical congregation,
+                statewide
+              </dt>
+              <dd>
+                <span className="block text-4xl font-bold text-brand-navy leading-none mb-2">
+                  {formatNumber(notEvangelical)}{" "}
+                  <span className="text-brand-amber">
+                    ({notEvangelicalPctLabel})
+                  </span>
+                </span>
+                <span
+                  className="block text-sm text-gray-600 leading-relaxed"
+                  aria-hidden="true"
+                >
+                  Iowans statewide not counted as adherents of an evangelical
+                  congregation
+                </span>
+              </dd>
+            </div>
+          </dl>
+
+          {/* Choropleth: people per evangelical congregation, by county */}
+          <div className="max-w-3xl mx-auto">
+            <IowaCountyMap />
+          </div>
+          <p
+            className="mt-3 max-w-3xl mx-auto text-xs text-gray-500 leading-relaxed"
+            aria-hidden="true"
+          >
+            People per evangelical congregation by county, 2020 U.S. Religion
+            Census. Darker means fewer congregations for the population.{" "}
+            {countyStats.worst.name} County, outlined, is thinnest at one for
+            every {formatNumber(peoplePerCongregation(countyStats.worst.name))}{" "}
+            people; {countyStats.best.name} County is densest at one for every{" "}
+            {formatNumber(peoplePerCongregation(countyStats.best.name))}.
+          </p>
+
+          {/* Accessible data table for the map. sr-only lives on a wrapping
+              div, not the table: overflow:hidden does not apply to table
+              boxes, so a sr-only table lays out at full nowrap width and adds
+              horizontal page scroll. */}
+          <div className="sr-only">
+            <table>
+              <caption>
+                Iowa counties in the 2020 U.S. Religion Census: population,
+                evangelical congregations, people per evangelical congregation,
+                and the share of the population not counted as adherents of an
+                evangelical congregation. All {countyStats.countyCount} counties
+                on the map appear here, in alphabetical order. The share not
+                counted is an upper bound; see the note below the table.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">County</th>
+                  <th scope="col">Population</th>
+                  <th scope="col">Evangelical congregations</th>
+                  <th scope="col">People per evangelical congregation</th>
+                  <th scope="col">Not counted as adherents</th>
+                </tr>
+              </thead>
+              <tbody>
+                {countyRows.map((row) => (
+                  <tr key={row.fips}>
+                    <th scope="row">{row.name}</th>
+                    <td>{formatNumber(row.population)}</td>
+                    <td>{formatNumber(row.evangelicalCongregations)}</td>
+                    <td>
+                      {formatNumber(Math.round(row.peoplePerCongregation))}
+                    </td>
+                    <td>{row.notEvangelicalPct.toFixed(1)}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-8 max-w-3xl mx-auto pt-4 border-t border-gray-200">
+            <p className="text-xs text-gray-500 leading-relaxed">
+              A note on the numbers:{" "}
+              {formatNumber(countyStats.congregationsWithoutAdherentCount)}{" "}
+              of Iowa&rsquo;s {formatNumber(countyStats.totalCongregations)}{" "}
+              evangelical congregations were counted by the 2020 census but
+              reported no adherent figures. Those churches are not spread
+              evenly, so in the counties where they cluster, the share of
+              people &ldquo;not counted as adherents&rdquo; comes out higher
+              than the reality on the ground. Read those percentages as an
+              upper bound. Congregation counts, on the other hand, are complete
+              and add up exactly to the state total — which is why the map
+              shades people per congregation rather than the percentage.
+            </p>
+            <p className="mt-2 text-xs text-gray-500 leading-relaxed">
+              Source: 2020 U.S. Religion Census (ARDA), county detail.
             </p>
           </div>
         </div>
