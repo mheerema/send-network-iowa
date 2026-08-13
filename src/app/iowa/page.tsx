@@ -357,14 +357,17 @@ export default function IowaPage() {
               County by County
             </p>
             <h2 className="text-3xl font-bold tracking-tight text-brand-navy mb-4">
-              {formatNumber(countyStats.belowUsAverage.population)} Iowans
-              live in counties with too few churches
+              {formatNumber(countyStats.belowSaturationGoal.population)}{" "}
+              Iowans live in counties with too few churches
               <NoteRef n={3} />
             </h2>
             <p className="text-lg text-gray-700 leading-snug">
-              These {countyStats.belowUsAverage.countyCount} counties are the
-              church planting targets. The counties that meet the goal are
-              Iowa&rsquo;s least populated ones, and they have enough churches.
+              These {countyStats.belowSaturationGoal.countyCount} counties fall
+              short of one evangelical congregation per{" "}
+              {formatNumber(scaleAnchors.gacxSaturationGoal)} people, and they
+              are the church planting targets. The counties that meet the goal
+              are Iowa&rsquo;s least populated ones, and they have enough
+              churches.
               <NoteRef n={6} />
             </p>
           </div>
@@ -374,47 +377,46 @@ export default function IowaPage() {
           <dl className="mb-10 grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-3xl">
             <div>
               <dt className="sr-only">
-                Iowa counties below the US evangelical average of one
-                congregation per {formatNumber(scaleAnchors.usAverage)} people
+                Iowa counties with fewer than one evangelical congregation
+                per {formatNumber(scaleAnchors.gacxSaturationGoal)} people
               </dt>
               {/* Two tiers, not one line: the count and the share are the
                   two halves of the argument, and at 48px a parenthetical
                   breaks mid-phrase in a half-width column. */}
               <dd>
                 <span className="block text-4xl sm:text-5xl font-bold text-brand-navy leading-none mb-1">
-                  {countyStats.belowUsAverage.countyCount} of{" "}
+                  {countyStats.belowSaturationGoal.countyCount} of{" "}
                   {countyStats.countyCount}
                 </span>
                 <span className="block text-xl font-bold text-brand-amber leading-none mb-3">
-                  {countyStats.belowUsAverage.pctOfCounties}% of counties
+                  {countyStats.belowSaturationGoal.pctOfCounties}% of counties
                 </span>
                 <span
                   className="block text-base text-gray-700 leading-snug"
                   aria-hidden="true"
                 >
-                  Iowa counties fall below the US evangelical average of one
-                  congregation per {formatNumber(scaleAnchors.usAverage)}{" "}
-                  people
+                  Iowa counties have fewer than one evangelical congregation
+                  per {formatNumber(scaleAnchors.gacxSaturationGoal)} people
                 </span>
               </dd>
             </div>
             <div>
               <dt className="sr-only">
-                Share of Iowans living in the counties below the US
-                evangelical average
+                Share of Iowans living in the counties that fall short of
+                the saturation goal
               </dt>
               <dd>
                 <span className="block text-4xl sm:text-5xl font-bold text-brand-navy leading-none mb-1">
-                  {formatNumber(countyStats.belowUsAverage.population)}
+                  {formatNumber(countyStats.belowSaturationGoal.population)}
                 </span>
                 <span className="block text-xl font-bold text-brand-amber leading-none mb-3">
-                  {countyStats.belowUsAverage.pctOfState}% of Iowans
+                  {countyStats.belowSaturationGoal.pctOfState}% of Iowans
                 </span>
                 <span
                   className="block text-base text-gray-700 leading-snug"
                   aria-hidden="true"
                 >
-                  live in those {countyStats.belowUsAverage.countyCount}{" "}
+                  live in those {countyStats.belowSaturationGoal.countyCount}{" "}
                   counties
                 </span>
               </dd>
