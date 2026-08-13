@@ -10,6 +10,7 @@ import IowaCountyMap, {
   countyRows,
   countyStats,
   peoplePerCongregation,
+  scaleAnchors,
 } from "@/components/IowaCountyMap";
 import {
   source,
@@ -344,59 +345,83 @@ export default function IowaPage() {
               County by County
             </p>
             <h2 className="text-3xl font-bold tracking-tight text-brand-navy mb-4">
-              Where the coverage stretches thinnest
+              The churches are where the people aren&rsquo;t
               <NoteRef n={3} />
             </h2>
             <p className="text-lg text-gray-700 leading-snug">
-              In Jackson County there is one evangelical congregation for every{" "}
-              {formatNumber(peoplePerCongregation("Jackson"))} people.
+              Iowa&rsquo;s best-covered counties are its emptiest ones.
             </p>
           </div>
 
-          {/* Inline figures */}
+          {/* Inline figures. Both are the same fact seen twice: coverage counted
+              by county looks good, and coverage counted by person does not. */}
           <dl className="mb-10 grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-3xl">
             <div>
               <dt className="sr-only">
-                Counties where more than 9 in 10 people are not counted as
-                adherents of an evangelical congregation
+                Iowa counties with at least one evangelical congregation for
+                every {formatNumber(scaleAnchors.gacxSaturationGoal)} people,
+                and the share of Iowans who live in them
               </dt>
+              {/* Two tiers, not one line: the count and the share are the
+                  two halves of the argument, and at 48px a parenthetical
+                  breaks mid-phrase in a half-width column. */}
               <dd>
-                <span className="block text-4xl sm:text-5xl font-bold text-brand-navy leading-none mb-3">
-                  {countyStats.countiesOver90PctUnconnected} of{" "}
+                <span className="block text-4xl sm:text-5xl font-bold text-brand-navy leading-none mb-1">
+                  {countyStats.meetsSaturationGoal.countyCount} of{" "}
                   {countyStats.countyCount}
+                </span>
+                <span className="block text-xl font-bold text-brand-amber leading-none mb-3">
+                  {countyStats.meetsSaturationGoal.pctOfState}% of Iowans
                 </span>
                 <span
                   className="block text-base text-gray-700 leading-snug"
                   aria-hidden="true"
                 >
-                  Iowa counties where more than 9 in 10 people are not counted
-                  as adherents of an evangelical congregation
+                  Iowa counties already have one evangelical congregation for
+                  every {formatNumber(scaleAnchors.gacxSaturationGoal)} people
+                  — but only{" "}
+                  {formatNumber(countyStats.meetsSaturationGoal.population)}{" "}
+                  Iowans live there
                 </span>
               </dd>
             </div>
             <div>
               <dt className="sr-only">
-                Share of Iowans living in the counties with the thinnest
-                evangelical coverage
+                Share of Iowans living in counties below the US evangelical
+                average of one congregation per{" "}
+                {formatNumber(scaleAnchors.usAverage)} people
               </dt>
               <dd>
-                <span className="block text-4xl sm:text-5xl font-bold text-brand-navy leading-none mb-3">
-                  {formatNumber(countyStats.thinlyCovered.population)}{" "}
-                  <span className="text-brand-amber">
-                    ({countyStats.thinlyCovered.pctOfState}%)
-                  </span>
+                <span className="block text-4xl sm:text-5xl font-bold text-brand-navy leading-none mb-1">
+                  {formatNumber(countyStats.belowUsAverage.population)}
+                </span>
+                <span className="block text-xl font-bold text-brand-amber leading-none mb-3">
+                  {countyStats.belowUsAverage.pctOfState}% of Iowans
                 </span>
                 <span
                   className="block text-base text-gray-700 leading-snug"
                   aria-hidden="true"
                 >
-                  Iowans live in the {countyStats.thinlyCovered.countyCount}{" "}
-                  counties with fewer than one evangelical congregation per
-                  2,000 people
+                  live in the {countyStats.belowUsAverage.countyCount} counties
+                  with fewer churches per person than the US evangelical
+                  average of one per {formatNumber(scaleAnchors.usAverage)}
                 </span>
               </dd>
             </div>
           </dl>
+
+          {/* The map's premise, at reading size. The scale has no standard
+              behind it and the page says so before the reader interprets a
+              single fill. */}
+          <p className="max-w-3xl mx-auto mb-5 text-base text-gray-700 leading-snug">
+            There is no accepted standard for how many churches a population
+            needs, so this map is anchored to the US evangelical average of one
+            congregation per {formatNumber(scaleAnchors.usAverage)}{" "}
+            people and to GACX&rsquo;s stated saturation goal of one church for
+            every{" "}
+            {formatNumber(scaleAnchors.gacxSaturationGoal)}.
+            <NoteRef n={6} />
+          </p>
 
           {/* Choropleth: people per evangelical congregation, by county */}
           <div className="max-w-3xl mx-auto">
@@ -408,12 +433,17 @@ export default function IowaPage() {
           >
             Iowa&rsquo;s {formatNumber(countyStats.totalCongregations)}{" "}
             evangelical congregations, mapped as the number of people each one
-            carries, 2020 U.S. Religion Census. Darker counties have the most
-            evangelical churches for their population; the palest counties have
-            the fewest. {countyStats.worst.name} County, outlined, is thinnest
-            at one congregation for every{" "}
-            {formatNumber(peoplePerCongregation(countyStats.worst.name))}{" "}
-            people; {countyStats.best.name} County is densest at one for every{" "}
+            carries, 2020 U.S. Religion Census. The bands break at the Global
+            Alliance for Church Multiplication&rsquo;s stated saturation goal
+            of one congregation per{" "}
+            {formatNumber(scaleAnchors.gacxSaturationGoal)}{" "}
+            people, at Iowa&rsquo;s own average of one per{" "}
+            {formatNumber(scaleAnchors.iowaAverage)}, and at the US evangelical
+            average of one per {formatNumber(scaleAnchors.usAverage)}.{" "}
+            {countyStats.worst.name} County, outlined, carries the most people
+            per congregation —{" "}
+            {formatNumber(peoplePerCongregation(countyStats.worst.name))};{" "}
+            {countyStats.best.name} County the fewest, at{" "}
             {formatNumber(peoplePerCongregation(countyStats.best.name))}.
           </p>
 
@@ -430,6 +460,8 @@ export default function IowaPage() {
                 evangelical congregation. All {countyStats.countyCount} counties
                 on the map appear here, in alphabetical order. The share not
                 counted is an upper bound; see note 3 at the foot of the page.
+                In counties with only a handful of congregations, the figure
+                for people per congregation is approximate; see note 6.
               </caption>
               <thead>
                 <tr>
@@ -617,6 +649,46 @@ export default function IowaPage() {
               overshoots. The ordering holds at the extremes; the middle of the
               map, where Iowa sits, is soft.
               <NoteBack n={5} />
+            </li>
+            <li id="note-6">
+              <strong className="font-semibold text-gray-700">
+                No accepted standard exists for how many churches a population
+                needs.
+              </strong>{" "}
+              NAMB and Send Network publish a people-per-church ratio for every
+              Send City without naming a target or citing a source, so the
+              county map is anchored to figures that can be named instead. The
+              saturation goal is the Global Alliance for Church
+              Multiplication&rsquo;s — &ldquo;a healthy, multiplying,
+              sustainable church for every{" "}
+              {formatNumber(scaleAnchors.gacxSaturationGoal)}{" "}
+              people&rdquo; ({scaleAnchors.gacxUrl}) — a stated goal for global
+              evangelization rather than a researched threshold, and it is
+              cited here as a goal, not as a benchmark. The other two breaks
+              are averages computed from the same 2020 U.S. Religion Census
+              figures used throughout this page: one evangelical congregation
+              per {formatNumber(scaleAnchors.usAverage)} people nationally, and
+              one per {formatNumber(scaleAnchors.iowaAverage)} in Iowa. Where a
+              county has only a handful of congregations its ratio turns on a
+              single church. One more congregation would move{" "}
+              {countyStats.fewestCongregations.map((r, i, arr) => (
+                <span key={r.fips}>
+                  {i === 0 ? "" : i === arr.length - 1 ? ", and " : ", "}
+                  {r.name} County ({formatNumber(r.population)}{" "}
+                  people, {r.evangelicalCongregations}{" "}
+                  congregations) by {r.swingPctOnOneMore}%
+                </span>
+              ))}
+              .{" "}
+              {countyStats.fewestCongregations.some(
+                (r) => r.fips === countyStats.worst.fips
+              )
+                ? `${countyStats.worst.name} is the county outlined on the map. `
+                : ""}
+              Read any county ratio resting on a handful of congregations as
+              approximate; the statewide and multi-county figures are not
+              affected.
+              <NoteBack n={6} />
             </li>
           </ol>
 
