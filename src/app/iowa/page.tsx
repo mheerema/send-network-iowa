@@ -90,10 +90,17 @@ function NoteRef({ n }: { n: number }) {
       <a
         id={`ref-note-${n}`}
         href={`#note-${n}`}
-        className="text-brand-amber underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-amber"
+        className="relative inline-block text-brand-amber underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-amber"
       >
         <span className="sr-only">See note </span>
         {n}
+        {/* WCAG 2.2 SC 2.5.8 (Target Size, Minimum): the rendered glyph is
+            ~7px, so an invisible 24x24 box centered on it carries the hit
+            area without changing how the superscript looks. */}
+        <span
+          aria-hidden="true"
+          className="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2"
+        />
       </a>
     </sup>
   );
@@ -104,9 +111,14 @@ function NoteBack({ n }: { n: number }) {
   return (
     <a
       href={`#ref-note-${n}`}
-      className="ml-1 whitespace-nowrap text-gray-600 underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-amber"
+      className="relative ml-1 inline-block whitespace-nowrap text-gray-600 underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-amber"
     >
       <span aria-hidden="true">↩</span>
+      {/* Same 24x24 hit area as NoteRef; the arrow glyph is under 24px. */}
+      <span
+        aria-hidden="true"
+        className="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2"
+      />
       <span className="sr-only">Back to note {n} reference</span>
     </a>
   );
