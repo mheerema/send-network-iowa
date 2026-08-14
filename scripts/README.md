@@ -255,6 +255,45 @@ a real defect in this script:
 scoring or rescue logic** — the rescue negative in particular, since a rule that
 never returns its negative verdict is permissive rather than validated.
 
+## Choosing a variant — by surface, never by control
+
+There are two band orders, and which one is correct is a property of **the
+surface**, not of the control:
+
+| utility | outer band | dead zone | use on |
+|---|---|---|---|
+| `focus-ring` | navy | `#454545`–`#717171` | light surfaces and true-dark ones |
+| `focus-ring-invert` | white | `#959595`–`#d2d2d2` | mid-dark and composited surfaces |
+| `focus-ring-on-dark` | — | — | a **section**; inverts every focusable descendant |
+
+The dead zone is where the outer band is neither carrying (≥3:1) nor subsumed
+(<1.5:1) — a visible-but-uncarrying smear at the page boundary. The two zones
+are disjoint, so every surface is covered by one variant, and
+`src/app/focus-ring.test.ts` asserts that. Selection is mechanical: pick the
+variant whose outer band's dead zone **excludes** the surface.
+
+### Reach for `focus-ring-on-dark`, not per-control classes
+
+Put it on the section. Every focusable descendant then gets the inverted band
+order whether or not it declared a variant.
+
+This exists because of a defect class no contrast tooling looks for: **a control
+that passes only because it happens to be transparent.** The `/iowa` hero
+footnote link was exactly that. Its white band carried at 7.72:1 against the
+surface *showing through* it, while the navy band sat at 1.88:1 in the dead zone
+contributing nothing. Correct — and resting entirely on a property nobody had
+written down as load-bearing.
+
+Add any `bg-*` utility to that link and the white band abuts an opaque fill
+instead of the surface, both boundaries collapse, and it becomes an **SC 2.4.7
+(Level A)** failure with no build error, no type error, and no visual warning at
+authoring time. Scoping by region removes the dependency: on a dark surface the
+outer white band carries against the page regardless of the control's fill.
+
+If you add a focusable control to a section with a photograph, scrim, gradient,
+or dark panel behind it, put `focus-ring-on-dark` on the section. Do not reason
+about whether that particular control happens to be safe.
+
 ## Fail closed — the invariant
 
 Any check added to this script must resolve unknowns toward **"cannot rescue"**,
