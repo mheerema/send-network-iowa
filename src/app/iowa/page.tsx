@@ -416,31 +416,27 @@ export default function IowaPage() {
               </dd>
             </div>
             <div>
+              {/* Short label here, and the supporting line below is NOT
+                  aria-hidden as it is in the other two: the note reference
+                  has to sit at the end of that sentence rather than after
+                  the figure, where a superscript reads as an exponent
+                  ("1,243 to the sixth"). A ref inside an aria-hidden span
+                  would be unreachable, so the span is exposed and this
+                  label is trimmed to avoid reading the sentence twice. */}
               <dt className="sr-only">
-                New evangelical congregations needed to bring every Iowa county
-                to one per{" "}
-                {formatNumber(countyStats.shortfall.goal)} people, and the
-                share of that shortfall concentrated in the{" "}
-                {countyStats.shortfall.topCount} counties needing the most
+                New evangelical congregations needed
               </dt>
               <dd>
-                {/* The note ref rides the figure, not the supporting line:
-                    the supporting line is aria-hidden, so a ref inside it
-                    would be unreachable, and a ref after it orphans onto a
-                    line of its own. Same treatment as the h2 above. */}
                 <span className="block text-4xl sm:text-5xl font-bold text-brand-navy leading-none mb-1">
                   {formatNumber(countyStats.shortfall.total)}
-                  <NoteRef n={6} />
                 </span>
                 <span className="block text-xl font-bold text-brand-amber leading-none mb-3">
                   churches
                 </span>
-                <span
-                  className="block text-base text-gray-700 leading-snug"
-                  aria-hidden="true"
-                >
+                <span className="block text-base text-gray-700 leading-snug">
                   would bring every county to one per{" "}
                   {formatNumber(countyStats.shortfall.goal)} people
+                  <NoteRef n={6} />
                 </span>
               </dd>
             </div>
