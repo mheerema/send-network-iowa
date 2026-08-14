@@ -140,8 +140,54 @@ as `PASS (rescued)`, never as a plain `pass`, so a rescued page can never be
 mistaken for a clean one.
 
 Locally, remote media (the Unsplash article images) will not load and every page
-will come back `PAGE INVALID`. To get genuinely clean page verdicts, run against
-a deployed preview instead, which has a working image pipeline.
+will come back `PAGE INVALID`. For genuinely clean page verdicts, run against
+the deployed site — `https://www.sendnetworkiowa.com` is public and current, so
+this needs no Vercel credential. Preview deployments are behind Vercel
+Authentication and are the harder target; prefer production.
+
+### ⚠ `PAGE INVALID` does not always mean something is broken
+
+**The precondition is too strict in one direction.** It classifies an image as
+broken with `!(img.complete && img.naturalWidth > 0)`, which is true both of an
+image that *failed* and an image that *has not loaded yet*. Those are not the
+same thing and the verdict cannot tell them apart.
+
+This bit on a real run. Against production, `/iowa` reported 2 broken images —
+both merely `loading="lazy"` at `w=3840` and still in flight — plus one
+mid-decode showing `complete: false` while `naturalWidth` was already `192`.
+Nothing was wrong with the site; the bytes were valid WebP, verified upstream.
+The fault was entirely in the readiness check.
+
+**So before treating `PAGE INVALID` as a site problem, settle the images first:**
+
+```js
+for (const i of document.images) {
+  if (i.loading === 'lazy') { i.loading = 'eager'; const s = i.src; i.src = ''; i.src = s; }
+}
+// scroll the page, then await load/error on each, then await i.decode()
+```
+
+Then re-run. If images still fail after that, they are genuinely broken and the
+verdict means what it says. If someone adds a lazy image to this site later and
+reads a `PAGE INVALID` as a defect, this is why.
+
+### The rescue machinery is scaffolding, and it has been retired once
+
+The rescue rule, the traversal test, and the broken-independent carrier
+selection all exist to salvage a run that *cannot* be made clean. They are not
+the normal path. Given a settled environment the correct move is to run against
+production with images loaded and get real verdicts.
+
+That run has been made. All ten pages returned `VALID + ALL PASS` — 149
+controls, zero failing, zero unscorable, zero broken images, plus a mobile pass
+at 375px with the nav drawer open and nothing obscured under the sticky header.
+
+Most significant: `/resources/articles` had never once been scored, because its
+11 remote images never loaded in any sandbox. It returned 35/35, with the 9 card
+image links carrying via `inner_vs_fill` — the white band measured against the
+**actual editorial photographs**, real pixels. That was the measurement the
+whole rescue apparatus was deferring, and it passes. Reach for the rescue path
+only when you genuinely cannot settle the environment.
 
 ### `carriedBy`
 
