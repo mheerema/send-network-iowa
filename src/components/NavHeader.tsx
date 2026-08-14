@@ -21,7 +21,9 @@ export default function NavHeader() {
   return (
     <header className="bg-brand-navy sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        {/* Height is the --header-height token, which globals.css also uses to
+            derive scroll-padding-top for SC 2.4.11. Change it in one place. */}
+        <div className="flex items-center justify-between h-[var(--header-height)]">
           {/* Logo */}
           <Link href="/" className="focus-ring flex items-center" onClick={() => setOpen(false)}>
             <Image

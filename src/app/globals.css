@@ -3,6 +3,11 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
+  /* Height of the sticky site header. NavHeader.tsx consumes this via
+     h-[var(--header-height)], and scroll-padding-top below derives from it —
+     so the SC 2.4.11 offset cannot drift out of sync with the header. */
+  --header-height: 4rem;
 }
 
 @theme inline {
@@ -150,9 +155,9 @@ body {
    does not account for sticky chrome — so a control landing under the header
    is fully hidden even though its focus ring renders correctly. 1.4.11 is
    about the ring; 2.4.11 is about the component being visible at all.
-   Header is h-16 (64px) at every breakpoint; 8px of breathing room above. */
+   Derived from --header-height so it cannot drift when the header changes. */
 html {
-  scroll-padding-top: 4.5rem;
+  scroll-padding-top: calc(var(--header-height) + 0.5rem);
 }
 
 /* ─── Article body (markdown rendered via marked in src/lib/articles.ts) ───

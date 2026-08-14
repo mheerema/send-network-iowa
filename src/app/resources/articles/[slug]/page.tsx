@@ -99,6 +99,19 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
       {/* Commentary / body */}
       <section className="py-20 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* `leading-relaxed` here is load-bearing for more than rhythm: body
+              links get the site focus ring (globals.css `.prose-article a`),
+              and a link that wraps across lines draws a ring on each fragment.
+              At this leading, measured at 200% zoom with SC 1.4.12 text-spacing
+              overrides applied (line-height 1.5, paragraph spacing 2em), the
+              fragments sit 9px apart against 8px of ring — they clear, with
+              ~1px to spare. Tightening the leading narrows that clearance.
+              Collision here is cosmetic, not a conformance failure: 1.4.12 is
+              about surviving a user INCREASING spacing, and a transient ring
+              crossing a descender is not loss of content. But if this value
+              drops, re-measure rather than assume. Do not "fix" it with a
+              line-height floor — an !important floor would itself defeat
+              1.4.12 by blocking the user's own spacing overrides. */}
           <div
             className="prose-article text-gray-700 leading-relaxed space-y-5 [&_a]:text-brand-navy [&_a]:font-semibold [&_a]:underline [&_a]:underline-offset-2 hover:[&_a]:text-brand-amber [&_h2]:text-brand-navy [&_h2]:font-bold [&_h2]:text-xl [&_h2]:mt-8 [&_h3]:text-brand-navy [&_h3]:font-bold [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6"
             dangerouslySetInnerHTML={{ __html: article.html }}

@@ -57,18 +57,21 @@ export default function ArticlesPage() {
                 {/* No `overflow-hidden` on the card: it existed only to round
                     this image's top corners, and it clipped away every pixel
                     of the image link's focus ring on three sides. The radius
-                    lives on the link and the image instead. */}
+                    lives on the link and the image instead — minus the card's
+                    1px border, since the image nests inside it and matching
+                    the outer 1rem exactly leaves a hairline of card showing
+                    through at the curve. */}
                 {article.image && (
                   <Link
                     href={`/resources/articles/${article.slug}`}
-                    className="focus-ring block relative aspect-[2/1] rounded-t-2xl bg-brand-navy"
+                    className="focus-ring block relative aspect-[2/1] rounded-t-[calc(1rem-1px)] bg-brand-navy"
                   >
                     <Image
                       src={article.image}
                       alt={article.imageAlt ?? ""}
                       fill
                       sizes="(min-width: 896px) 832px, 100vw"
-                      className="rounded-t-2xl object-cover object-center"
+                      className="rounded-t-[calc(1rem-1px)] object-cover object-center"
                     />
                   </Link>
                 )}
