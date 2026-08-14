@@ -495,6 +495,157 @@ const VIEWBOX_WIDTH = Number(IOWA_MAP_VIEWBOX.split(" ")[2]);
 const DESKTOP_MAP_WIDTH_PX = 768;
 const MIN_MARKER_DIAMETER_PX = 8;
 
+/* ---------------------------------------------------------------------------
+ * CITY LABELS
+ *
+ * WHY THE MARKERS CARRY THE CITY NAMES AND NOTHING ELSE DOES. Iowa's 99
+ * counties are an undifferentiated grid to almost every reader — there is
+ * nothing on a county map to locate yourself by. The obvious fix, a second
+ * set of dots for the major cities, is the wrong one twice over: it competes
+ * with the shortfall encoding for the eye, and it invites the reader to think
+ * the two symbol sets mark different places when they mark the SAME ones.
+ * The ten counties that need the most churches ARE the ten metros, because
+ * the need is an absolute count and the count follows population. So the
+ * existing markers get labelled instead. One symbol set, two jobs: the reader
+ * orients, and the concentration of the shortfall in the population centres —
+ * the argument this whole section is making — becomes readable off the map.
+ * ------------------------------------------------------------------------ */
+
+/**
+ * Where a label sits relative to its marker. Hand-set per city below; ten
+ * labels on a fixed basemap is not a layout-engine problem, and a solver
+ * would produce placements nobody can predict from the source. `dx`/`dy`
+ * nudge in viewBox units for the one or two labels that would otherwise sit
+ * against the map's edge.
+ */
+type LabelPlacement = {
+  side: "left" | "right" | "above" | "below";
+  dx?: number;
+  dy?: number;
+};
+
+/**
+ * PRINCIPAL CITIES, NOT COUNTY SEATS.
+ *
+ * Each entry names the population centre a reader actually orients by, which
+ * is frequently not the seat: Dallas County's seat is Adel (about 6,000
+ * people) and nobody navigates by it — the county's population centre is the
+ * Waukee / West Des Moines edge of the Des Moines metro. The label says
+ * Waukee because Waukee lies wholly inside Dallas County while West Des
+ * Moines straddles the Polk line, so labelling this marker "West Des Moines"
+ * would print a city name over a county it is only half in, two centimetres
+ * from the Des Moines label. Story County's seat is Nevada; the city is Ames.
+ * Pottawattamie's seat is Council Bluffs and Black Hawk's is Waterloo, so
+ * some of these agree with the seat — that is a coincidence, not the rule.
+ *
+ * KEYED BY FIPS, NOT BY NAME, and not because of the join convention alone:
+ * "Des Moines" is also the name of an Iowa COUNTY, in the south-east corner,
+ * whose seat is Burlington. A name-keyed table here would be one plausible
+ * typo away from printing "Des Moines" on the wrong side of the state.
+ *
+ * `mobile` present means the label survives below the `md` breakpoint — see
+ * the mobile-subset comment on `mobileCityLabels`.
+ */
+const PRINCIPAL_CITIES: Record<
+  string,
+  {
+    /** County name as the census payload spells it, for the guard below. */
+    county: string;
+    city: string;
+    desktop: LabelPlacement;
+    mobile?: LabelPlacement;
+  }
+> = {
+  "19153": {
+    county: "Polk",
+    city: "Des Moines",
+    desktop: { side: "right" },
+    mobile: { side: "right" },
+  },
+  "19113": {
+    county: "Linn",
+    city: "Cedar Rapids",
+    // Above, not below: Johnson sits directly underneath at the same x.
+    desktop: { side: "above" },
+    mobile: { side: "above" },
+  },
+  "19163": {
+    county: "Scott",
+    city: "Davenport",
+    // Left, because "Davenport" set to the right of the state's south-east
+    // corner runs past the viewBox. On mobile the type is twice the size and
+    // a left label reaches back over Johnson's marker, so it goes below,
+    // nudged west to keep its right edge clear of the map's own edge.
+    desktop: { side: "left" },
+    mobile: { side: "below", dx: -40 },
+  },
+  "19103": {
+    county: "Johnson",
+    city: "Iowa City",
+    desktop: { side: "below" },
+  },
+  "19061": { county: "Dubuque", city: "Dubuque", desktop: { side: "right" } },
+  "19049": {
+    county: "Dallas",
+    city: "Waukee",
+    // Left, so the Dallas and Polk labels flank the pair rather than one of
+    // them landing in the 41 units of clear space between the two markers.
+    desktop: { side: "left" },
+  },
+  "19013": { county: "Black Hawk", city: "Waterloo", desktop: { side: "above" } },
+  "19169": { county: "Story", city: "Ames", desktop: { side: "right" } },
+  "19193": {
+    county: "Woodbury",
+    city: "Sioux City",
+    desktop: { side: "right" },
+    mobile: { side: "right" },
+  },
+  "19155": {
+    county: "Pottawattamie",
+    city: "Council Bluffs",
+    desktop: { side: "right" },
+  },
+};
+
+/**
+ * Coverage guard. The marked set is DERIVED — it is whichever ten counties
+ * need the most churches today — so a census revision can change it without
+ * anyone touching this file. Unlabelled markers would ship silently and the
+ * map would go back to being an unreadable grid for the reader it was
+ * labelled for, so make it a build failure and name the county that needs a
+ * city and a hand-placed offset.
+ */
+const unlabelled = topShortCounties.filter((r) => !PRINCIPAL_CITIES[r.fips]);
+if (unlabelled.length) {
+  throw new Error(
+    `Iowa county markers have no principal city: ` +
+      `${unlabelled.map((r) => `${r.name} (${r.fips})`).join(", ")}. The ` +
+      `marked counties are derived from the shortfall, so the top ` +
+      `${MARKED_COUNTY_COUNT} changed. Add each one to PRINCIPAL_CITIES with ` +
+      `a hand-placed side, then re-check the placements in a browser — ` +
+      `label collision cannot be asserted here, because it depends on text ` +
+      `metrics this process has no font to measure. Do not fall back to an ` +
+      `unlabelled marker.`
+  );
+}
+
+/**
+ * Key guard. A wrong FIPS in the table above would label the right marker
+ * with the wrong city and nothing downstream would notice, so assert that
+ * every key still points at the county the entry claims.
+ */
+const misKeyedCities = Object.entries(PRINCIPAL_CITIES).filter(
+  ([fips, entry]) => byFips.get(fips)?.name !== entry.county
+);
+if (misKeyedCities.length) {
+  throw new Error(
+    `PRINCIPAL_CITIES keys do not match the county they name: ` +
+      `${misKeyedCities
+        .map(([fips, e]) => `${fips} is ${byFips.get(fips)?.name ?? "no county"}, not ${e.county}`)
+        .join("; ")}.`
+  );
+}
+
 export const countyMarkers = topShortCounties
   .map((row) => {
     const path = countyPaths.find((p) => p.fips === row.fips)!;
@@ -502,6 +653,7 @@ export const countyMarkers = topShortCounties
     return {
       fips: row.fips,
       name: row.name,
+      city: PRINCIPAL_CITIES[row.fips].city,
       churchesNeeded: row.churchesNeeded,
       cx,
       cy,
@@ -511,6 +663,26 @@ export const countyMarkers = topShortCounties
   })
   // Largest first so a small marker can never be buried under a large one.
   .sort((a, b) => b.r - a.r);
+
+/** The city the map prints on a marked county. Throws for anything else. */
+export function principalCity(fips: string): string {
+  const entry = PRINCIPAL_CITIES[fips];
+  if (!entry) throw new Error(`No principal city for FIPS "${fips}"`);
+  return entry.city;
+}
+
+/**
+ * "Polk (Des Moines)" — for the prose and the table cells that have to carry
+ * both. Two deliberate silences: an UNMARKED county returns its name alone,
+ * because the sr-only table runs every county in the state and only the
+ * marked ten are labelled on the map; and Dubuque's city is Dubuque, where
+ * "Dubuque (Dubuque)" reads as a typo, so the parenthetical drops when the
+ * two match.
+ */
+export function countyWithCity(row: { fips: string; name: string }): string {
+  const city = PRINCIPAL_CITIES[row.fips]?.city;
+  return !city || city === row.name ? row.name : `${row.name} (${city})`;
+}
 
 /**
  * Placement guard. A centroid outside its own county means the marker is
@@ -565,6 +737,111 @@ if (collisions.length) {
 }
 
 /**
+ * Label anchors, derived from the marker the label belongs to so a data
+ * revision that resizes a marker moves its label with it. The gap is the
+ * clear space between the marker's edge and the text, in viewBox units; it is
+ * larger for the mobile set because that set is set at roughly twice the type
+ * size and a 5-unit gap under 27-unit type reads as a collision.
+ *
+ * `dominantBaseline` rather than a computed y offset: the type size changes
+ * with the breakpoint (see the label groups in the markup) while these
+ * coordinates do not, so the vertical anchor has to be one the renderer
+ * resolves against the current font size, not a number baked in at build time.
+ */
+function labelAnchor(
+  m: { cx: number; cy: number; r: number },
+  place: LabelPlacement,
+  gap: number
+) {
+  const dx = place.dx ?? 0;
+  const dy = place.dy ?? 0;
+  switch (place.side) {
+    case "right":
+      return {
+        x: m.cx + m.r + gap + dx,
+        y: m.cy + dy,
+        textAnchor: "start" as const,
+        dominantBaseline: "central" as const,
+      };
+    case "left":
+      return {
+        x: m.cx - m.r - gap + dx,
+        y: m.cy + dy,
+        textAnchor: "end" as const,
+        dominantBaseline: "central" as const,
+      };
+    case "above":
+      return {
+        x: m.cx + dx,
+        y: m.cy - m.r - gap + dy,
+        textAnchor: "middle" as const,
+        dominantBaseline: "auto" as const,
+      };
+    case "below":
+      return {
+        x: m.cx + dx,
+        y: m.cy + m.r + gap + dy,
+        textAnchor: "middle" as const,
+        dominantBaseline: "hanging" as const,
+      };
+  }
+}
+
+/**
+ * Clear space between the marker's edge and the label's anchor, in viewBox
+ * units. Sized against the VERTICAL placements, which are the expensive ones:
+ * the anchor for those is a baseline, so the text box reaches about 0.3em
+ * past it (Montserrat's descent) and the halo adds 0.11em on top of that,
+ * before the marker's own 1-unit ring. At the mobile group's largest step,
+ * 27 units, that is 13 units of overshoot — which is why these numbers look
+ * generous next to a marker radius and are not. Measured in a browser rather
+ * than estimated; see the placement note on the label groups in the markup.
+ */
+const DESKTOP_LABEL_GAP = 8;
+const MOBILE_LABEL_GAP = 14;
+
+export const cityLabels = countyMarkers.map((m) => ({
+  fips: m.fips,
+  city: m.city,
+  ...labelAnchor(m, PRINCIPAL_CITIES[m.fips].desktop, DESKTOP_LABEL_GAP),
+}));
+
+/**
+ * THE MOBILE SUBSET, AND WHY IT IS FOUR.
+ *
+ * At 375px the map renders 343px wide, so a viewBox unit is 0.38px and the
+ * desktop label size (13 units, about 11px on a full-width map) would come
+ * out at 5px. Ten labels do not fit at any size that is legible there — the
+ * two eastern clusters alone (Linn/Johnson, Scott/Dubuque) would overlap
+ * before the type was readable. The choice is a subset or nothing, and
+ * nothing is the worse answer: the whole point of labelling is orientation,
+ * and the reader who most needs to find themselves on this map is the one
+ * holding a phone. The county drawer below cannot do that job — it is a list
+ * of county names, and a list of counties is exactly what the reader cannot
+ * place.
+ *
+ * So: the four largest cities in the state, which is a principled subset
+ * rather than a pruned one, and they happen to spread across the map —
+ * Sioux City north-west, Des Moines centre, Cedar Rapids east, Davenport
+ * south-east. Four points that far apart are enough to triangulate the rest
+ * of the grid. The fifth candidate, Iowa City, cannot be placed at mobile
+ * type size without touching either Cedar Rapids or Davenport, and a legible
+ * four beats a colliding five. All ten return at `md`.
+ */
+export const mobileCityLabels = countyMarkers.flatMap((m) => {
+  const place = PRINCIPAL_CITIES[m.fips].mobile;
+  return place
+    ? [
+        {
+          fips: m.fips,
+          city: m.city,
+          ...labelAnchor(m, place, MOBILE_LABEL_GAP),
+        },
+      ]
+    : [];
+});
+
+/**
  * Legend swatch geometry, derived from the markers actually drawn so the two
  * sample circles are in true proportion to each other and to the map. Padded
  * by the stroke width so neither ring is clipped by the viewBox.
@@ -601,7 +878,8 @@ const MAP_LABEL =
   `${countyStats.best.name} County is densest at one for every ` +
   `${round(countyStats.best.peoplePerCongregation)}. ` +
   `Amber circles mark the ${countyStats.shortfall.topCount} counties that ` +
-  `need the most new churches, drawn larger where more are needed. ` +
+  `need the most new churches, drawn larger where more are needed, each ` +
+  `labelled on the map with the county's principal city. ` +
   `Statewide, ${countyStats.shortfall.countyCount} counties are short a ` +
   `combined ${round(countyStats.shortfall.total)} evangelical congregations ` +
   `of one per ${round(GACX_SATURATION_GOAL)} people, and the ` +
@@ -609,7 +887,16 @@ const MAP_LABEL =
   `${round(countyStats.shortfall.topTotal)} of them, ` +
   `${countyStats.shortfall.topPctOfTotal} percent. They are ` +
   `${countyStats.shortfall.top
-    .map((r) => `${r.name}, needing ${round(r.churchesNeeded)}`)
+    .map(
+      (r) =>
+        `${r.name}${
+          // Dubuque County's principal city is Dubuque; "Dubuque, home to
+          // Dubuque" is noise in a label that is already long.
+          principalCity(r.fips) === r.name
+            ? ""
+            : `, home to ${principalCity(r.fips)}`
+        }, needing ${round(r.churchesNeeded)}`
+    )
     .join("; ")}. County-by-county figures follow in the table.`;
 
 export default function IowaCountyMap() {
@@ -641,6 +928,69 @@ export default function IowaCountyMap() {
         <g fill="#fbac33" stroke="#10294c" strokeWidth={2}>
           {countyMarkers.map((m) => (
             <circle key={m.fips} cx={m.cx} cy={m.cy} r={m.r} />
+          ))}
+        </g>
+        {/* City labels — see the CITY LABELS block above for why these ride
+            the shortfall markers instead of a second set of city dots.
+            Purely visual: the svg is role="img", so its subtree is not
+            exposed, and the aria-label and the data table both name the city
+            alongside the county.
+
+            THE HALO IS NOT DECORATION. Navy type crosses seven fills here,
+            three of which are dark enough to swallow it. `paint-order:
+            stroke` draws the white stroke first and the navy fill over it, so
+            the halo stays outside the letterforms instead of thinning them.
+            Its width is set in `em` so it tracks the responsive type size —
+            a fixed unit value that reads as a halo at 13 units closes up the
+            counters at 27.
+
+            Both groups hide with `hidden` on the side of the breakpoint they
+            do not serve, and neither turns display back ON: `hidden md:block`
+            would have to put `display:block` on an SVG <g>, and display
+            values other than `none` are only loosely defined for SVG
+            containers. Hiding one side and setting nothing on the other never
+            asks the question.
+
+            TYPE SIZE IS IN VIEWBOX UNITS, so it scales with the map and has
+            to be stepped back down as the map grows. The staircase keeps
+            every step between about 10 and 14px: at 375px the map is 343px
+            wide and 27 units renders 10.3px; at 640px it is 592px and 16
+            units renders 10.5px; from `md` up the map is capped at 768px by
+            its max-w-3xl column, so 13 units holds at 10.4–11.1px. */}
+        <g
+          className="fill-brand-navy font-semibold [font-size:27px] min-[500px]:[font-size:20px] sm:[font-size:16px] md:hidden"
+          stroke="#ffffff"
+          strokeLinejoin="round"
+          style={{ paintOrder: "stroke", strokeWidth: "0.22em" }}
+        >
+          {mobileCityLabels.map((l) => (
+            <text
+              key={l.fips}
+              x={l.x}
+              y={l.y}
+              textAnchor={l.textAnchor}
+              dominantBaseline={l.dominantBaseline}
+            >
+              {l.city}
+            </text>
+          ))}
+        </g>
+        <g
+          className="fill-brand-navy font-semibold [font-size:13px] max-md:hidden"
+          stroke="#ffffff"
+          strokeLinejoin="round"
+          style={{ paintOrder: "stroke", strokeWidth: "0.22em" }}
+        >
+          {cityLabels.map((l) => (
+            <text
+              key={l.fips}
+              x={l.x}
+              y={l.y}
+              textAnchor={l.textAnchor}
+              dominantBaseline={l.dominantBaseline}
+            >
+              {l.city}
+            </text>
           ))}
         </g>
       </svg>
@@ -704,10 +1054,16 @@ export default function IowaCountyMap() {
               />
             </g>
           </svg>
+          {/* The label clause lives here rather than only in the caption:
+              this row is where the circle vocabulary is defined, and a
+              reader who sees "Des Moines" printed beside a circle has to be
+              told, at the circle, that the circle is still the county. */}
           <span>
             The {countyStats.shortfall.topCount} counties needing the most new
-            churches, sized by how many — {countyStats.shortfall.top[0].name}{" "}
-            needs {round(countyStats.shortfall.top[0].churchesNeeded)}
+            churches, sized by how many and labelled with their principal city
+            — {countyStats.shortfall.top[0].name} (
+            {principalCity(countyStats.shortfall.top[0].fips)}) needs{" "}
+            {round(countyStats.shortfall.top[0].churchesNeeded)}
           </span>
         </div>
       </div>

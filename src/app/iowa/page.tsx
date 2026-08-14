@@ -9,6 +9,7 @@ import UsEvangelicalMap, {
 import IowaCountyMap, {
   countyRows,
   countyStats,
+  countyWithCity,
   peoplePerCongregation,
   scaleAnchors,
 } from "@/components/IowaCountyMap";
@@ -520,14 +521,12 @@ export default function IowaPage() {
             {countyStats.best.name} County the fewest, at{" "}
             {formatNumber(peoplePerCongregation(countyStats.best.name))}.{" "}
             The amber circles mark the {countyStats.shortfall.topCount}{" "}
-            counties that need the most new churches, sized by how many:{" "}
-            {countyStats.shortfall.top[0].name} needs{" "}
+            counties that need the most new churches, sized by how many and
+            labelled with their principal cities:{" "}
+            {countyWithCity(countyStats.shortfall.top[0])} needs{" "}
             {formatNumber(countyStats.shortfall.top[0].churchesNeeded)}, more
             than any other, then{" "}
-            {countyStats.shortfall.top
-              .slice(1, 5)
-              .map((r) => r.name)
-              .join(", ")}
+            {countyStats.shortfall.top.slice(1, 5).map(countyWithCity).join(", ")}
             . Between them the {countyStats.shortfall.topCount} account for{" "}
             {countyStats.shortfall.topPctOfTotal}% of the{" "}
             {formatNumber(countyStats.shortfall.total)}{" "}
@@ -579,9 +578,13 @@ export default function IowaPage() {
                 county would have to gain to reach one per{" "}
                 {formatNumber(countyStats.shortfall.goal)} residents; 0 means
                 it is already there. The{" "}
-                {countyStats.shortfall.topCount} counties needing the most are
-                the ones marked with circles on the map. The share not counted
-                is an upper bound; see note 3 at the foot of the page. In
+                {countyStats.shortfall.topCount}{" "}
+                counties needing the most are the ones marked with circles on
+                the map, and each of those circles is labelled there with the
+                county&rsquo;s principal city — given here in brackets after
+                the county name, so the city on the map and the county in this
+                table are the same place. The share not counted is an upper
+                bound; see note 3 at the foot of the page. In
                 counties with only a handful of congregations, the figure for
                 people per congregation is approximate. A shorter table below
                 lists only the{" "}
@@ -601,7 +604,12 @@ export default function IowaPage() {
               <tbody>
                 {countyRows.map((row) => (
                   <tr key={row.fips}>
-                    <th scope="row">{row.name}</th>
+                    {/* The city rides the row header rather than taking a
+                        column of its own: a 7th column would be empty for 89
+                        of the 99 rows and read as "blank" on every one of
+                        them, where the header costs two words on the ten
+                        rows that have a city and nothing on the rest. */}
+                    <th scope="row">{countyWithCity(row)}</th>
                     <td>{formatNumber(row.population)}</td>
                     <td>{formatNumber(row.evangelicalCongregations)}</td>
                     <td>
