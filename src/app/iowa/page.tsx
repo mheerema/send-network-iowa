@@ -470,6 +470,18 @@ export default function IowaPage() {
                   {formatNumber(countyStats.shortfall.goal)} people
                   <NoteRef n={6} />
                 </span>
+                {/* Targets a node INSIDE the <details>, not the element
+                    itself: navigating to a fragment within a closed details
+                    opens it, so the drawer expands on click with no client
+                    JS. Where that is unsupported it still scrolls the reader
+                    to the closed drawer, which is a fair degradation. */}
+                <a
+                  href="#county-need-list"
+                  className="mt-3 inline-block text-base font-semibold text-brand-navy underline decoration-brand-amber decoration-2 underline-offset-4 hover:decoration-brand-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-navy"
+                >
+                  See the {countyStats.shortfall.countyCount} counties
+                  <span aria-hidden="true"> &rarr;</span>
+                </a>
               </dd>
             </div>
           </dl>
@@ -645,7 +657,10 @@ export default function IowaPage() {
                 it. Prose has to wrap to the viewport. The table keeps a short
                 visually-hidden caption for its accessible name, which is the
                 part <caption> is actually better at than a paragraph. */}
-            <p className="border-t border-gray-200 px-3 pt-4 text-sm text-gray-600 leading-snug sm:px-5">
+            <p
+              id="county-need-list"
+              className="scroll-mt-24 border-t border-gray-200 px-3 pt-4 text-sm text-gray-600 leading-snug sm:px-5"
+            >
               The {countyStats.shortfall.countyCount} Iowa counties with fewer
               than one evangelical congregation per{" "}
               {formatNumber(countyStats.shortfall.goal)} residents, the most
