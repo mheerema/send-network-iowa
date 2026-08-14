@@ -79,6 +79,34 @@ body {
    perceptible ring is 2px on any given surface, never 4px — only one band is
    ever doing work.
 
+   WHY THE TWO BAND COLOURS MUST STAY FAR APART (W3C Technique C40)
+   The separation between the bands is 14.55:1, and that number is a guarantee,
+   not a decoration. For band separation S, the best of the two bands is
+   mathematically at least sqrt(S) against ANY solid surface — if both bands
+   were under r against some surface, the bands could be at most r*r apart.
+   sqrt(14.55) = 3.81, so on any solid background one band clears 3.81:1 before
+   anyone measures anything. Verified by brute force over all 256 greys: the
+   true worst case is 3.84 at #838383. The tightest real token is brand-steel
+   (navy 3.17, white 4.58).
+
+   That floor is why there is no per-surface table to maintain for solid
+   backgrounds. It is ALSO why the band colours may not be retuned casually:
+   drop the separation and the floor drops with it. Keep it at or above 9:1.
+
+   WHERE THE GUARANTEE DOES NOT REACH — read this before trusting it
+   It bounds each band against the surface. It does NOT bound the band that is
+   sandwiched between the control and the surface. On the home hero the
+   composited surface (scrim over photo) sits at about #40546f, where the outer
+   navy band is 1.88:1 — too low to carry (needs 3:1) and too high to be
+   subsumed into the page (under ~1.5:1). In that gap the navy band is a
+   visible-but-uncarrying layer between the white band and the page, and the
+   ring failed even though the guarantee held at 7.73:1 for white.
+
+   Palette tokens never land in that gap; composited surfaces — photos, scrims,
+   gradients, translucent layers — can and do. So: solid brand backgrounds are
+   covered by the guarantee, anything composited must be measured. That is what
+   scripts/focus-ring-audit.js is for.
+
    This is the same reasoning the county map already applies to its markers
    (see IowaCountyMap.tsx: amber disc, navy ring, each covering the fills the
    other cannot). Changing either color means re-measuring both families. */
