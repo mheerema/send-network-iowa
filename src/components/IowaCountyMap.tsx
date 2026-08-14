@@ -245,9 +245,27 @@ const MARKED_COUNTY_COUNT = 10;
 const shortCounties = countyRows.filter((r) => r.churchesNeeded > 0);
 const shortfallTotal = shortCounties.reduce((s, r) => s + r.churchesNeeded, 0);
 
-const topShortCounties = [...shortCounties]
-  .sort((a, b) => b.churchesNeeded - a.churchesNeeded || a.name.localeCompare(b.name))
-  .slice(0, MARKED_COUNTY_COUNT);
+/**
+ * THE ONE NEED ORDER. The map's markers and the page's county table both rank
+ * by shortfall, so they share this comparator rather than each writing their
+ * own — two sorts that agree today and drift later is exactly the bug that
+ * would put Dubuque above Dallas in one place and below it in the other.
+ *
+ * Population descending is the tie-break: 11 shortfall values are shared by
+ * two or more counties, and among counties needing the same number the larger
+ * one is the larger opportunity, which is the question the table is being read
+ * to answer. Name is the last key so the order is TOTAL — two counties with
+ * equal need and equal population would otherwise sit in payload order, which
+ * is not a promise the payload makes.
+ */
+const byNeed = (a: CountyRow, b: CountyRow) =>
+  b.churchesNeeded - a.churchesNeeded ||
+  b.population - a.population ||
+  a.name.localeCompare(b.name);
+
+const rankedShortCounties = [...shortCounties].sort(byNeed);
+
+const topShortCounties = rankedShortCounties.slice(0, MARKED_COUNTY_COUNT);
 const topShortfallTotal = topShortCounties.reduce(
   (s, r) => s + r.churchesNeeded,
   0
@@ -259,9 +277,7 @@ const topShortfallTotal = topShortCounties.reduce(
  * and the map silently asserts a distinction the data does not support, so
  * fail the build and make someone choose a different count.
  */
-const nextShortCounty = [...shortCounties].sort(
-  (a, b) => b.churchesNeeded - a.churchesNeeded || a.name.localeCompare(b.name)
-)[MARKED_COUNTY_COUNT];
+const nextShortCounty = rankedShortCounties[MARKED_COUNTY_COUNT];
 if (
   nextShortCounty &&
   nextShortCounty.churchesNeeded ===
@@ -320,6 +336,13 @@ export const countyStats = {
       Math.ceil(statewidePopulation / GACX_SATURATION_GOAL) -
         statewideCongregations
     ),
+    /**
+     * Every county that falls short, in need order — the page's county table
+     * renders this list whole. `top` is its first `MARKED_COUNTY_COUNT` rows,
+     * so the map's markers and the table's opening rows are the same counties
+     * in the same order by construction, not by coincidence.
+     */
+    ranked: rankedShortCounties,
     top: topShortCounties,
     topCount: MARKED_COUNTY_COUNT,
     topTotal: topShortfallTotal,

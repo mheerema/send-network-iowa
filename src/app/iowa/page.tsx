@@ -76,6 +76,38 @@ function formatPct(pct: number): string {
   return `${pct.toFixed(1)}%`;
 }
 
+/**
+ * Column totals for the county-need table, summed from the exact rows that
+ * table renders rather than read off `countyStats` — a footer that quotes a
+ * figure the rows above it do not add up to is worse than no footer.
+ */
+const needTableTotals = countyStats.shortfall.ranked.reduce(
+  (t, r) => ({
+    population: t.population + r.population,
+    congregations: t.congregations + r.evangelicalCongregations,
+    needed: t.needed + r.churchesNeeded,
+  }),
+  { population: 0, congregations: 0, needed: 0 }
+);
+
+/** Counties already at the goal — the rows the need table deliberately omits. */
+const countiesAtGoal =
+  countyStats.countyCount - countyStats.shortfall.countyCount;
+
+/**
+ * Reconciliation guard. The need table and the page's headline shortfall are
+ * two renderings of one figure; if the row-by-row sum ever stops matching
+ * `countyStats.shortfall.total`, the page is publishing two totals and the
+ * build should say so rather than letting a reader find it.
+ */
+if (needTableTotals.needed !== countyStats.shortfall.total) {
+  throw new Error(
+    `The county need table sums to ${needTableTotals.needed} churches but ` +
+      `the page publishes ${countyStats.shortfall.total}. Both derive from ` +
+      `countyRows — reconcile the derivation, do not adjust one to match.`
+  );
+}
+
 /** Ranks are interpolated, so the suffix has to be computed, not typed. */
 function ordinal(n: number): string {
   const teens = n % 100;
@@ -487,10 +519,32 @@ export default function IowaPage() {
             rather than the hundreds the largest counties need.
           </p>
 
-          {/* Accessible data table for the map. sr-only lives on a wrapping
-              div, not the table: overflow:hidden does not apply to table
-              boxes, so a sr-only table lays out at full nowrap width and adds
-              horizontal page scroll. */}
+          {/* Accessible data table for the MAP, and it stays even though the
+              visible county table below now repeats 58 of its rows.
+
+              WHY BOTH. The two tables answer different questions and neither
+              is a superset in the way that matters. This one is the map's
+              text equivalent: it carries people per evangelical congregation
+              — the variable the choropleth actually shades, which the visible
+              table does not have a column for — across all 99 counties,
+              including the 41 already at the goal. Dropping it would leave
+              seven bands of shading with no accessible equivalent for 41 of
+              the counties they cover, and it would delete "41 counties
+              already meet the goal" from the page entirely, which is half of
+              what the shortfall means.
+
+              The duplication is real: 58 counties, three shared columns. It
+              is paid for in the captions instead — this one now closes by
+              naming the shorter table that follows, and that table's caption
+              names its own narrower scope, so a screen-reader user can tell
+              within a sentence which of the two they are in and skip the one
+              they have already heard. Table navigation is caption-driven, so
+              distinguishing captions are the actual remedy for meeting the
+              same data twice, not deleting one of the tables.
+
+              sr-only lives on a wrapping div, not the table: overflow:hidden
+              does not apply to table boxes, so a sr-only table lays out at
+              full nowrap width and adds horizontal page scroll. */}
           <div className="sr-only">
             <table>
               <caption>
@@ -507,7 +561,10 @@ export default function IowaPage() {
                 the ones marked with circles on the map. The share not counted
                 is an upper bound; see note 3 at the foot of the page. In
                 counties with only a handful of congregations, the figure for
-                people per congregation is approximate.
+                people per congregation is approximate. A shorter table below
+                lists only the{" "}
+                {countyStats.shortfall.countyCount} counties that fall short,
+                ordered by how many congregations each one needs.
               </caption>
               <thead>
                 <tr>
@@ -535,6 +592,232 @@ export default function IowaPage() {
               </tbody>
             </table>
           </div>
+
+          {/* The county list, as a native disclosure.
+
+              NO CLIENT JS. `<details>`/`<summary>` gets the keyboard
+              operation, focus handling, `aria-expanded` state and
+              find-in-page behaviour that a div-and-button version would have
+              to re-implement, and it keeps /iowa a server component with zero
+              hydration — this page has no client components and a disclosure
+              is not the reason to introduce the first one.
+
+              Closed by default, but every row is in the HTML either way: the
+              content of a closed `<details>` is rendered and indexed, so the
+              58 counties are findable by search engines and by Ctrl+F (which
+              opens the disclosure to reveal its hit) without JavaScript. */}
+          <details className="group mt-8 max-w-3xl mx-auto overflow-hidden rounded-2xl border border-gray-200 bg-gray-50">
+            {/* The default triangle is hidden in all three engines — Chrome
+                and Firefox honour `list-style: none` on summary, Safari needs
+                the -webkit pseudo-element — and replaced by a chevron that
+                rotates 180° on open. It is navy, not amber: brand amber is
+                about 1.9:1 on this surface and a state indicator has to clear
+                3:1 (SC 1.4.11). Same reason the focus outline below is navy
+                rather than the site's usual amber; the inset offset is so the
+                card's `overflow-hidden` cannot clip it. */}
+            <summary className="cursor-pointer list-none rounded-2xl px-3 py-4 transition-colors hover:bg-gray-100 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand-navy sm:px-5 [&::-webkit-details-marker]:hidden">
+              <span className="flex items-center justify-between gap-3 text-base font-semibold text-brand-navy">
+                <span>
+                  See all {countyStats.shortfall.countyCount} counties that
+                  need churches
+                </span>
+                <svg
+                  viewBox="0 0 20 20"
+                  aria-hidden="true"
+                  className="h-5 w-5 shrink-0 transition-transform duration-200 group-open:rotate-180 motion-reduce:transition-none"
+                >
+                  <path
+                    d="M5 7.5 10 12.5 15 7.5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </span>
+            </summary>
+
+            {/* The description sits OUTSIDE the scroll region, and a <caption>
+                cannot: a caption box takes the table's width, so at 375px it
+                inherits the table's 438px and the sentence is cut off at the
+                card edge until the reader scrolls sideways to finish reading
+                it. Prose has to wrap to the viewport. The table keeps a short
+                visually-hidden caption for its accessible name, which is the
+                part <caption> is actually better at than a paragraph. */}
+            <p className="border-t border-gray-200 px-3 pt-4 text-sm text-gray-600 leading-snug sm:px-5">
+              The {countyStats.shortfall.countyCount} Iowa counties with fewer
+              than one evangelical congregation per{" "}
+              {formatNumber(countyStats.shortfall.goal)} residents, the most
+              needed first. The other {countiesAtGoal} counties already meet
+              the goal and are not listed. 2020 U.S. Religion Census; see note
+              6 at the foot of the page for how the shortfall is counted.
+              {/* Plain text, not a NoteRef: each note carries exactly one ref
+                  so its back-link has a unique target, and note 6's ref
+                  already sits on the 1,243 figure above. */}
+            </p>
+
+            {/* All four columns fit at 375px, so there is no scroll hint and
+                no sideways scroll to hint at. This wrapper is the safety net,
+                not the plan: below 375px, and at large text-zoom settings
+                (SC 1.4.4), the table will still outgrow its column and has to
+                scroll somewhere other than the page. A scroll container has to
+                be reachable without a mouse (SC 2.1.1), hence tabIndex and a
+                visible focus style on it; `role="region"` with a name is what
+                makes that tab stop announce itself rather than landing a
+                screen-reader user on an anonymous div. */}
+            <div
+              role="region"
+              aria-label="Counties ranked by churches needed"
+              tabIndex={0}
+              /* `relative` is load-bearing, not decoration. The sr-only header
+                 spans are `position:absolute`, and an absolutely-positioned
+                 element is only clipped by an ancestor's overflow if that
+                 ancestor is in its containing-block chain. Without this class
+                 they were laid out at their static position inside the full
+                 329px table, escaped the 286px scrollport, and pushed the
+                 PAGE sideways by 14px at 320px wide. */
+              className="relative mt-4 overflow-x-auto pb-5 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand-navy"
+            >
+              {/* Reference data, not body prose: the page's ban on small grey
+                  type is about copy people read in sequence, and a 58-row
+                  lookup table at 16px is harder to scan, not easier. 14px from
+                  `sm` up; 13px on phones, which is the last of the three
+                  economies that got the fourth column on screen at 375. No
+                  `min-w-*` — a floor wider than the scrollport would force a
+                  scrollbar back onto a table that now fits. */}
+              <table className="w-full text-[13px] sm:text-sm">
+                {/* sr-only on the SPAN, never on the <caption> itself. A
+                    caption is a table box, so `overflow:hidden` does not clip
+                    it, and `sr-only`'s `position:absolute` escapes the scroll
+                    region's clipping because that region is not a positioned
+                    ancestor — the caption then lays out at its nowrap
+                    min-content width and pushes the whole PAGE sideways. It
+                    measured 14px of document overflow at 320px. Same family
+                    as the sr-only state table further up this page. */}
+                <caption>
+                  <span className="sr-only">
+                    Iowa counties that need churches, most needed first
+                  </span>
+                </caption>
+                {/* HOW THE FOURTH COLUMN GOT ON SCREEN AT 375px.
+                    The table wanted 438px of a 341px scrollport, and the fat
+                    was in the headers, not the data — "Evangelical churches"
+                    sets a column wider than any number in it. Three economies,
+                    in order of how much they cost the reader:
+
+                    1. Abbreviated headers below `sm` only — "Evangelical
+                       churches" to "Churches", "Churches needed" to "Needed",
+                       "Population" to "People". The full wording stays in the
+                       cell as an sr-only span and the short version is
+                       aria-hidden, so the ACCESSIBLE NAME never degrades — a
+                       screen-reader user hears "Evangelical churches" at
+                       every width, and the row cells keep a header
+                       association that says what they are. It is the header
+                       that sets these column widths, not the data: at 13px
+                       "Population" is wider than 492,401.
+                    2. Tighter cell padding below `sm`.
+                    3. 13px type below `sm`, one notch down from 14.
+
+                    The data itself was not touched: no dropped thousands
+                    separators, no truncated county names, and the column
+                    order is Matt's at every width.
+
+                    The county column stays pinned (`sticky left-0` plus the
+                    card's background) for the cases where the wrapper still
+                    has to scroll — under 375px and at large text zoom. A
+                    number with no county beside it is not data. That is also
+                    why the horizontal padding sits on the edge CELLS rather
+                    than the scroll container: padding on the container would
+                    leave the pinned column flush against the card border the
+                    moment anyone scrolls. */}
+                <thead>
+                  <tr className="border-b border-gray-300 text-brand-navy">
+                    <th
+                      scope="col"
+                      className="sticky left-0 bg-gray-50 py-2 pl-3 pr-1.5 text-left font-semibold tracking-tight sm:pl-5 sm:pr-3 sm:tracking-normal"
+                    >
+                      County
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-1 py-2 text-right font-semibold sm:px-3"
+                    >
+                      <span aria-hidden="true" className="sm:hidden">
+                        People
+                      </span>
+                      <span className="sr-only sm:not-sr-only">Population</span>
+                    </th>
+                    <th
+                      scope="col"
+                      className="px-1 py-2 text-right font-semibold sm:px-3"
+                    >
+                      <span aria-hidden="true" className="sm:hidden">
+                        Churches
+                      </span>
+                      <span className="sr-only sm:not-sr-only">
+                        Evangelical churches
+                      </span>
+                    </th>
+                    <th
+                      scope="col"
+                      className="py-2 pl-1 pr-3 text-right font-semibold sm:pl-3 sm:pr-5"
+                    >
+                      <span aria-hidden="true" className="sm:hidden">
+                        Needed
+                      </span>
+                      <span className="sr-only sm:not-sr-only">
+                        Churches needed
+                      </span>
+                    </th>
+                  </tr>
+                </thead>
+                {/* Hairlines, not zebra: the card already sits on a tinted
+                    surface, so a second tint per row would be a third value
+                    competing with the amber emphasis in the last column. */}
+                <tbody className="divide-y divide-gray-200">
+                  {countyStats.shortfall.ranked.map((row) => (
+                    <tr key={row.fips}>
+                      <th
+                        scope="row"
+                        className="sticky left-0 bg-gray-50 py-2 pl-3 pr-1.5 text-left font-normal tracking-tight text-gray-700 sm:pl-5 sm:pr-3 sm:tracking-normal"
+                      >
+                        {row.name}
+                      </th>
+                      <td className="px-1 py-2 text-right tabular-nums text-gray-700 sm:px-3">
+                        {formatNumber(row.population)}
+                      </td>
+                      <td className="px-1 py-2 text-right tabular-nums text-gray-700 sm:px-3">
+                        {formatNumber(row.evangelicalCongregations)}
+                      </td>
+                      <td className="py-2 pl-1 pr-3 text-right font-semibold tabular-nums text-brand-navy sm:pl-3 sm:pr-5">
+                        {formatNumber(row.churchesNeeded)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className="border-t-2 border-gray-300 font-semibold text-brand-navy">
+                    <th
+                      scope="row"
+                      className="sticky left-0 bg-gray-50 py-2 pl-3 pr-1.5 text-left tracking-tight sm:pl-5 sm:pr-3 sm:tracking-normal"
+                    >
+                      All {countyStats.shortfall.countyCount}
+                    </th>
+                    <td className="px-1 py-2 text-right tabular-nums sm:px-3">
+                      {formatNumber(needTableTotals.population)}
+                    </td>
+                    <td className="px-1 py-2 text-right tabular-nums sm:px-3">
+                      {formatNumber(needTableTotals.congregations)}
+                    </td>
+                    <td className="py-2 pl-1 pr-3 text-right tabular-nums sm:pl-3 sm:pr-5">
+                      {formatNumber(needTableTotals.needed)}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </details>
         </div>
       </section>
 
