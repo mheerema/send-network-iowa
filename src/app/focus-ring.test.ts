@@ -111,19 +111,164 @@ describe("focus-ring band separation (W3C Technique C40)", () => {
     assert.ok(worst >= 3, `Empirical worst case ${worst.toFixed(3)} at ${worstAt} is under 3:1.`);
   });
 
-  test("every brand surface token has a band clearing 3:1", () => {
-    const surfaces = [...CSS.matchAll(/--color-(brand-[a-z-]+):\s*(#[0-9a-fA-F]{3,8});/g)]
+  /*
+   * THE BOUND IS BAND-AGNOSTIC. SC 1.4.11 IS BAND-SPECIFIC.
+   *
+   * The sqrt(S) floor says SOME band clears 3:1. The criterion asks whether the
+   * band ADJACENT TO THE SURFACE does. For an outset ring that is the outermost
+   * band only (Understanding 1.4.11, Fig 10). So there are three outcomes:
+   *
+   *   outer >= 3:1          carrying                                  PASS
+   *   outer <  1.5:1        subsumed into the surface, so the inner
+   *                         band inherits the adjacency and clears
+   *                         by the >= 9:1 separation                  PASS
+   *   1.5:1 <= outer < 3:1  neither carrying nor subsumed — a
+   *                         visible-but-uncarrying smear at the page
+   *                         boundary                                  FAIL
+   *
+   * The middle case is the DEAD ZONE, and it is a property of the outer band
+   * COLOUR, not of any one surface. It is where the shipped home-hero defect
+   * lived: navy outermost over a scrimmed photograph at 1.88:1. Asserting
+   * `max(outer, inner) >= 3` passes that defect. Do not weaken these back.
+   */
+  const SUBSUMPTION = 1.5; // declared tokens; tighten to 1.2 for computed composites
+
+  const surfaceTokens = () =>
+    [...CSS.matchAll(/--color-(brand-[a-z-]+):\s*(#[0-9a-fA-F]{3,8});/g)]
       .map((m) => ({ name: m[1], hex: m[2] }))
       .concat([
         { name: "white", hex: "#ffffff" },
         { name: "gray-50", hex: "#f9fafb" },
         { name: "gray-100", hex: "#f3f4f6" },
       ]);
-    assert.ok(surfaces.length > 10, "brand tokens not parsed from globals.css");
-    for (const s of surfaces) {
-      const best = Math.max(contrast(OUTER_BAND(), s.hex), contrast(INNER_BAND, s.hex));
-      assert.ok(best >= 3, `${s.name} (${s.hex}): best band only ${best.toFixed(2)}:1`);
+
+  test("every surface the site uses is carried or subsumed — not merely 'some band passes'", () => {
+    const inUse = ["white", "brand-navy", "gray-50", "brand-amber", "gray-100", "brand-off-white"];
+    const tokens = surfaceTokens();
+    for (const name of inUse) {
+      const t = tokens.find((x) => x.name === name);
+      assert.ok(t, `surface ${name} not found among tokens`);
+      const outer = contrast(OUTER_BAND(), t!.hex);
+      assert.ok(
+        outer >= 3 || outer < SUBSUMPTION,
+        `${name} (${t!.hex}): outer band at ${outer.toFixed(2)}:1 is in the dead zone ` +
+          `[${SUBSUMPTION}, 3.0) — neither carrying nor subsumed. Use focus-ring-invert here.`
+      );
     }
+  });
+
+  test("G4 — the variants' dead zones are disjoint, so every surface is coverable", () => {
+    const deadZone = (band: string): [number | null, number | null] => {
+      let lo: number | null = null;
+      let hi: number | null = null;
+      for (let v = 0; v <= 255; v++) {
+        const grey = "#" + [v, v, v].map((n) => n.toString(16).padStart(2, "0")).join("");
+        const c = contrast(band, grey);
+        if (c >= SUBSUMPTION && c < 3) {
+          if (lo === null) lo = v;
+          hi = v;
+        }
+      }
+      return [lo, hi];
+    };
+    const [aLo, aHi] = deadZone(OUTER_BAND());
+    const [bLo, bHi] = deadZone(INNER_BAND);
+    assert.ok(aLo !== null && bLo !== null, "expected both variants to have a dead zone");
+    assert.ok(
+      !(Math.max(aLo!, bLo!) <= Math.min(aHi!, bHi!)),
+      `dead zones overlap (${aLo}-${aHi} and ${bLo}-${bHi}); some surfaces uncoverable`
+    );
+  });
+
+  test("G4 — no brand token sits in BOTH variants' dead zones", () => {
+    for (const t of surfaceTokens()) {
+      const a = contrast(OUTER_BAND(), t.hex);
+      const b = contrast(INNER_BAND, t.hex);
+      assert.ok(
+        !(a >= SUBSUMPTION && a < 3 && b >= SUBSUMPTION && b < 3),
+        `${t.name} (${t.hex}) is dead-zoned for both variants ` +
+          `(navy-outer ${a.toFixed(2)}, white-outer ${b.toFixed(2)})`
+      );
+    }
+  });
+});
+
+/*
+ * G5 — the scrimmed hero, bounded without reference to any photograph.
+ *
+ * For a uniform scrim of colour C at alpha a over arbitrary source S, the
+ * composite is a*C + (1-a)*S per channel. Luminance is monotonic per channel,
+ * so compositing over pure black and pure white BOUNDS the achievable range for
+ * every possible image. Checking the outer band against the nearer endpoint is
+ * therefore image-independent — it survives an asset swap, a CMS upload, or a
+ * sixth carousel slide, which per-image measurement does not.
+ */
+describe("hero scrim bound (image-independent)", () => {
+  const SCRIM_ALPHA = 0.8; // bg-brand-navy/80 in HeroPathwaySplit.tsx
+  const HERO = readFileSync(
+    new URL("../components/HeroPathwaySplit.tsx", import.meta.url),
+    "utf8"
+  );
+  const composite = (over: number[], scrim: string, a: number) => {
+    let h = scrim.replace("#", "");
+    if (h.length === 3) h = [...h].map((c) => c + c).join("");
+    return (
+      "#" +
+      [0, 2, 4]
+        .map((i) => parseInt(h.slice(i, i + 2), 16))
+        .map((ch, i) => Math.round(a * ch + (1 - a) * over[i]).toString(16).padStart(2, "0"))
+        .join("")
+    );
+  };
+  const darkest = () => composite([0, 0, 0], token("brand-navy"), SCRIM_ALPHA);
+  const brightest = () => composite([255, 255, 255], token("brand-navy"), SCRIM_ALPHA);
+
+  test("the derived bound brackets the surface actually measured on the page", () => {
+    const measured = "#40546f";
+    assert.ok(
+      relativeLuminance(darkest()) <= relativeLuminance(measured) &&
+        relativeLuminance(measured) <= relativeLuminance(brightest()),
+      `measured hero surface ${measured} outside derived bound ${darkest()}..${brightest()}`
+    );
+  });
+
+  test("the hero's variant clears 3:1 across the WHOLE range, for any image", () => {
+    const worstWhiteOuter = Math.min(
+      contrast(INNER_BAND, darkest()),
+      contrast(INNER_BAND, brightest())
+    );
+    assert.ok(
+      worstWhiteOuter >= 3,
+      `white-outermost worst case ${worstWhiteOuter.toFixed(2)}:1 over the hero range`
+    );
+    // Navy outermost must NOT be used here: it never reaches 3:1 anywhere in
+    // the range. That is exactly the defect that shipped and was fixed.
+    const bestNavyOuter = Math.max(
+      contrast(OUTER_BAND(), darkest()),
+      contrast(OUTER_BAND(), brightest())
+    );
+    assert.ok(
+      bestNavyOuter < 3,
+      `expected navy-outermost to fail across the hero range; got ${bestNavyOuter.toFixed(2)}:1`
+    );
+  });
+
+  test("the hero CTAs are declared with the inverted variant", () => {
+    const rings = [...HERO.matchAll(/className="(focus-ring(?:-invert)?)\s/g)].map((m) => m[1]);
+    assert.ok(rings.length >= 2, "expected the two hero CTAs to carry a focus-ring class");
+    for (const r of rings) {
+      assert.equal(
+        r,
+        "focus-ring-invert",
+        "a hero CTA is using the default focus-ring; over the scrimmed hero its navy outer " +
+          "band never reaches 3:1. This is the SC 1.4.11 / 2.4.7 defect that shipped once."
+      );
+    }
+    assert.match(
+      HERO,
+      /bg-brand-navy\/80/,
+      "hero scrim alpha changed — re-derive the bound in this file before trusting it"
+    );
   });
 });
 
