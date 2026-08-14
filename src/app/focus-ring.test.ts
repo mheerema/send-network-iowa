@@ -270,6 +270,39 @@ describe("hero scrim bound (image-independent)", () => {
       "hero scrim alpha changed — re-derive the bound in this file before trusting it"
     );
   });
+
+  /*
+   * Region scoping is the safety net under the per-control declaration above.
+   * Without it, a control on these surfaces can be correct only by accident:
+   * the /iowa footnote link passes because it is transparent, and adding any
+   * `bg-*` to it would make it a Level A failure with no build error. Scoping
+   * by surface makes the outer white band carry regardless of the fill.
+   */
+  test("every composited dark surface scopes the inverted band order", () => {
+    const regions = [
+      { file: "../components/HeroPathwaySplit.tsx", what: "home hero (scrim over carousel)" },
+      { file: "./iowa/page.tsx", what: "/iowa hero (photo at opacity-20 over navy)" },
+    ];
+    for (const r of regions) {
+      const src = readFileSync(new URL(r.file, import.meta.url), "utf8");
+      assert.match(
+        src,
+        /<section className="focus-ring-on-dark /,
+        `${r.what}: the section must carry focus-ring-on-dark, or a control added there ` +
+          `later inherits the default navy-outermost ring, which is dead-zoned on this surface`
+      );
+    }
+  });
+
+  test("the region utility inverts band order for any focusable descendant", () => {
+    const block = CSS.match(/@utility focus-ring-on-dark\s*\{[\s\S]*?\n\}/);
+    assert.ok(block, "@utility focus-ring-on-dark not found");
+    // White must be the OUTER band (outline); navy the inner (box-shadow).
+    assert.match(block![0], /outline:\s*2px solid #ffffff/, "outer band must be white");
+    assert.match(block![0], /box-shadow:\s*0 0 0 2px var\(--color-brand-navy\)/, "inner band must be navy");
+    // It has to reach controls that never declared a variant at all.
+    assert.match(block![0], /a,\s*button/, "must match bare focusable descendants");
+  });
 });
 
 describe("focus-ring declarations in globals.css", () => {

@@ -160,6 +160,33 @@ body {
   }
 }
 
+/* ─── Region scoping: put the inverted band order on the SURFACE ───
+   Apply to a section whose painted surface is mid-dark or composited — a
+   scrimmed photo, a dark panel — and every focusable descendant gets the
+   inverted band order, whether or not it declared a variant itself.
+
+   This exists because the per-control approach has a silent failure mode. The
+   /iowa hero footnote link passes on that surface only BECAUSE it is
+   transparent: the white band carries at 7.72:1 against the surface showing
+   through it, while the navy band sits at 1.88:1 in the dead zone and
+   contributes nothing. Add any `bg-*` utility to that link and the white band
+   now abuts an opaque fill instead of the surface, both boundaries collapse,
+   and it becomes an SC 2.4.7 (Level A) failure — with no build error, no type
+   error, and no visual warning at authoring time.
+
+   Scoping by region removes the dependency: on a dark surface the outer white
+   band carries against the page (7.72:1 worst case at the hero's scrim alpha)
+   regardless of what fill the control has. Correctness becomes a property of
+   the surface, which is where it belongs, rather than of a control's
+   background staying unset. */
+@utility focus-ring-on-dark {
+  & :is(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--color-brand-navy);
+  }
+}
+
 /* There is deliberately no inset variant. An earlier pass added one for the
    article-card image links, whose outset ring was clipped by the card's
    `overflow-hidden`. It drew its white band with `box-shadow: inset`, which
