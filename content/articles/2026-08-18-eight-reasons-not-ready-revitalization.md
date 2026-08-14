@@ -5,6 +5,10 @@ sourceName: "Send Network"
 sourceUrl: "https://www.sendnetwork.com/podcasts/8-reasons-pastors-arent-ready-to-lead-revitalization/"
 excerpt: "Mark Clifton, Mark Hallock and Dan Hurst work through a Chuck Lawless list of eight. Every item on it is spiritual, which makes the episode a self-assessment before it is a strategy."
 tags: ["revitalization", "replanting", "leadership"]
+image: "https://images.unsplash.com/photo-1749402459884-8b15d7279d5c?q=80&w=2400&auto=format&fit=crop"
+imageAlt: "A small white clapboard country church with a rusting metal roof and a narrow bell tower stands beside a two-lane highway under an overcast sky."
+imageCredit: "Roger Starnes Sr / Unsplash"
+imageCreditUrl: "https://unsplash.com/photos/y0d8M28xYO8"
 ---
 
 Revitalizations stall on the readiness of the pastor long before anyone gets to strategy. Mark Clifton, Mark Hallock and Dan Hurst spend an episode of Revitalize & Replant on that claim, working through a list from Chuck Lawless of eight reasons a pastor is not ready to lead one.

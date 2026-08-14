@@ -5,6 +5,10 @@ sourceName: "Send Network"
 sourceUrl: "https://www.sendnetwork.com/podcasts/5-encouragements-for-small-church-pastors/"
 excerpt: "Mark Clifton and Mark Hallock make the case that faithfulness in a small church is real ministry, and that meaningful ministry is never measured by attendance. Aimed squarely at the bivocational pastor."
 tags: ["small churches", "bivocational", "encouragement"]
+image: "https://images.unsplash.com/photo-1641422132928-0a1784310688?q=80&w=2400&auto=format&fit=crop"
+imageAlt: "A man stands alone in the center aisle of an empty sanctuary, facing the front between rows of wooden pews."
+imageCredit: "Danique Godwin / Unsplash"
+imageCreditUrl: "https://unsplash.com/photos/HhnZtdX2hI4"
 ---
 
 If you preach on Sunday and clock in somewhere else Monday morning, this episode is aimed at you.

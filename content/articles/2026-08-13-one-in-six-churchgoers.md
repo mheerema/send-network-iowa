@@ -5,6 +5,10 @@ sourceName: "Lifeway Research"
 sourceUrl: "https://research.lifeway.com/2026/08/12/1-in-6-protestant-churchgoers-attend-megachurches/"
 excerpt: "Megachurches are under 1% of American Protestant congregations and hold 17% of the churchgoers. The median congregation runs about 70 people a week, which describes almost every church in Iowa."
 tags: ["church size", "statistics", "small churches"]
+image: "https://images.unsplash.com/photo-1737820544699-511fd917156d?q=80&w=2400&auto=format&fit=crop"
+imageAlt: "Rows of dark wooden pews inside a small sanctuary with honey-colored plank walls, lit by a single side window."
+imageCredit: "Karl Raymund Catabas / Unsplash"
+imageCreditUrl: "https://unsplash.com/photos/l0ZVGUPjqfg"
 ---
 
 Megachurches make up less than one percent of Protestant congregations in the United States. They hold 17 percent of the people who attend one.
