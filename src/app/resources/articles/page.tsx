@@ -57,7 +57,7 @@ export default function ArticlesPage() {
                 {article.image && (
                   <Link
                     href={`/resources/articles/${article.slug}`}
-                    className="block relative aspect-[2/1] bg-brand-navy"
+                    className="focus-ring-inset block relative aspect-[2/1] bg-brand-navy"
                   >
                     <Image
                       src={article.image}
@@ -84,7 +84,7 @@ export default function ArticlesPage() {
                   <h2 className="text-lg font-bold text-brand-navy tracking-tight mb-2">
                     <Link
                       href={`/resources/articles/${article.slug}`}
-                      className="hover:text-brand-amber transition-colors"
+                      className="focus-ring hover:text-brand-amber transition-colors"
                     >
                       {article.title}
                     </Link>
@@ -94,7 +94,7 @@ export default function ArticlesPage() {
                   </p>
                   <Link
                     href={`/resources/articles/${article.slug}`}
-                    className="text-sm font-semibold text-brand-navy hover:text-brand-amber transition-colors"
+                    className="focus-ring text-sm font-semibold text-brand-navy hover:text-brand-amber transition-colors"
                   >
                     Read more &rarr;
                   </Link>

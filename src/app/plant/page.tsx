@@ -37,7 +37,7 @@ export default function PlantPage() {
                 href="https://www.sendnetwork.com/plant/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
+                className="focus-ring inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
               >
                 Get Started on Send Network
               </a>
@@ -99,7 +99,7 @@ export default function PlantPage() {
               href="https://bciowa.org/churchplantingpartnership/"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-full border-2 border-brand-navy text-brand-navy text-sm font-semibold hover:bg-brand-navy hover:text-white transition-colors"
+              className="focus-ring inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-full border-2 border-brand-navy text-brand-navy text-sm font-semibold hover:bg-brand-navy hover:text-white transition-colors"
             >
               Learn more at bciowa.org &rarr;
             </a>

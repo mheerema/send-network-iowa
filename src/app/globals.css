@@ -33,11 +33,80 @@ body {
   font-family: var(--font-montserrat), Arial, Helvetica, sans-serif;
 }
 
+/* ─── Keyboard focus indicator (WCAG 2.2 SC 1.4.11, Non-text Contrast) ───
+   One class for every focusable control on the site. Apply `focus-ring` and
+   add nothing else; do not hand-roll a focus-visible outline per component.
+
+   Two tones, because no single brand color clears 3:1 on both of this site's
+   background families. Measured against #ffffff / #f9fafb / #f3f4f6 / navy:
+
+     brand-amber   1.9 : 1 on white   FAILS   (the old site-wide convention)
+     brand-navy   14.55 : 1 on white  passes  — but 1 : 1 on a navy section
+     white        14.55 : 1 on navy   passes  — but 1 : 1 on a white section
+
+   So the ring carries both: a white band against the control, a navy band
+   outside it. On a light surface the white band merges into the page and the
+   navy edge does the work; on a navy section the navy edge merges and the
+   white band does the work. Either way one band is left standing at 12:1 or
+   better, and where neither merges — mid-tone fills like brand-steel — the
+   two bands sit against each other at 14.55:1. Worst measured case across
+   the whole palette is 4.58:1, on brand-steel.
+
+   This is the same reasoning the county map already applies to its markers
+   (see IowaCountyMap.tsx: amber disc, navy ring, each covering the fills the
+   other cannot). Changing either color means re-measuring both families. */
+
+@utility focus-ring {
+  /* Set in the resting state too, where outline-style:none keeps it invisible.
+     Tailwind's `transition-colors` includes outline-color, and most controls
+     here carry it — without this, outline-color animates up from currentColor
+     over 150ms and the ring fades in through whatever the text color happens
+     to be, which on a low-contrast control is a sub-3:1 ring. Pinning both
+     ends of the transition to navy makes the ring appear at full contrast. */
+  outline-color: var(--color-brand-navy);
+
+  &:focus-visible {
+    outline: 2px solid var(--color-brand-navy);
+    outline-offset: 2px;
+    /* Fills the outline-offset gap, so the two bands are always adjacent. */
+    box-shadow: 0 0 0 2px #ffffff;
+  }
+}
+
+/* Same indicator, drawn inside the control instead of around it. For controls
+   sitting flush against an `overflow-hidden` ancestor, where the outset ring
+   is clipped away entirely — the article cards clip their image to the card's
+   rounded corner, so the image link's outset ring lost all 4px on three sides
+   and only the bottom edge survived. Reach for this only when the clipping
+   ancestor is load-bearing; otherwise use `focus-ring`. */
+@utility focus-ring-inset {
+  outline-color: var(--color-brand-navy);
+
+  &:focus-visible {
+    /* Negative offset pulls the outline inward, so it paints the outermost
+       2px inside the border box; the 4px inset shadow shows through as the
+       white band just inside it. Same navy-then-white pair, same 14.55:1. */
+    outline: 2px solid var(--color-brand-navy);
+    outline-offset: -2px;
+    box-shadow: inset 0 0 0 4px #ffffff;
+  }
+}
+
 /* ─── Article body (markdown rendered via marked in src/lib/articles.ts) ───
    Blockquotes carry pull-quote excerpts on reposts. marked emits:
    <blockquote><p>quote…</p><p>— Attribution</p></blockquote>
    The em-dash attribution line is the last <p> — styled smaller only when the
    quote has more than one paragraph, so plain quotes are unaffected. */
+
+/* Article bodies are markdown, so their links cannot carry `focus-ring`.
+   Same two-tone indicator, applied by element instead of by class. Article
+   bodies are always on white, but the navy/white pair is kept rather than a
+   bare navy ring so every focus ring on the site looks like the same thing. */
+.prose-article a:focus-visible {
+  outline: 2px solid var(--color-brand-navy);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px #ffffff;
+}
 
 .prose-article blockquote {
   @apply border-l-4 border-brand-amber pl-6 pr-2 py-1 font-serif italic text-lg leading-relaxed text-brand-navy;

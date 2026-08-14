@@ -117,7 +117,7 @@ export default function RootLayout({
               </span>
               <Link
                 href="/privacy"
-                className="text-white/60 hover:text-white transition-colors"
+                className="focus-ring text-white/60 hover:text-white transition-colors"
               >
                 Privacy
               </Link>

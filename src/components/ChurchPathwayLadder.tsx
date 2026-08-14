@@ -19,13 +19,13 @@ export default function ChurchPathwayLadder() {
             href="https://www.sendnetwork.com/send/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center px-7 py-3 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
+            className="focus-ring inline-flex items-center px-7 py-3 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
           >
             Explore Send Network
           </Link>
           <Link
             href="/events"
-            className="inline-flex items-center px-7 py-3 rounded-full border border-brand-navy text-brand-navy text-sm font-semibold hover:bg-brand-navy hover:text-white transition-colors"
+            className="focus-ring inline-flex items-center px-7 py-3 rounded-full border border-brand-navy text-brand-navy text-sm font-semibold hover:bg-brand-navy hover:text-white transition-colors"
           >
             Attend a Sending Lab
           </Link>

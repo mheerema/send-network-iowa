@@ -90,7 +90,7 @@ function NoteRef({ n }: { n: number }) {
       <a
         id={`ref-note-${n}`}
         href={`#note-${n}`}
-        className="relative inline-block text-brand-amber underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-amber"
+        className="focus-ring relative inline-block text-brand-amber underline-offset-2 hover:underline"
       >
         <span className="sr-only">See note </span>
         {n}
@@ -111,7 +111,7 @@ function NoteBack({ n }: { n: number }) {
   return (
     <a
       href={`#ref-note-${n}`}
-      className="relative ml-1 inline-block whitespace-nowrap text-gray-600 underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-amber"
+      className="focus-ring relative ml-1 inline-block whitespace-nowrap text-gray-600 underline-offset-2 hover:underline"
     >
       <span aria-hidden="true">↩</span>
       {/* Same 24x24 hit area as NoteRef; the arrow glyph is under 24px. */}
@@ -589,13 +589,13 @@ export default function IowaPage() {
           <div className="flex flex-wrap justify-center gap-3">
             <Link
               href="/plant"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
+              className="focus-ring inline-flex items-center justify-center px-6 py-3 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
             >
               Explore planting
             </Link>
             <Link
               href="/partner"
-              className="inline-flex items-center justify-center px-6 py-3 rounded-full border border-white/40 text-white text-sm font-semibold hover:bg-white hover:text-brand-navy transition-colors"
+              className="focus-ring inline-flex items-center justify-center px-6 py-3 rounded-full border border-white/40 text-white text-sm font-semibold hover:bg-white hover:text-brand-navy transition-colors"
             >
               Partner with us
             </Link>

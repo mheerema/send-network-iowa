@@ -55,7 +55,7 @@ export default function PartnerPage() {
             href="https://www.sendnetwork.com/send/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
+            className="focus-ring inline-flex items-center justify-center w-full sm:w-auto px-6 py-3 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
           >
             Get Started on Send Network &rarr;
           </a>

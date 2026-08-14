@@ -85,7 +85,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 href={article.imageCreditUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white/60 transition-colors"
+                className="focus-ring hover:text-white/60 transition-colors"
               >
                 Photo: {article.imageCredit}
               </a>
@@ -114,7 +114,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
                 href={article.sourceUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-base font-bold text-brand-navy hover:text-brand-amber transition-colors"
+                className="focus-ring text-base font-bold text-brand-navy hover:text-brand-amber transition-colors"
               >
                 Read the original at {article.sourceName ?? "the source"}{" "}
                 &rarr;
@@ -126,7 +126,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <div className="mt-12 pt-8 border-t border-gray-100">
             <Link
               href="/resources/articles"
-              className="text-sm font-semibold text-brand-navy hover:text-brand-amber transition-colors"
+              className="focus-ring text-sm font-semibold text-brand-navy hover:text-brand-amber transition-colors"
             >
               &larr; All articles
             </Link>

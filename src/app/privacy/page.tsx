@@ -76,7 +76,7 @@ export default function PrivacyPage() {
               If you have any questions about this policy, you can reach us at{" "}
               <a
                 href="mailto:matt@mattheerema.com"
-                className="text-brand-navy font-semibold underline hover:opacity-80 transition-opacity"
+                className="focus-ring text-brand-navy font-semibold underline hover:opacity-80 transition-opacity"
               >
                 matt@mattheerema.com
               </a>
