@@ -51,7 +51,7 @@ export default function ResourcesPage() {
             {/* Card: Articles (internal) */}
             <Link
               href="/resources/articles"
-              className="group flex flex-col rounded-2xl border border-brand-light-gray bg-white p-8 transition-colors hover:border-brand-amber focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-amber"
+              className="focus-ring group flex flex-col rounded-2xl border border-brand-light-gray bg-white p-8 transition-colors hover:border-brand-amber"
             >
               <span className="inline-flex w-fit items-center rounded-full bg-brand-amber/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-brand-navy">
                 Send Network Iowa
@@ -95,7 +95,7 @@ export default function ResourcesPage() {
               href="https://www.sendnetwork.com/resources/"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex flex-col rounded-2xl border border-brand-light-gray bg-white p-8 transition-colors hover:border-brand-amber focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-amber"
+              className="focus-ring group flex flex-col rounded-2xl border border-brand-light-gray bg-white p-8 transition-colors hover:border-brand-amber"
             >
               <span className="inline-flex w-fit items-center rounded-full bg-brand-amber/20 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-brand-navy">
                 Send Network

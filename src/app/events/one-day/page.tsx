@@ -262,13 +262,13 @@ export default function OneDayPage() {
                 href={REGISTRATION_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-7 py-3 rounded-full bg-white text-gray-900 text-sm font-bold hover:bg-white/90 transition-colors"
+                className="focus-ring inline-flex items-center px-7 py-3 rounded-full bg-white text-gray-900 text-sm font-bold hover:bg-white/90 transition-colors"
               >
                 Register Now
               </a>
               <Link
                 href="/events"
-                className="inline-flex items-center px-7 py-3 rounded-full border border-white/35 text-white text-sm font-semibold hover:border-white/60 transition-colors"
+                className="focus-ring inline-flex items-center px-7 py-3 rounded-full border border-white/35 text-white text-sm font-semibold hover:border-white/60 transition-colors"
               >
                 All Iowa Events
               </Link>
@@ -461,7 +461,7 @@ export default function OneDayPage() {
                 href="https://maps.google.com/?q=317+SE+Magazine+Rd+Ankeny+IA+50021"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block py-1 text-sm font-semibold text-brand-amber hover:opacity-75 transition-opacity"
+                className="focus-ring inline-block py-1 text-sm font-semibold text-brand-amber hover:opacity-75 transition-opacity"
               >
                 Get directions &rarr;
               </a>
@@ -505,7 +505,7 @@ export default function OneDayPage() {
             href={REGISTRATION_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center px-9 py-4 rounded-full bg-white text-gray-900 text-sm font-bold hover:bg-white/90 transition-colors"
+            className="focus-ring inline-flex items-center px-9 py-4 rounded-full bg-white text-gray-900 text-sm font-bold hover:bg-white/90 transition-colors"
           >
             Register Now
           </a>

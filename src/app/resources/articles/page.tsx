@@ -51,20 +51,27 @@ export default function ArticlesPage() {
               <li
                 key={article.slug}
                 className={`rounded-2xl border border-gray-100 hover:border-brand-amber/30 transition-colors ${
-                  article.image ? "overflow-hidden" : "p-6 sm:p-8"
+                  article.image ? "" : "p-6 sm:p-8"
                 }`}
               >
+                {/* No `overflow-hidden` on the card: it existed only to round
+                    this image's top corners, and it clipped away every pixel
+                    of the image link's focus ring on three sides. The radius
+                    lives on the link and the image instead — minus the card's
+                    1px border, since the image nests inside it and matching
+                    the outer 1rem exactly leaves a hairline of card showing
+                    through at the curve. */}
                 {article.image && (
                   <Link
                     href={`/resources/articles/${article.slug}`}
-                    className="block relative aspect-[2/1] bg-brand-navy"
+                    className="focus-ring block relative aspect-[2/1] rounded-t-[calc(1rem-1px)] bg-brand-navy"
                   >
                     <Image
                       src={article.image}
                       alt={article.imageAlt ?? ""}
                       fill
                       sizes="(min-width: 896px) 832px, 100vw"
-                      className="object-cover object-center"
+                      className="rounded-t-[calc(1rem-1px)] object-cover object-center"
                     />
                   </Link>
                 )}
@@ -84,7 +91,7 @@ export default function ArticlesPage() {
                   <h2 className="text-lg font-bold text-brand-navy tracking-tight mb-2">
                     <Link
                       href={`/resources/articles/${article.slug}`}
-                      className="hover:text-brand-amber transition-colors"
+                      className="focus-ring hover:text-brand-amber transition-colors"
                     >
                       {article.title}
                     </Link>
@@ -94,7 +101,7 @@ export default function ArticlesPage() {
                   </p>
                   <Link
                     href={`/resources/articles/${article.slug}`}
-                    className="text-sm font-semibold text-brand-navy hover:text-brand-amber transition-colors"
+                    className="focus-ring text-sm font-semibold text-brand-navy hover:text-brand-amber transition-colors"
                   >
                     Read more &rarr;
                   </Link>

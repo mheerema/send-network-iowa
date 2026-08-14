@@ -21,9 +21,11 @@ export default function NavHeader() {
   return (
     <header className="bg-brand-navy sticky top-0 z-50">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        {/* Height is the --header-height token, which globals.css also uses to
+            derive scroll-padding-top for SC 2.4.11. Change it in one place. */}
+        <div className="flex items-center justify-between h-[var(--header-height)]">
           {/* Logo */}
-          <Link href="/" className="flex items-center" onClick={() => setOpen(false)}>
+          <Link href="/" className="focus-ring flex items-center" onClick={() => setOpen(false)}>
             <Image
               src="/images/brand/sni-logo-white.png"
               alt="Send Network Iowa"
@@ -40,7 +42,7 @@ export default function NavHeader() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-sm py-1 transition-colors ${
+                className={`focus-ring text-sm py-1 transition-colors ${
                   pathname === link.href
                     ? "text-white font-semibold"
                     : "text-white/70 hover:text-white"
@@ -53,7 +55,7 @@ export default function NavHeader() {
 
           {/* Hamburger */}
           <button
-            className="md:hidden text-white/80 hover:text-white p-3 min-w-[44px] min-h-[44px] flex items-center justify-center"
+            className="focus-ring md:hidden text-white/80 hover:text-white p-3 min-w-[44px] min-h-[44px] flex items-center justify-center"
             aria-label={open ? "Close menu" : "Open menu"}
             aria-expanded={open}
             aria-controls="mobile-menu"
@@ -83,7 +85,7 @@ export default function NavHeader() {
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className={`px-3 py-3 rounded-lg text-sm font-medium transition-colors ${
+                className={`focus-ring px-3 py-3 rounded-lg text-sm font-medium transition-colors ${
                   pathname === link.href
                     ? "bg-white/10 text-white"
                     : "text-white/70 hover:bg-white/5 hover:text-white"
