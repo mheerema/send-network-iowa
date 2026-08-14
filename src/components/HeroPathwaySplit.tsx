@@ -44,7 +44,7 @@ export default function HeroPathwaySplit() {
   }, []);
 
   return (
-    <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+    <section className="focus-ring-on-dark relative min-h-[90vh] flex items-center justify-center overflow-hidden">
       {/* Background slideshow */}
       {slides.map((slide, index) => (
         <Image

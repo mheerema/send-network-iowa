@@ -194,7 +194,7 @@ export default function IowaPage() {
       />
 
       {/* Page hero */}
-      <section className="relative bg-brand-navy py-16 sm:py-20 md:py-28 overflow-hidden">
+      <section className="focus-ring-on-dark relative bg-brand-navy py-16 sm:py-20 md:py-28 overflow-hidden">
         <div className="absolute inset-0 opacity-20">
           <Image
             src="/images/sending-lab-adel/2025-Sending-Lab-05.jpg"

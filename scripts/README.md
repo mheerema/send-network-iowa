@@ -19,6 +19,45 @@ CI job. The convention it guards is locked and does not churn; a CI harness
 would cost a dependency and ongoing flake triage to watch something that
 changes once a year. Revisit that if surface tokens start moving regularly.
 
+## Run C40 first, pixel-sampling second
+
+**Do not start by sampling every control.** Most of this site's surfaces are
+solid brand colours, and for those the answer comes from one palette check, not
+from measurement.
+
+[W3C Technique **C40**](https://www.w3.org/WAI/WCAG22/Techniques/css/C40) —
+"Creating a two-color focus indicator to ensure sufficient contrast with all
+components" — is the official Sufficient Technique for exactly this ring, for
+SC 1.4.11 (focus state), 2.4.7, and 2.4.13. Its whole test procedure is:
+
+1. the two indicator colours contrast **9:1 or greater with each other**;
+2. each colour band is **at least 2 CSS pixels** thick;
+3. the indicator appears over **one solid background colour at a time**.
+
+In its own words: *"As long as the two indicator colors have a contrast ratio of
+at least 9:1 with each other, at least one of the two colors is guaranteed to
+meet 3:1 contrast with any solid background color."*
+
+Steps 1 and 2 are enforced by `src/app/focus-ring.test.ts` and need no browser.
+**Step 3 is the one that requires walking the page** — you cannot know a control
+sits over a single solid colour without going and looking. That walk is what
+this script automates.
+
+So the efficient order is:
+
+| | question | cost |
+|---|---|---|
+| 1 | Is band separation ≥ 9:1 and each band ≥ 2px? | one test run |
+| 2 | Which controls sit over something **not** solid? | one audit run |
+| 3 | Do those controls pass? | the expensive part — but only for them |
+
+**Both real defects on this site were on the composited hero** — a translucent
+scrim over rotating photographs, which is precisely the case C40 excludes. The
+solid-surface majority was never at risk and never needed measuring. Reach for
+per-control sampling on gradients, images, video, translucent or
+backdrop-filtered layers, and rings that overlap another *component* rather than
+a background. Everywhere else, the guarantee already answered it.
+
 ## How to run
 
 1. Open the page in Chrome.
@@ -46,6 +85,48 @@ Check both 1280px and 375px, and at 375px open the nav drawer first.
 | `carriedBy` | which boundary carried each control's indicator |
 | `annulusPointsSampled` | how many pixels of the painted band were measured |
 | `carrierDivergedFromGlobalMax` | how often the reported witness was not the highest ratio |
+
+### `UNSCORABLE` is a verdict, not an error
+
+It means the tool **declines to answer**, because every boundary that would
+carry the control depends on a resource that did not load. Re-running does not
+help. A human closes it, usually by characterising the surface independently.
+
+Worked example — the `/iowa` hero footnote link. It came back `UNSCORABLE`
+locally because the hero photograph does not load in this environment. It was
+closed *without* the image, by characterising the surface: the hero is a photo
+at `opacity-20` over an opaque `bg-brand-navy` section, so the painted surface
+is `0.2 × photo + 0.8 × navy`, which bounds to `rgb(13,33,61)`–`rgb(64,84,112)`
+whatever the photograph is.
+
+**Get the geometry right before reading the numbers.** `focus-ring` paints its
+white band with a *non-inset* `box-shadow`, so both bands are **outside** the
+border box: white from 0–2px out, navy from 2–4px out. The white band's outer
+neighbour is therefore the navy band (an indicator — no credit). Its inner
+neighbour is the control's own box — and this link has **no background**, so
+what shows through there is the page surface itself.
+
+So the carrying boundary is *white band ↔ the surface showing through the
+transparent control*, on the band's **inner** side. That is a genuine
+non-indicator adjacency, not band-vs-band in disguise: the colour being
+contrasted against is the surface, which is not part of the indicator. Scanning
+the actual photo (25,288 pixels, zero outside the bound):
+
+| boundary | ratio | carries? |
+|---|---|---|
+| navy band ↔ page surface (outer) | 1.88 | no — dead zone |
+| white band ↔ surface through the control (inner) | **7.72** | **yes** |
+
+Pass, on the bound, no image needed.
+
+This is the mirror image of the defect on the home hero CTA. There the control
+had an **opaque white** fill, so the white band's inner neighbour was that fill
+at 1.00:1 while the navy band merged into the page — both boundaries gone. Same
+surface, same variant, opposite outcome. **The control's fill is the
+discriminator**, which is why the auditor reports these cases as
+`N/A (fill==surface)`: when a control is transparent the "fill" and the
+"surface" are the same colour, and calling the carrier one or the other is a
+labelling choice, not a difference in what was measured.
 
 ### `PAGE INVALID` is not a failure
 
@@ -94,8 +175,48 @@ On each surface exactly **one** band carries the indicator, and it must clear
 or the control's own fill inside it.
 
 **The two bands' contrast against each other is never a scoring term.** That is
-indicator-against-indicator, and Understanding 1.4.11 Figure 13 grades exactly
-that pattern *Fail*.
+indicator-against-indicator. Understanding 1.4.11 defines *adjacent colors* as
+"the colors adjacent to the component" — outward, toward the surroundings,
+with nothing contemplating internal structure — and Figure 13 is a worked
+**Fail** of exactly this move: an inner dark-green border that contrasts with
+the black border but not with the blue component background. Figure 14 passes
+the same geometry only because the inner band contrasts with *both*.
+
+The normative sentence alone does not settle it: SC 1.4.11 says "3:1 against
+adjacent color(s)" and *adjacent colors* is not in the WCAG glossary. The
+guidance settles it.
+
+### The criterion is existential, not a maximisation
+
+At least one boundary must clear 3:1. The carrier is a **witness**, not a
+maximum. Any valid witness suffices, which is what makes it legitimate for this
+script to pick a witness that does not rest on a broken resource rather than
+the highest number — it is citing the proof that does not depend on an
+unavailable lemma. A broken-dependent term can only ever supply an *additional*
+proof of pass; it can never revoke one. The script reports both the carrier and
+the global max so this can be audited rather than trusted.
+
+### Why the band colours must stay far apart
+
+The bands are 14.55:1 apart, and that is a guarantee rather than a decoration.
+For separation `S`, the better band is at least `sqrt(S)` against **any solid
+surface** — if both bands were under `r` against some surface, the bands could
+be at most `r × r` apart. W3C Technique C40 uses 9:1 for exactly this reason:
+`sqrt(9) = 3`, the threshold. Ours gives a floor of **3.81:1**, verified by
+brute force over all 256 greys (true worst case 3.84 at `#838383`).
+
+That floor is why there is no per-surface table to maintain for solid
+backgrounds, and it is enforced by `src/app/focus-ring.test.ts` — the tripwire
+that fires if anyone retunes `brand-navy`.
+
+**Where the guarantee does not reach.** It bounds each band against the
+surface. It does *not* bound a band sandwiched between the control and the
+surface. On the home hero the composited surface sits near `#40546f`, where the
+outer navy band is 1.88:1 — too low to carry (needs 3:1), too high to be
+subsumed into the page (under ~1.5:1). The ring failed there even though the
+guarantee held at 7.73:1 for white. Palette tokens never land in that gap;
+composited surfaces — photos, scrims, gradients, translucent layers — can, and
+that is what this script is for.
 
 The failure this rule exists to catch: a near-white control on a navy section.
 The white band merges into the control, the navy band merges into the page, and
@@ -133,6 +254,23 @@ a real defect in this script:
 `results.ok === true` means all three behaved. **Re-run this after touching the
 scoring or rescue logic** — the rescue negative in particular, since a rule that
 never returns its negative verdict is permissive rather than validated.
+
+## Fail closed — the invariant
+
+Any check added to this script must resolve unknowns toward **"cannot rescue"**,
+never toward "safe". Two defects here came from the same violation of that rule,
+and they do not look related:
+
+| what | where it bit |
+|---|---|
+| An `rgb()` regex silently dropped `lab()` colours | the hero scrim vanished from the surface calculation, hiding a Level A defect |
+| A guard checked only `background: transparent`, not the whole class of surface-inherited values | the rescue rule ran 148 controls without its negative branch ever firing |
+
+The first is *measurement*, the second is *dependency analysis*. "Sample
+pixels, not tokens" is the lesson for both, and applying it to one did not
+immunise the other. A value is only safe to treat as independent if it resolves
+to a literal colour with alpha exactly 1, from a chain with no ancestor
+`opacity`, `mix-blend-mode`, `filter`, or `backdrop-filter`.
 
 ## Known gaps
 

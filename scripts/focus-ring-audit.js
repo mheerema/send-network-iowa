@@ -257,16 +257,55 @@
       const surfaceDependsOnBroken = sampled.some((s) => s.reachedBroken) || anyLayoutDependent;
 
       /*
-       * A control with a NON-OPAQUE background inherits its fill from the
-       * surface, so a broken-dependent surface makes the fill broken-dependent
-       * too. Omitting this second clause is what let the rescue rule's negative
-       * branch never fire — it rescued a transparent control whose ring sat
-       * over a broken image behind a translucent scrim.
+       * SURFACE-DEPENDENCE IS A CLASS, NOT A CASE.
+       *
+       * Any value whose computed result depends on ancestor context is
+       * surface-dependent, and therefore broken-dependent when the surface is.
+       * The first version of this guard only knew about `background:transparent`,
+       * which is one member of the class — and that gap is what let the rescue
+       * rule's negative branch never fire across 148 controls.
+       *
+       * Members that exist or could exist in this codebase:
+       *   - partial alpha (bg-white/10), not just fully transparent
+       *   - currentColor band colours (outline-current), resolved from an
+       *     inherited `color` a section wrapper may set
+       *   - ancestor opacity < 1, mix-blend-mode, filter, backdrop-filter,
+       *     which make the band itself composite with the backdrop
+       *   - custom properties scoped at a surface container
+       *
+       * One guard collapses them: every colour entering a term must resolve to
+       * a literal value with alpha exactly 1, from a chain with no ancestor
+       * compositing. Anything else marks the term broken-dependent. FAIL CLOSED
+       * — resolve unknowns toward "cannot rescue", never toward "safe".
+       *
+       * Note this is the same lesson as the lab() parsing miss, arriving for
+       * dependency analysis rather than for measurement. "Sample pixels, not
+       * tokens" applied once did not immunise the other path.
        */
+      const compositingAncestor = (node) => {
+        for (let a = node; a && a !== document.documentElement; a = a.parentElement) {
+          const acs = getComputedStyle(a);
+          if (parseFloat(acs.opacity) !== 1) return true;
+          if (acs.mixBlendMode && acs.mixBlendMode !== "normal") return true;
+          if (acs.filter && acs.filter !== "none") return true;
+          if (acs.backdropFilter && acs.backdropFilter !== "none") return true;
+        }
+        return false;
+      };
+      const contextComposited = compositingAncestor(el);
+      // A band colour is context-free only if it is fully opaque and nothing in
+      // the chain composites it. Partial alpha on EITHER band leaks the surface.
+      const bandsContextFree =
+        !contextComposited &&
+        parseColour(cs.outlineColor)[3] === 1 &&
+        parseColour(shadow[0])[3] === 1;
+
       const ownBg = parseColour(cs.backgroundColor);
+      const fillIsContextFree = ownBg[3] === 1 && !contextComposited;
       const fillDependsOnBroken =
         [...el.querySelectorAll("img")].some(isBroken) ||
-        (ownBg[3] !== 1 && surfaceDependsOnBroken);
+        (!fillIsContextFree && surfaceDependsOnBroken) ||
+        (!bandsContextFree && surfaceDependsOnBroken);
 
       const fill = ownBg[3] < 1 ? over(ownBg, surfaces[0]) : ownBg.slice(0, 3);
 
