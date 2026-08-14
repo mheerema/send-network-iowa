@@ -37,6 +37,16 @@ export const metadata: Metadata = {
       "89% of Iowans — more than 2.8 million people — are not connected to an evangelical church. The case for church planting in Iowa.",
     url: "/iowa",
   },
+  // Without this block X falls back to the root layout's generic title and
+  // description, pairing this page's infographic with the wrong headline.
+  twitter: {
+    // summary_large_image, not the default summary: at "summary" X renders a
+    // small square thumbnail and crops a 1200x630 infographic to nothing.
+    card: "summary_large_image",
+    title: "The Need in Iowa | Send Network Iowa",
+    description:
+      "89% of Iowans — more than 2.8 million people — are not connected to an evangelical church. The case for church planting in Iowa.",
+  },
 };
 
 const breadcrumbJsonLd = {

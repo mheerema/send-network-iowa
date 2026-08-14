@@ -10,7 +10,7 @@ import { join } from "node:path";
 
 export const OG_SIZE = { width: 1200, height: 630 };
 
-const BRAND_NAVY = "#10294c";
+export const BRAND_NAVY = "#10294c";
 export const BRAND_AMBER = "#fbac33";
 
 /**
