@@ -19,6 +19,45 @@ CI job. The convention it guards is locked and does not churn; a CI harness
 would cost a dependency and ongoing flake triage to watch something that
 changes once a year. Revisit that if surface tokens start moving regularly.
 
+## Run C40 first, pixel-sampling second
+
+**Do not start by sampling every control.** Most of this site's surfaces are
+solid brand colours, and for those the answer comes from one palette check, not
+from measurement.
+
+[W3C Technique **C40**](https://www.w3.org/WAI/WCAG22/Techniques/css/C40) —
+"Creating a two-color focus indicator to ensure sufficient contrast with all
+components" — is the official Sufficient Technique for exactly this ring, for
+SC 1.4.11 (focus state), 2.4.7, and 2.4.13. Its whole test procedure is:
+
+1. the two indicator colours contrast **9:1 or greater with each other**;
+2. each colour band is **at least 2 CSS pixels** thick;
+3. the indicator appears over **one solid background colour at a time**.
+
+In its own words: *"As long as the two indicator colors have a contrast ratio of
+at least 9:1 with each other, at least one of the two colors is guaranteed to
+meet 3:1 contrast with any solid background color."*
+
+Steps 1 and 2 are enforced by `src/app/focus-ring.test.ts` and need no browser.
+**Step 3 is the one that requires walking the page** — you cannot know a control
+sits over a single solid colour without going and looking. That walk is what
+this script automates.
+
+So the efficient order is:
+
+| | question | cost |
+|---|---|---|
+| 1 | Is band separation ≥ 9:1 and each band ≥ 2px? | one test run |
+| 2 | Which controls sit over something **not** solid? | one audit run |
+| 3 | Do those controls pass? | the expensive part — but only for them |
+
+**Both real defects on this site were on the composited hero** — a translucent
+scrim over rotating photographs, which is precisely the case C40 excludes. The
+solid-surface majority was never at risk and never needed measuring. Reach for
+per-control sampling on gradients, images, video, translucent or
+backdrop-filtered layers, and rings that overlap another *component* rather than
+a background. Everywhere else, the guarantee already answered it.
+
 ## How to run
 
 1. Open the page in Chrome.

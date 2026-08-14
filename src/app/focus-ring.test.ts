@@ -13,9 +13,21 @@ import { readFileSync } from "node:fs";
  * For band separation S, the better of the two bands is at least sqrt(S)
  * against ANY solid surface. If both bands were under r against some surface,
  * the two bands could be at most r*r apart from each other — so a large
- * separation makes it impossible for both to fail at once. W3C Technique C40
- * ("Creating a two-color focus indicator") uses 9:1 for exactly this reason:
- * sqrt(9) = 3, the 1.4.11 threshold.
+ * separation makes it impossible for both to fail at once.
+ *
+ * This is W3C Technique C40, "Creating a two-color focus indicator to ensure
+ * sufficient contrast with all components", the Sufficient Technique for this
+ * exact ring under SC 1.4.11 (focus state), 2.4.7 and 2.4.13:
+ * https://www.w3.org/WAI/WCAG22/Techniques/css/C40
+ *
+ *   "As long as the two indicator colors have a contrast ratio of at least
+ *    9:1 with each other, at least one of the two colors is guaranteed to
+ *    meet 3:1 contrast with any solid background color."
+ *
+ * 9:1 is chosen because sqrt(9) = 3, the 1.4.11 threshold. This file covers
+ * C40's steps 1 and 2; step 3 — that the indicator sits over one solid colour
+ * at a time — cannot be answered without walking the page, which is what
+ * scripts/focus-ring-audit.js is for.
  *
  * Ours is 14.55:1, giving a floor of 3.81:1 on any solid background. That is
  * why there is no per-surface contrast table to maintain, and why nobody may
