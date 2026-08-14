@@ -51,20 +51,24 @@ export default function ArticlesPage() {
               <li
                 key={article.slug}
                 className={`rounded-2xl border border-gray-100 hover:border-brand-amber/30 transition-colors ${
-                  article.image ? "overflow-hidden" : "p-6 sm:p-8"
+                  article.image ? "" : "p-6 sm:p-8"
                 }`}
               >
+                {/* No `overflow-hidden` on the card: it existed only to round
+                    this image's top corners, and it clipped away every pixel
+                    of the image link's focus ring on three sides. The radius
+                    lives on the link and the image instead. */}
                 {article.image && (
                   <Link
                     href={`/resources/articles/${article.slug}`}
-                    className="focus-ring-inset block relative aspect-[2/1] bg-brand-navy"
+                    className="focus-ring block relative aspect-[2/1] rounded-t-2xl bg-brand-navy"
                   >
                     <Image
                       src={article.image}
                       alt={article.imageAlt ?? ""}
                       fill
                       sizes="(min-width: 896px) 832px, 100vw"
-                      className="object-cover object-center"
+                      className="rounded-t-2xl object-cover object-center"
                     />
                   </Link>
                 )}

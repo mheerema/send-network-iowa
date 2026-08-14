@@ -46,11 +46,33 @@ body {
 
    So the ring carries both: a white band against the control, a navy band
    outside it. On a light surface the white band merges into the page and the
-   navy edge does the work; on a navy section the navy edge merges and the
-   white band does the work. Either way one band is left standing at 12:1 or
-   better, and where neither merges — mid-tone fills like brand-steel — the
-   two bands sit against each other at 14.55:1. Worst measured case across
-   the whole palette is 4.58:1, on brand-steel.
+   navy edge does the work; on a navy section the navy edge merges into the
+   page and the white band does the work.
+
+   HOW TO SCORE THIS (the rule is narrower than it looks):
+   On each surface, exactly ONE band carries the indicator, and it must clear
+   3:1 against an adjacent NON-indicator color — the page surface outside it,
+   or the control's own fill inside it. The two bands' contrast against EACH
+   OTHER is never a scoring term: that is indicator-against-indicator, and
+   Understanding 1.4.11 Figure 13 grades exactly that pattern Fail. On navy
+   sections the white band scores 14.55:1 against the page surface (the navy
+   band is chromatically identical to it, so the color outside the white band
+   IS the surface) — not against the navy band. Same number, different and
+   valid justification.
+
+   The failure mode this rule exists to catch: a near-white control on a navy
+   section. The white band merges into the control, the navy band merges into
+   the page, and the only edge left is the control's own outline, which was
+   there before focus. Scored band-against-band that reads 14.55:1; a keyboard
+   user sees nothing. That is SC 2.4.7 Focus Visible, Level A. Any new control
+   whose fill is near-white on a dark section, or near-navy on a light one,
+   needs the bands swapped — not a contrast tweak.
+
+   2px per band at a 2px offset is deliberate: 1.4.11 sets no size floor, and
+   2px is the threshold Understanding 2.4.13 Figure 4 passes for an outset
+   indicator. Treat it as a hard minimum, not a starting value. Note the
+   perceptible ring is 2px on any given surface, never 4px — only one band is
+   ever doing work.
 
    This is the same reasoning the county map already applies to its markers
    (see IowaCountyMap.tsx: amber disc, navy ring, each covering the fills the
@@ -73,23 +95,64 @@ body {
   }
 }
 
-/* Same indicator, drawn inside the control instead of around it. For controls
-   sitting flush against an `overflow-hidden` ancestor, where the outset ring
-   is clipped away entirely — the article cards clip their image to the card's
-   rounded corner, so the image link's outset ring lost all 4px on three sides
-   and only the bottom edge survived. Reach for this only when the clipping
-   ancestor is load-bearing; otherwise use `focus-ring`. */
-@utility focus-ring-inset {
-  outline-color: var(--color-brand-navy);
+/* ─── Inverted variant: white band outside, navy band inside ───
+   For controls on a DARK surface, where the navy band cannot carry. The home
+   hero is the case that forced this: five rotating photos behind a
+   `bg-brand-navy/80` scrim, so the painted surface is
+   0.8*navy + 0.2*photo — bounded between rgb(13,33,61) and rgb(64,84,112)
+   whatever the photo. brand-navy never clears 1.9:1 against any of that
+   range, and on the darker frames it merges into the hero outright.
+
+   With the standard ring, the white "Planters Start Here" button was a
+   Level A failure (SC 2.4.7): white band merged into the white button, navy
+   band merged into the hero, and focus only pushed the button's existing
+   edge out 2px. The amber button failed 1.4.11 on the brighter frames — the
+   white band is only 1.9:1 against brand-amber.
+
+   Inverted, both are carried by a band that is measured, not incidental:
+     navy inner vs white fill   14.55 : 1
+     navy inner vs amber fill    7.66 : 1
+     white outer vs the surface  7.4 : 1 worst case (bright photo), 15.9 best
+
+   Use this on any control sitting on a photo, scrim, or dark section. On a
+   light surface it is WRONG — the white outer band would merge into the page.
+   The test is the surface, not the control. */
+@utility focus-ring-invert {
+  outline-color: #ffffff;
 
   &:focus-visible {
-    /* Negative offset pulls the outline inward, so it paints the outermost
-       2px inside the border box; the 4px inset shadow shows through as the
-       white band just inside it. Same navy-then-white pair, same 14.55:1. */
-    outline: 2px solid var(--color-brand-navy);
-    outline-offset: -2px;
-    box-shadow: inset 0 0 0 4px #ffffff;
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px var(--color-brand-navy);
   }
+}
+
+/* There is deliberately no inset variant. An earlier pass added one for the
+   article-card image links, whose outset ring was clipped by the card's
+   `overflow-hidden`. It drew its white band with `box-shadow: inset`, which
+   paints on the background layer BENEATH child content — and that link's
+   child is `<Image fill>` (position:absolute; inset:0), so the white band
+   rendered zero pixels behind an opaque photograph. What shipped would have
+   been a bare navy ring over arbitrary editorial imagery: unmeasured, and
+   failing 3:1 over any mid-tone region. It measured clean only because the
+   remote image could not load in the test environment.
+
+   The fix was to remove the need: the card's `overflow-hidden` existed only
+   to round the image's top corners, so the radius moved onto the image and
+   the link, and the standard outset ring applies. If a clipping ancestor is
+   ever genuinely load-bearing, draw the band with a `::after` overlay
+   (position:absolute; inset:2px; border:2px solid #fff; border-radius:inherit;
+   pointer-events:none) — never `box-shadow: inset` behind filled content. */
+
+/* ─── Sticky-header scroll offset (WCAG 2.2 SC 2.4.11, Focus Not Obscured) ───
+   The site header is `sticky top-0 z-50` (NavHeader.tsx). Sequential focus
+   navigation scrolls a control just far enough to be in the viewport, which
+   does not account for sticky chrome — so a control landing under the header
+   is fully hidden even though its focus ring renders correctly. 1.4.11 is
+   about the ring; 2.4.11 is about the component being visible at all.
+   Header is h-16 (64px) at every breakpoint; 8px of breathing room above. */
+html {
+  scroll-padding-top: 4.5rem;
 }
 
 /* ─── Article body (markdown rendered via marked in src/lib/articles.ts) ───
@@ -99,13 +162,12 @@ body {
    quote has more than one paragraph, so plain quotes are unaffected. */
 
 /* Article bodies are markdown, so their links cannot carry `focus-ring`.
-   Same two-tone indicator, applied by element instead of by class. Article
-   bodies are always on white, but the navy/white pair is kept rather than a
-   bare navy ring so every focus ring on the site looks like the same thing. */
-.prose-article a:focus-visible {
-  outline: 2px solid var(--color-brand-navy);
-  outline-offset: 2px;
-  box-shadow: 0 0 0 2px #ffffff;
+   Applied by element instead of by class — same utility, not a hand-copy, so
+   the two can never drift. Article bodies are always on white, where a bare
+   navy ring would pass on its own; the pair is kept anyway so every focus
+   ring on the site is one learnable shape. */
+.prose-article a {
+  @apply focus-ring;
 }
 
 .prose-article blockquote {
