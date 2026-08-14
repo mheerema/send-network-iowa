@@ -229,7 +229,9 @@ const MAP_LABEL =
   `follows.`;
 
 /** Iowa's bounding box in the basemap is x 471–576, y 180–250. */
-const IOWA_CALLOUT = { x: 523, y: 172 };
+/** Centre of Iowa's bounding box in the 959x593 viewBox — the figure
+ *  sits inside the state rather than beside it. */
+const IOWA_CALLOUT = { x: 523, y: 215 };
 
 export default function UsEvangelicalMap() {
   const iowaPath = statePaths.find((s) => s.code === "IA")!;
@@ -262,32 +264,28 @@ export default function UsEvangelicalMap() {
         </g>
         {/* Divider around the Alaska and Hawaii insets. */}
         <path d={AK_HI_SEPARATOR} fill="none" stroke="#d1d5db" strokeWidth={1.5} />
-        {/* Iowa last so its highlight stroke sits above its neighbors.
-            Drawn twice: a navy under-stroke gives the amber callout a dark
-            hairline on both edges, since amber on the pale fills of the low
-            classes is only ~1.1:1 on its own. Same fix as IowaCountyMap. */}
+        {/* Iowa drawn last so it sits above its neighbours. It is filled
+            amber rather than outlined — an outline is a second encoding
+            competing with the ramp, and the fill plus the figure inside it
+            says "this is us, and this is our number" without one. Iowa
+            therefore does not show its band colour; the printed percentage
+            carries that information directly. The thin navy edge keeps it
+            legible against the pale fills of its low-rate neighbours. */}
         <path
           d={iowaPath.d}
-          fill={fillFor(iowaRate)}
+          fill="#fbac33"
           stroke="#10294c"
-          strokeWidth={5}
-          strokeLinejoin="round"
-        />
-        <path
-          d={iowaPath.d}
-          fill="none"
-          stroke="#fbac33"
-          strokeWidth={2.5}
+          strokeWidth={1.25}
           strokeLinejoin="round"
         />
         <text
           x={IOWA_CALLOUT.x}
           y={IOWA_CALLOUT.y}
           textAnchor="middle"
-          className="fill-brand-navy font-bold [font-size:28px] sm:[font-size:19px]"
-          style={{ paintOrder: "stroke", stroke: "#ffffff", strokeWidth: 5, strokeLinejoin: "round" }}
+          dominantBaseline="central"
+          className="fill-brand-navy font-bold [font-size:30px] sm:[font-size:26px]"
         >
-          Iowa {iowaRate}%
+          {iowaRate}%
         </text>
       </svg>
 

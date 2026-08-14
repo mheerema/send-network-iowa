@@ -296,7 +296,7 @@ export default function IowaPage() {
               aria-hidden="true"
             >
               Share of each state&rsquo;s population {compareMeasure}, 2020
-              U.S. Religion Census. Iowa outlined.
+              U.S. Religion Census. Iowa is shown in amber with its own figure.
             </p>
 
             {/* Accessible data table; the map is labeled/decorative.
@@ -383,14 +383,14 @@ export default function IowaPage() {
                   {countyStats.countyCount}
                 </span>
                 <span className="block text-xl font-bold text-brand-amber leading-none mb-3">
-                  {countyStats.belowSaturationGoal.pctOfCounties}% of counties
+                  counties
                 </span>
                 <span
                   className="block text-base text-gray-700 leading-snug"
                   aria-hidden="true"
                 >
-                  Iowa counties have fewer than one evangelical congregation
-                  per {formatNumber(scaleAnchors.gacxSaturationGoal)} people
+                  have fewer than one evangelical congregation per{" "}
+                  {formatNumber(scaleAnchors.gacxSaturationGoal)} people
                 </span>
               </dd>
             </div>
@@ -404,14 +404,14 @@ export default function IowaPage() {
                   {formatNumber(countyStats.belowSaturationGoal.population)}
                 </span>
                 <span className="block text-xl font-bold text-brand-amber leading-none mb-3">
-                  {countyStats.belowSaturationGoal.pctOfState}% of Iowans
+                  Iowans
                 </span>
                 <span
                   className="block text-base text-gray-700 leading-snug"
                   aria-hidden="true"
                 >
-                  live in those {countyStats.belowSaturationGoal.countyCount}{" "}
-                  counties
+                  live in them — {countyStats.belowSaturationGoal.pctOfState}%
+                  of the state
                 </span>
               </dd>
             </div>
@@ -433,15 +433,14 @@ export default function IowaPage() {
                   <NoteRef n={6} />
                 </span>
                 <span className="block text-xl font-bold text-brand-amber leading-none mb-3">
-                  {countyStats.shortfall.topPctOfTotal}% in{" "}
-                  {countyStats.shortfall.topCount} counties
+                  churches
                 </span>
                 <span
                   className="block text-base text-gray-700 leading-snug"
                   aria-hidden="true"
                 >
-                  more evangelical congregations would bring every county to
-                  one per {formatNumber(countyStats.shortfall.goal)} people
+                  would bring every county to one per{" "}
+                  {formatNumber(countyStats.shortfall.goal)} people
                 </span>
               </dd>
             </div>
