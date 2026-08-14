@@ -97,14 +97,36 @@ locally because the hero photograph does not load in this environment. It was
 closed *without* the image, by characterising the surface: the hero is a photo
 at `opacity-20` over an opaque `bg-brand-navy` section, so the painted surface
 is `0.2 × photo + 0.8 × navy`, which bounds to `rgb(13,33,61)`–`rgb(64,84,112)`
-whatever the photograph is. Scanning the actual photo (25,288 pixels, zero
-outside the bound) gives the outer navy band 1.88:1 — it does not carry — and
-the inner white band **7.72:1**, which does, because the link is transparent so
-its fill *is* the surface showing through. Pass, on the bound, no image needed.
+whatever the photograph is.
 
-Note that this is the mirror image of the defect on the home hero CTA: there
-the control had an *opaque white* fill, so the white band merged into it (1.00)
-while the navy band merged into the page. **The fill is the discriminator.**
+**Get the geometry right before reading the numbers.** `focus-ring` paints its
+white band with a *non-inset* `box-shadow`, so both bands are **outside** the
+border box: white from 0–2px out, navy from 2–4px out. The white band's outer
+neighbour is therefore the navy band (an indicator — no credit). Its inner
+neighbour is the control's own box — and this link has **no background**, so
+what shows through there is the page surface itself.
+
+So the carrying boundary is *white band ↔ the surface showing through the
+transparent control*, on the band's **inner** side. That is a genuine
+non-indicator adjacency, not band-vs-band in disguise: the colour being
+contrasted against is the surface, which is not part of the indicator. Scanning
+the actual photo (25,288 pixels, zero outside the bound):
+
+| boundary | ratio | carries? |
+|---|---|---|
+| navy band ↔ page surface (outer) | 1.88 | no — dead zone |
+| white band ↔ surface through the control (inner) | **7.72** | **yes** |
+
+Pass, on the bound, no image needed.
+
+This is the mirror image of the defect on the home hero CTA. There the control
+had an **opaque white** fill, so the white band's inner neighbour was that fill
+at 1.00:1 while the navy band merged into the page — both boundaries gone. Same
+surface, same variant, opposite outcome. **The control's fill is the
+discriminator**, which is why the auditor reports these cases as
+`N/A (fill==surface)`: when a control is transparent the "fill" and the
+"surface" are the same colour, and calling the carrier one or the other is a
+labelling choice, not a difference in what was measured.
 
 ### `PAGE INVALID` is not a failure
 
