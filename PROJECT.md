@@ -101,7 +101,7 @@ Speaker image sources (for attribution/replacement reference):
 **Afternoon tracks:**
 - Preaching — Tony Merida
 - Pastoring — Brian Croft
-- Women — Rivers Partin & Kari Minter
+- Women — Kari Minter
 - Hispanics — David Martinez & Israel Becerra
 
 **Schedule:**

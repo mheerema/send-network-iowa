@@ -123,7 +123,7 @@ const schedule = [
     tracks: [
       { label: "Preaching", leaders: "Tony Merida" },
       { label: "Pastoring", leaders: "Brian Croft" },
-      { label: "Women", leaders: "Rivers Partin & Kari Minter" },
+      { label: "Women", leaders: "Kari Minter" },
       { label: "Hispanics", leaders: "David Martinez & Israel Becerra" },
     ],
   },
