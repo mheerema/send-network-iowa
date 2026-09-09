@@ -18,16 +18,6 @@ interface RegularEvent {
 
 const events: RegularEvent[] = [
   {
-    title: "Sending Lab — Ankeny",
-    date: "Sep 14, 2026",
-    location: "First Family Church · 317 SE Magazine Rd, Ankeny, IA",
-    description:
-      "A one-day workshop (9:00am–3:45pm) to help church leaders develop a vision and plan for leading their church to send planters. Sessions cover sending vision, identifying potential planters, developing leaders, and multiplication strategy. Lunch and snacks provided.",
-    registrationHref:
-      "https://web.cvent.com/event/f7132731-b654-4c4d-bb4d-6142470e1495/summary",
-    detailHref: "https://www.sendnetwork.com/events/sending-lab-ankeny-ia/",
-  },
-  {
     title: "Sending Lab — Davenport",
     date: "Oct 5, 2026",
     location: "Coram Deo Bible Church · 3800 E 53rd St, Davenport, IA",
@@ -86,21 +76,6 @@ const eventsJsonLd = [
         position: 2,
         item: {
           "@type": "Event",
-          name: "Sending Lab — Ankeny",
-          startDate: "2026-09-14T09:00:00-05:00",
-          endDate: "2026-09-14T15:45:00-05:00",
-          eventStatus: "https://schema.org/EventScheduled",
-          eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-          location: { "@type": "Place", name: "First Family Church", address: { "@type": "PostalAddress", streetAddress: "317 SE Magazine Rd", addressLocality: "Ankeny", addressRegion: "IA", postalCode: "50021", addressCountry: "US" } },
-          organizer: { "@type": "Organization", name: "Send Network Iowa", url: "https://sendnetworkiowa.com" },
-          url: "https://www.sendnetwork.com/events/sending-lab-ankeny-ia/",
-        },
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        item: {
-          "@type": "Event",
           name: "Sending Lab — Davenport",
           startDate: "2026-10-05T09:00:00-05:00",
           endDate: "2026-10-05T15:45:00-05:00",
@@ -113,7 +88,7 @@ const eventsJsonLd = [
       },
       {
         "@type": "ListItem",
-        position: 4,
+        position: 3,
         item: {
           "@type": "Event",
           name: "Residency Builder — Ankeny",

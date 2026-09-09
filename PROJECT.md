@@ -123,7 +123,6 @@ Speaker image sources (for attribution/replacement reference):
 
 | Event | Date | Location |
 |---|---|---|
-| Sending Lab Ankeny | Sep 14, 2026 | First Family Church, Ankeny |
 | Sending Lab Davenport | Oct 5, 2026 | Coram Deo Bible Church, Davenport |
 | Residency Builder Ankeny | Dec 1–2, 2026 | First Family Church, Ankeny |
 
