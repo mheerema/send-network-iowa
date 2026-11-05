@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Events | Send Network Iowa",
   description:
-    "Iowa Send Network gatherings — One Day, Sending Labs, Residency Builder, and more. Find the right gathering for where you are in the process.",
+    "Iowa Send Network gatherings — Sending Labs, Residency Builder, and more. Find the right gathering for where you are in the process.",
 };
 
 interface RegularEvent {
@@ -17,16 +16,6 @@ interface RegularEvent {
 }
 
 const events: RegularEvent[] = [
-  {
-    title: "Sending Lab — Davenport",
-    date: "Oct 5, 2026",
-    location: "Coram Deo Bible Church · 3800 E 53rd St, Davenport, IA",
-    description:
-      "A one-day workshop (9:00am–3:45pm) to help church leaders develop a vision and plan for leading their church to send planters. Sessions cover sending vision, identifying potential planters, developing leaders, and multiplication strategy. Lunch and snacks provided.",
-    registrationHref:
-      "https://web.cvent.com/event/d67f3f32-eb73-456f-ad58-82d46fc21726/summary",
-    detailHref: "https://www.sendnetwork.com/events/sending-lab-davenport-ia/",
-  },
   {
     title: "Residency Builder — Ankeny",
     date: "Dec 1–2, 2026",
@@ -58,37 +47,6 @@ const eventsJsonLd = [
       {
         "@type": "ListItem",
         position: 1,
-        item: {
-          "@type": "Event",
-          name: "One Day — The Work of the Pastor",
-          startDate: "2026-08-28T08:30:00-05:00",
-          endDate: "2026-08-28T15:00:00-05:00",
-          eventStatus: "https://schema.org/EventScheduled",
-          eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-          isAccessibleForFree: true,
-          location: { "@type": "Place", name: "First Family Church", address: { "@type": "PostalAddress", streetAddress: "317 SE Magazine Rd", addressLocality: "Ankeny", addressRegion: "IA", postalCode: "50021", addressCountry: "US" } },
-          organizer: { "@type": "Organization", name: "Send Network Iowa", url: "https://sendnetworkiowa.com" },
-          url: "https://sendnetworkiowa.com/events/one-day",
-        },
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        item: {
-          "@type": "Event",
-          name: "Sending Lab — Davenport",
-          startDate: "2026-10-05T09:00:00-05:00",
-          endDate: "2026-10-05T15:45:00-05:00",
-          eventStatus: "https://schema.org/EventScheduled",
-          eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
-          location: { "@type": "Place", name: "Coram Deo Bible Church", address: { "@type": "PostalAddress", streetAddress: "3800 E 53rd St", addressLocality: "Davenport", addressRegion: "IA", postalCode: "52807", addressCountry: "US" } },
-          organizer: { "@type": "Organization", name: "Send Network Iowa", url: "https://sendnetworkiowa.com" },
-          url: "https://www.sendnetwork.com/events/sending-lab-davenport-ia/",
-        },
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
         item: {
           "@type": "Event",
           name: "Residency Builder — Ankeny",
@@ -135,68 +93,7 @@ export default function EventsPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <ul className="space-y-4 list-none p-0">
 
-            {/* One Day — featured card */}
-            <li className="rounded-2xl border-2 border-brand-amber/60 bg-brand-amber/[0.04] p-6 sm:p-8 hover:border-brand-amber transition-colors">
-              <div className="flex flex-col sm:flex-row sm:items-start gap-6">
-
-                {/* Date block */}
-                <div className="shrink-0 sm:w-28">
-                  <p className="text-xs text-gray-500 font-medium uppercase tracking-wider mb-1">
-                    Date
-                  </p>
-                  <p className="text-sm font-bold text-brand-navy leading-snug">
-                    Aug 28, 2026
-                  </p>
-                </div>
-
-                {/* Event info */}
-                <div className="flex-1">
-                  <div className="flex flex-wrap items-center gap-2 mb-1">
-                    <h2 className="text-base font-bold text-brand-navy tracking-tight">
-                      One Day — The Work of the Pastor
-                    </h2>
-                    <span className="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-brand-amber text-brand-navy">
-                      Featured
-                    </span>
-                  </div>
-                  <p className="text-xs text-gray-500 mb-3">
-                    First Family Church · 317 SE Magazine Rd, Ankeny, IA
-                  </p>
-                  <p className="text-sm text-gray-600 leading-relaxed mb-2">
-                    A full-day gathering for pastors, church leaders, and church
-                    planters built around preaching and shepherding. Morning
-                    general sessions. Afternoon ministry tracks. Lunch provided.
-                    Free.
-                  </p>
-                  <p className="text-xs text-gray-500 mb-5">
-                    Featuring{" "}
-                    <span className="font-semibold text-brand-navy">Tony Merida</span>
-                    {" "}and{" "}
-                    <span className="font-semibold text-brand-navy">Brian Croft</span>
-                  </p>
-                  <div className="flex flex-wrap gap-3">
-                    <a
-                      href="https://web.cvent.com/event/65de6a21-94e2-4911-b20a-9218e3e9481b/summary"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label="Register for One Day — The Work of the Pastor"
-                      className="focus-ring inline-flex items-center px-5 py-3 rounded-full bg-brand-amber text-brand-navy text-sm font-semibold hover:opacity-90 transition-opacity"
-                    >
-                      Register
-                    </a>
-                    <Link
-                      href="/events/one-day"
-                      className="focus-ring inline-flex items-center px-5 py-3 rounded-full border border-brand-navy text-brand-navy text-sm font-semibold hover:bg-brand-navy hover:text-white transition-colors"
-                    >
-                      Event details
-                    </Link>
-                  </div>
-                </div>
-
-              </div>
-            </li>
-
-            {/* Other Iowa events */}
+            {/* Iowa events */}
             {events.map((event) => (
               <li
                 key={event.registrationHref}

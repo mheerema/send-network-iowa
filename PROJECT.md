@@ -46,8 +46,8 @@ linear-gradient(150deg, #f7931e 0%, #00a99d 42%, #1e2d6e 100%)
 | `/` | Homepage |
 | `/plant` | For church planters; includes BCI Partnership funding section |
 | `/partner` | For partnering churches; tier overview + link to sendnetwork.com/send/ |
-| `/events` | Iowa events list; One Day featured + Sending Labs + Residency Builder |
-| `/events/one-day` | Standalone event landing page (One Day, Aug 28 2026) |
+| `/events` | Iowa events list; upcoming events only (Residency Builder as of 2026-11-05) |
+| `/events/one-day` | Standalone event landing page (One Day, Aug 28 2026 — past; no longer linked from /events) |
 | `/iowa` | Exists in filesystem; not in nav — awaiting real data |
 | `/contact` | Contact page |
 
@@ -123,7 +123,6 @@ Speaker image sources (for attribution/replacement reference):
 
 | Event | Date | Location |
 |---|---|---|
-| Sending Lab Davenport | Oct 5, 2026 | Coram Deo Bible Church, Davenport |
 | Residency Builder Ankeny | Dec 1–2, 2026 | First Family Church, Ankeny |
 
 Cvent registration links for Sending Labs are in `app/events/page.tsx`.
